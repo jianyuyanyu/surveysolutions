@@ -19,6 +19,7 @@ const connectionStore = {
             }
         },
         disconnected({ state, commit }) {
+            commit('IS_RECONNECTING', false)
             commit('SET_RECONNECT_ATTEMPT', { count: 0, elapsedMs: 0 })
             if (!state.isDisconnected) {
                 commit('IS_DISCONNECTED', true)
