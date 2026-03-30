@@ -73,8 +73,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public Assignment GetAssignmentWithUpgradeLock(int id)
         {
-            var assignment = this.assignmentsAccessor.Query(_ => _.Where(a => a.Id == id)).SingleOrDefault();
-            return GetAssignmentWithUpgradeLock(assignment);
+            // Load with an upgrade lock in a single SELECT … FOR UPDATE round-trip,
+            // avoiding the extra query that assignmentsAccessor.Query + Refresh would otherwise add.
+            return this.sessionProvider.Session
+                .QueryOver<Assignment>()
+                .Where(a => a.Id == id)
+                .Lock().Upgrade
+                .SingleOrDefault();
         }
 
         public Assignment GetAssignmentWithUpgradeLock(Assignment assignment)
