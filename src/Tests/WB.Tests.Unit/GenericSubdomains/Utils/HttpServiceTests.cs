@@ -173,5 +173,28 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
             // Assert
             Assert.That(act, Throws.InstanceOf<RestException>());
         }
+
+        [Test]
+        public async Task when_integrity_validation_is_ignored_and_header_is_missing_should_not_throw()
+        {
+            var settings = Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost/hq"
+                                                              && x.UserAgent == "SurveySolutions/1"
+                                                              && x.Timeout == TimeSpan.FromMinutes(1)
+                                                              && x.CommunicationIntegrityValidationIgnore == true);
+
+            var testMessageHandler = new TestMessageHandler(); // no integrity header
+            var httpClient = new HttpClient(testMessageHandler);
+            var httpClientFactory =
+                Mock.Of<IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
+
+            var integrityService = new IntegrityService(settings);
+            RestService service = Create.Service.RestService(
+                restServiceSettings: settings,
+                httpClientFactory: httpClientFactory,
+                integrityService: integrityService);
+
+            // Act + Assert (should not throw even though integrity header is absent)
+            await service.GetAsync("q", null, null, false, null, CancellationToken.None);
+        }
     }
 }
