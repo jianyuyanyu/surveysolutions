@@ -36,7 +36,9 @@ namespace WB.Services.Export.CsvExport.Exporters
             if (format == GeographyExportFormat.Legacy)
                 return fallback;
 
-            if (!TryParseCoordinates(area.Coordinates, out var coords) || coords!.Length == 0)
+            if (!TryParseCoordinates(area.Coordinates, out var coords))
+                return fallback;
+            if (coords == null || coords.Length == 0)
                 return fallback;
 
             if (geometryType == null)
