@@ -73,6 +73,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public Assignment GetAssignmentWithUpgradeLock(int id)
         {
+            // Use Query instead of GetById: bypasses the NHibernate L1 cache (required before acquiring a row-level lock)
             var assignment = this.assignmentsAccessor.Query(_ => _.Where(a => a.Id == id)).SingleOrDefault();
             return GetAssignmentWithUpgradeLock(assignment);
         }
