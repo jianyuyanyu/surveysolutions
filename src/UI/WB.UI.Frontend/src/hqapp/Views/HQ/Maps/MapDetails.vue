@@ -31,7 +31,7 @@
                         </li>
                         <li v-if="$config.model.showDuplicateLabelsWarning" class="text-danger">
                             <strong>{{ $t("Pages.MapList_HasDuplicateLabels") }}: </strong>
-                            <span>{{ $t("Pages.MapList_Yes") }}</span>
+                            <span>{{ $t("Common.Yes") }}</span>
                         </li>
                     </ul>
                 </FilterBlock>

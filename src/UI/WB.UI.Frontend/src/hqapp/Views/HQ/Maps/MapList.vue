@@ -248,7 +248,7 @@ export default {
                             if (data === null || data === undefined) {
                                 return ''
                             }
-                            return data ? self.$t('Pages.MapList_Yes') : self.$t('Pages.MapList_No')
+                            return data ? self.$t('Common.Yes') : self.$t('Common.No')
                         },
                     },
                 ],

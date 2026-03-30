@@ -302,7 +302,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                         for (int i = 0; i < shapefileReader.Fields.Count; i++)
                         {
-                            if (string.Equals(shapefileReader.Fields[i].Name, LabelFieldName, StringComparison.InvariantCultureIgnoreCase))
+                            if (string.Equals(shapefileReader.Fields[i].Name, LabelFieldName, StringComparison.OrdinalIgnoreCase))
                             {
                                 labelColumnTitle = shapefileReader.Fields[i].Name;
                                 break;
