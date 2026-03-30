@@ -35,11 +35,9 @@ export const useRosterStore = defineStore('roster', {
             }
         },
         questionDeleted(payload) {
-            //TODO: remove question from
-            //numericIntegerTitles
-            //textListsQuestions
-            //notLinkedMultiOptionQuestions
-            //numericIntegerTitles
+            if (this.roster.itemId && this.questionnaireId) {
+                this.fetchRosterData(this.questionnaireId, this.roster.itemId);
+            }
         },
         async questionAdded(payload) {
             if (this.roster.itemId && this.questionnaireId) {
