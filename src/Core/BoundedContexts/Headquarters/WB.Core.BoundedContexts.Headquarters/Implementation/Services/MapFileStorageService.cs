@@ -296,7 +296,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         item.YMaxVal = headerBounds.MaxY;
                         item.ShapeType = shapefileReader.ShapeType.ToString();
                         item.Wkid = 4326;  //geographic coordinates Wgs84
-                        item.ShapesCount = shapefileReader.RecordCount;
+                        item.ShapesCount = shapefileReader.Features.Count;
                         
                         string labelColumnTitle = null;
 
