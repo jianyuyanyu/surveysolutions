@@ -15,7 +15,6 @@ using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
 using IHttpClientFactory = WB.Core.Infrastructure.HttpServices.Services.IHttpClientFactory;
-using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils
 {
