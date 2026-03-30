@@ -134,7 +134,11 @@ namespace WB.UI.Designer
             services.AddHealthChecks()
                 .AddCheck<DatabaseConnectionCheck>("database");
 
-            services
+            // Read the JWT secret key once; all JWT-related registration is gated on its presence.
+            var jwtSecretKey = Configuration["Providers:Assistant:JwtSecretKey"];
+            var jwtEnabled = !string.IsNullOrWhiteSpace(jwtSecretKey);
+
+            var authBuilder = services
                 .AddAuthentication(sharedOptions =>
                 {
                     sharedOptions.DefaultScheme = "boc";
@@ -147,7 +151,10 @@ namespace WB.UI.Designer
                         var authHeader = context.Request.Headers["Authorization"].ToString();
                         if (!string.IsNullOrEmpty(authHeader))
                         {
-                            if (authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                            // Only forward to the JWT handler when the secret key is configured;
+                            // otherwise fall through to basic auth so Bearer tokens are rejected
+                            // rather than being handled with no validation rules.
+                            if (jwtEnabled && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
                             {
                                 return JwtBearerDefaults.AuthenticationScheme;
                             }
@@ -158,79 +165,82 @@ namespace WB.UI.Designer
                     };
                 })
                 .AddScheme<BasicAuthenticationSchemeOptions, BasicAuthenticationHandler>("basic",
-                    opts => { opts.Realm = "mysurvey.solutions"; })
-                .AddJwtBearer(options =>
+                    opts => { opts.Realm = "mysurvey.solutions"; });
+
+            // Only register the JWT bearer handler when the secret key is present; registering it
+            // without TokenValidationParameters would leave the handler with no validation rules,
+            // causing unpredictable accept/reject behaviour.
+            if (jwtEnabled)
+            {
+                authBuilder.AddJwtBearer(options =>
                 {
-                    var secretKey = Configuration["Providers:Assistant:JwtSecretKey"];
-                    if (!string.IsNullOrWhiteSpace(secretKey))
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        options.TokenValidationParameters = new TokenValidationParameters
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer",
+                        ValidAudience = Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey!)),
+                        ClockSkew = TimeSpan.FromMinutes(5)
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = context =>
                         {
-                            ValidateIssuer = true,
-                            ValidateAudience = true,
-                            ValidateLifetime = true,
-                            ValidateIssuerSigningKey = true,
-                            ValidIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer",
-                            ValidAudience = Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService",
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
-                            ClockSkew = TimeSpan.FromMinutes(5)
-                        };
-                        
-                        options.Events = new JwtBearerEvents
-                        {
-                            OnAuthenticationFailed = context =>
+                            if (context.Exception is SecurityTokenExpiredException)
                             {
-                                if (context.Exception is SecurityTokenExpiredException)
-                                {
-                                    context.Response.Headers.Append("X-Token-Expired", "true");
-                                    context.Response.Headers.Append("X-Token-Error", "Token has expired");
-                                }
-                                else if (context.Exception is SecurityTokenInvalidSignatureException)
-                                {
-                                    context.Response.Headers.Append("X-Token-Error", "Invalid token signature");
-                                }
-                                else if (context.Exception is SecurityTokenInvalidIssuerException)
-                                {
-                                    context.Response.Headers.Append("X-Token-Error", "Invalid token issuer");
-                                }
-                                else if (context.Exception is SecurityTokenInvalidAudienceException)
-                                {
-                                    context.Response.Headers.Append("X-Token-Error", "Invalid token audience");
-                                }
-                                else
-                                {
-                                    context.Response.Headers.Append("X-Token-Error", context.Exception.Message);
-                                }
-                                return Task.CompletedTask;
-                            },
-                            OnChallenge = context =>
-                            {
-                                context.HandleResponse();
-                                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                                context.Response.ContentType = "application/json";
-                                
-                                var errorMessage = context.AuthenticateFailure?.Message ?? "Unauthorized";
-                                if (context.AuthenticateFailure is SecurityTokenExpiredException)
-                                {
-                                    errorMessage = "JWT token has expired. Please generate a new token.";
-                                }
-                                else if (context.AuthenticateFailure is SecurityTokenInvalidSignatureException)
-                                {
-                                    errorMessage = "JWT token has invalid signature.";
-                                }
-                                
-                                var result = JsonSerializer.Serialize(new
-                                {
-                                    error = "Unauthorized",
-                                    message = errorMessage,
-                                    timestamp = DateTime.UtcNow
-                                });
-                                
-                                return context.Response.WriteAsync(result);
+                                context.Response.Headers.Append("X-Token-Expired", "true");
+                                context.Response.Headers.Append("X-Token-Error", "Token has expired");
                             }
-                        };
-                    }
+                            else if (context.Exception is SecurityTokenInvalidSignatureException)
+                            {
+                                context.Response.Headers.Append("X-Token-Error", "Invalid token signature");
+                            }
+                            else if (context.Exception is SecurityTokenInvalidIssuerException)
+                            {
+                                context.Response.Headers.Append("X-Token-Error", "Invalid token issuer");
+                            }
+                            else if (context.Exception is SecurityTokenInvalidAudienceException)
+                            {
+                                context.Response.Headers.Append("X-Token-Error", "Invalid token audience");
+                            }
+                            else
+                            {
+                                context.Response.Headers.Append("X-Token-Error", context.Exception.Message);
+                            }
+                            return Task.CompletedTask;
+                        },
+                        OnChallenge = context =>
+                        {
+                            context.HandleResponse();
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            context.Response.ContentType = "application/json";
+
+                            var errorMessage = context.AuthenticateFailure?.Message ?? "Unauthorized";
+                            if (context.AuthenticateFailure is SecurityTokenExpiredException)
+                            {
+                                errorMessage = "JWT token has expired. Please generate a new token.";
+                            }
+                            else if (context.AuthenticateFailure is SecurityTokenInvalidSignatureException)
+                            {
+                                errorMessage = "JWT token has invalid signature.";
+                            }
+
+                            var result = JsonSerializer.Serialize(new
+                            {
+                                error = "Unauthorized",
+                                message = errorMessage,
+                                timestamp = DateTime.UtcNow
+                            });
+
+                            return context.Response.WriteAsync(result);
+                        }
+                    };
                 });
+            }
             
             services.AddAuthorization(options =>
             {
