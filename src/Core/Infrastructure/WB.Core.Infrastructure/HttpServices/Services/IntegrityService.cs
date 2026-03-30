@@ -19,10 +19,13 @@ public class IntegrityService : IIntegrityService
 
     public void ValidateResponseHeadersAndThrow(HttpResponseHeaders headers)
     {
-            if (!headers.Contains(IntegrityHeaderName) 
-                || headers.GetValues(IntegrityHeaderName).All(v => v != IntegrityHeaderValue))
-            {                
-                throw new RestException("The response received does not appear to come from the Survey Solutions server. This is usually caused by a network proxy, firewall, or security gateway intercepting the connection. Please check your network connection or contact your IT support.");
-            }
+        if (this.enumeratorSettings.CommunicationIntegrityValidationIgnore)
+            return;
+        
+        if (!headers.Contains(IntegrityHeaderName) 
+            || headers.GetValues(IntegrityHeaderName).All(v => v != IntegrityHeaderValue)) 
+        {                
+                throw new RestException("The response received does not appear to come from the Survey Solutions server. This is usually caused by a network proxy, firewall, or security gateway intercepting the connection. Please check your network connection or contact your IT support."); 
+        }
     }
 }
