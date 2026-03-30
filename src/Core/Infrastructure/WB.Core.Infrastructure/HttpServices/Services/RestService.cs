@@ -156,8 +156,16 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                         .ConfigureAwait(false);
                 this.logger.Debug($"Executed web request url: {request.RequestUri}, response code: {httpResponseMessage.StatusCode}");
 
-                integrityService.ValidateResponseHeadersAndThrow(httpResponseMessage.Headers);
-                
+                try
+                {
+                    integrityService.ValidateResponseHeadersAndThrow(httpResponseMessage.Headers);
+                }
+                catch
+                {
+                    httpResponseMessage.Dispose();
+                    throw;
+                }
+
                 if (httpResponseMessage.IsSuccessStatusCode
                     || httpResponseMessage.StatusCode == HttpStatusCode.NotModified
                     || httpResponseMessage.StatusCode == HttpStatusCode.NoContent)
