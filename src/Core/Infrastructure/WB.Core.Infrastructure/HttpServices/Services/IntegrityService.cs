@@ -7,18 +7,15 @@ namespace WB.Core.Infrastructure.HttpServices.Services;
 
 public class IntegrityService : IIntegrityService
 {
-    private readonly string HeaderValue = "773994826649214";
-    private string XSurveySolutions = "X-Survey-Solutions";
-    
+    public const string IntegrityHeaderValue = "773994826649214";
+    public const string IntegrityHeaderName = "X-Survey-Solutions";
+
     private readonly IRestServiceSettings enumeratorSettings;
 
     public IntegrityService(IRestServiceSettings enumeratorSettings)
     {
         this.enumeratorSettings = enumeratorSettings;
     }
-
-    public const string IntegrityHeaderValue = "773994826649214";
-    public const string IntegrityHeaderName = "X-Survey-Solutions";
 
     public void ValidateResponseHeadersAndThrow(HttpResponseHeaders headers)
     {

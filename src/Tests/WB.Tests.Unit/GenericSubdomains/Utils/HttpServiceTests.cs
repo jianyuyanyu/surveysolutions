@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
 using IHttpClientFactory = WB.Core.Infrastructure.HttpServices.Services.IHttpClientFactory;
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils
 {
@@ -89,6 +90,89 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
             var httpRequestMessage = testMessageHandler.ExecutedRequests.First();
             Assert.That(httpRequestMessage.Headers.UserAgent.First().Product.Name, Is.EqualTo("SurveySolutions"));
             Assert.That(httpRequestMessage.Headers.UserAgent.First().Product.Version, Is.EqualTo("11"));
+        }
+
+        [Test]
+        public async Task when_response_has_valid_integrity_header_should_not_throw()
+        {
+            var settings = Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost/hq"
+                                                              && x.UserAgent == "SurveySolutions/1"
+                                                              && x.Timeout == TimeSpan.FromMinutes(1)
+                                                              && x.CommunicationIntegrityValidationIgnore == false);
+
+            var responseHeaders = new Dictionary<string, string>
+            {
+                [IntegrityService.IntegrityHeaderName] = IntegrityService.IntegrityHeaderValue
+            };
+            var testMessageHandler = new TestMessageHandler(responseHeaders);
+            var httpClient = new HttpClient(testMessageHandler);
+            var httpClientFactory =
+                Mock.Of<IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
+
+            var integrityService = new IntegrityService(settings);
+            RestService service = Create.Service.RestService(
+                restServiceSettings: settings,
+                httpClientFactory: httpClientFactory,
+                integrityService: integrityService);
+
+            // Act + Assert (should not throw)
+            await service.GetAsync("q", null, null, false, null, CancellationToken.None);
+        }
+
+        [Test]
+        public void when_response_is_missing_integrity_header_should_throw_RestException()
+        {
+            var settings = Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost/hq"
+                                                              && x.UserAgent == "SurveySolutions/1"
+                                                              && x.Timeout == TimeSpan.FromMinutes(1)
+                                                              && x.CommunicationIntegrityValidationIgnore == false);
+
+            var testMessageHandler = new TestMessageHandler(); // no integrity header
+            var httpClient = new HttpClient(testMessageHandler);
+            var httpClientFactory =
+                Mock.Of<IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
+
+            var integrityService = new IntegrityService(settings);
+            RestService service = Create.Service.RestService(
+                restServiceSettings: settings,
+                httpClientFactory: httpClientFactory,
+                integrityService: integrityService);
+
+            // Act
+            AsyncTestDelegate act = async () => await service.GetAsync("q", null, null, false, null, CancellationToken.None);
+
+            // Assert
+            Assert.That(act, Throws.InstanceOf<RestException>());
+        }
+
+        [Test]
+        public void when_response_has_incorrect_integrity_header_value_should_throw_RestException()
+        {
+            var settings = Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost/hq"
+                                                              && x.UserAgent == "SurveySolutions/1"
+                                                              && x.Timeout == TimeSpan.FromMinutes(1)
+                                                              && x.CommunicationIntegrityValidationIgnore == false);
+
+            var responseHeaders = new Dictionary<string, string>
+            {
+                [IntegrityService.IntegrityHeaderName] = "wrong-value"
+            };
+            var testMessageHandler = new TestMessageHandler(responseHeaders);
+            var httpClient = new HttpClient(testMessageHandler);
+            var httpClientFactory =
+                Mock.Of<IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
+
+            var integrityService = new IntegrityService(settings);
+            RestService service = Create.Service.RestService(
+                restServiceSettings: settings,
+                httpClientFactory: httpClientFactory,
+                integrityService: integrityService);
+
+            // Act
+            AsyncTestDelegate act = async () => await service.GetAsync("q", null, null, false, null, CancellationToken.None);
+
+            // Assert
+            Assert.That(act, Throws.InstanceOf<RestException>());
         }
     }
 }
