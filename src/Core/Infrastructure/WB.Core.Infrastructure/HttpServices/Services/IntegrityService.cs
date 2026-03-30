@@ -17,13 +17,13 @@ public class IntegrityService : IIntegrityService
         this.enumeratorSettings = enumeratorSettings;
     }
 
+    public const string IntegrityHeaderValue = "773994826649214";
+    public const string IntegrityHeaderName = "X-Survey-Solutions";
+
     public void ValidateResponseHeadersAndThrow(HttpResponseHeaders headers)
     {
-        if(enumeratorSettings.CommunicationIntegrityValidationIgnore)
-            return;
-        
-        if (!headers.Contains(XSurveySolutions) 
-                || headers.GetValues(XSurveySolutions).All(v => v != HeaderValue))
+            if (!headers.Contains(IntegrityHeaderName) 
+                || headers.GetValues(IntegrityHeaderName).All(v => v != IntegrityHeaderValue))
             {                
                 throw new RestException("The response received does not appear to come from the Survey Solutions server. This is usually caused by a network proxy, firewall, or security gateway intercepting the connection. Please check your network connection or contact your IT support.");
             }
