@@ -144,7 +144,7 @@
   <data name="GeographyExportFormat_GeoJson" xml:space="preserve">
     <value>GeoJSON</value>
   </data>
-  <data name="GeographyExportFormat_Legacy" xml:space="preserve">
+  <data name="GeographyExportFormat_ArrayOfCoordinates" xml:space="preserve">
     <value>Matrice de coordonate</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">

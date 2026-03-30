@@ -57,8 +57,9 @@ namespace WB.Services.Export.CsvExport.Exporters
 
                 return string.IsNullOrEmpty(result) ? (area.Coordinates ?? string.Empty) : result;
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException ex)
             {
+                logger.LogError(ex, "Unknown geography export format: {Format}", format);
                 throw;
             }
             catch (Exception ex)

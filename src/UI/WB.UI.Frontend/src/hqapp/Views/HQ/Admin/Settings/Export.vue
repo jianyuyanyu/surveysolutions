@@ -307,7 +307,7 @@ export default {
             return [
                 { key: 'Wkt', value: this.$t('Settings.GeographyExportFormat_Wkt') },
                 { key: 'GeoJson', value: this.$t('Settings.GeographyExportFormat_GeoJson') },
-                { key: 'Legacy', value: this.$t('Settings.GeographyExportFormat_Legacy') },
+                { key: 'Legacy', value: this.$t('Settings.GeographyExportFormat_ArrayOfCoordinates') },
             ]
         },
         geographyFormatValue() {
