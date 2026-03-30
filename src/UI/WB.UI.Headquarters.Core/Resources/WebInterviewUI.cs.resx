@@ -184,6 +184,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Znovu načtěte stránku pro obnovení připojení a pokračování v tomto rozhovoru.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Spojení ztraceno. Probíhá pokus o opětovné připojení…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Pokus {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>Připojení k serveru je ztraceno.</value>
   </data>

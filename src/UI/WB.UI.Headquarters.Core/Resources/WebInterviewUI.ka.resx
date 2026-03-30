@@ -204,6 +204,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>გთხოვთ, განაახლოთ გვერდი რომ აღადგინოთ კავშირი და გააგრძელოთ ეს ინტერვიუ.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>კავშირი დაიკარგა. მიმდინარეობს ხელახლა დაკავშირების მცდელობა…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>მცდელობა {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>სერვერთან კავშირი დაიკარგა</value>
   </data>

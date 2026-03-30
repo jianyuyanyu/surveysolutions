@@ -222,6 +222,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Будь ласка, перезавантажте сторінку, щоб відновити з'єднання і продовжити інтерв'ю.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>З'єднання втрачено. Виконується спроба відновлення з'єднання…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Спроба {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>Втрачено з'єднання з сервером.</value>
   </data>

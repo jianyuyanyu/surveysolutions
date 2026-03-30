@@ -26,10 +26,43 @@ export default {
     },
 
     beforeMount() {
+        const MAX_RETRIES = 10
+        const store = this.$store
+        const reconnectPolicy = {
+            nextRetryDelayInMilliseconds(retryContext) {
+                if (retryContext.previousRetryCount >= MAX_RETRIES) {
+                    return null
+                }
+                const delays = [0, 2000, 5000, 10000, 15000, 30000]
+                const delay = delays[retryContext.previousRetryCount] ?? 30000
+                store.dispatch('reconnectAttempt', {
+                    count: retryContext.previousRetryCount + 1,
+                    elapsedMs: retryContext.elapsedMilliseconds,
+                })
+                return delay
+            },
+        }
+
         connection = new signalR.HubConnectionBuilder()
             .withUrl(this.$config.basePath + `interview?interviewId=${this.interviewId}&mode=${this.mode}`)
-            .withAutomaticReconnect()
+            .withAutomaticReconnect(reconnectPolicy)
             .build()
+
+        connection.onreconnecting(() => {
+            this.$store.dispatch('tryingToReconnect', true)
+        })
+
+        connection.onreconnected(() => {
+            this.$store.dispatch('tryingToReconnect', false)
+            this.$store.dispatch('loadInterview')
+            this.$store.dispatch('getLanguageInfo')
+            this.$store.dispatch('fetchSectionEntities')
+            this.$store.dispatch('refreshSectionState')
+        })
+
+        connection.onclose(() => {
+            this.$store.dispatch('disconnected')
+        })
 
         connection.on('refreshEntities', (questions) => {
             this.$store.dispatch('refreshEntities', questions)
@@ -70,7 +103,7 @@ export default {
 
         connection.start()
             .then(() => this.$emit('connected'))
-            .catch(err => console.log(err))
+            .catch(() => this.$store.dispatch('disconnected'))
     },
 
     render() { return null },

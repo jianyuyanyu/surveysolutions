@@ -147,6 +147,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Por favor, recarregue a página para restaurar a conexão e continuar esta entrevista.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Conexão perdida. Tentando reconectar…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Tentativa {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="CloseInterviewMessage" xml:space="preserve">
     <value>&lt;p&gt;A Entrevista Web suporta apenas uma guia ativa com a entrevista.&lt;/p&gt;&lt;p&gt;Por favor, recarregue esta página para continuar usando esta guia ou feche-a.&lt;/p&gt;</value>
   </data>

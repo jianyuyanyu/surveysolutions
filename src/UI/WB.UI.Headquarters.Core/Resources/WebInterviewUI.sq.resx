@@ -213,6 +213,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Ju lutemi ringarkoni faqen për t’u rilidhur dhe për të vijuar këtë intervistë.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Lidhja u shkëput. Po përpiqemi të rilidhemi…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Tentativë {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>Lidhja me rrjetin u shkëput.</value>
   </data>
