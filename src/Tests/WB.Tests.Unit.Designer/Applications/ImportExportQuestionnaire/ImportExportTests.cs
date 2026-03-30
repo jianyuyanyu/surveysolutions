@@ -11,6 +11,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using NSubstitute;

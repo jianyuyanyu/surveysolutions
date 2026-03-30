@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AutoMapper;
 using Main.Core.Documents;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;

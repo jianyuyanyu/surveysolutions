@@ -8,6 +8,7 @@ using ApprovalTests.Reporters.TestFrameworks;
 using AutoMapper;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.DataAccess;
