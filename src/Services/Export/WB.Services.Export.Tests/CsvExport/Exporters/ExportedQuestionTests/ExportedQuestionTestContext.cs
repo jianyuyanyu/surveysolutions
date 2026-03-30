@@ -102,7 +102,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                     break;
             }
 
-            return new ExportQuestionService(new GeographySerializer()).GetExportedQuestion(interviewQuestion, headerItem);
+            return new ExportQuestionService(new GeographySerializer(Microsoft.Extensions.Logging.Abstractions.NullLogger<GeographySerializer>.Instance)).GetExportedQuestion(interviewQuestion, headerItem);
         }
 
         public static string[] CreateFilledExportedQuestion(QuestionType questionType,

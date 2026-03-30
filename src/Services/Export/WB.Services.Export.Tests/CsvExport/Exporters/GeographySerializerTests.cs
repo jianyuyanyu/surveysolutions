@@ -1,3 +1,5 @@
+using System;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Interview.Entities;
@@ -21,7 +23,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         [SetUp]
         public void SetUp()
         {
-            serializer = new GeographySerializer();
+            serializer = new GeographySerializer(NullLogger<GeographySerializer>.Instance);
         }
 
         // ── Null / empty ────────────────────────────────────────────────────────
@@ -190,6 +192,50 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var area = new Area { Coordinates = "10,48;11,48" };
             Assert.That(serializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.GeoJson),
                 Is.EqualTo("10,48;11,48"));
+        }
+
+        // ── Invalid input consistency ────────────────────────────────────────────
+
+        [Test]
+        public void Wkt_point_with_invalid_coordinates_falls_back_to_area_coordinates()
+        {
+            var area = new Area { Coordinates = "bad;data" };
+            Assert.That(serializer.Serialize(area, GeometryType.Point, GeographyExportFormat.Wkt),
+                Is.EqualTo("bad;data"));
+        }
+
+        [Test]
+        public void GeoJson_point_with_invalid_coordinates_falls_back_to_area_coordinates()
+        {
+            var area = new Area { Coordinates = "bad;data" };
+            Assert.That(serializer.Serialize(area, GeometryType.Point, GeographyExportFormat.GeoJson),
+                Is.EqualTo("bad;data"));
+        }
+
+        [Test]
+        public void Wkt_point_with_no_coordinates_falls_back_to_area_coordinates()
+        {
+            var area = new Area { Coordinates = "some-coord" };
+            Assert.That(serializer.Serialize(area, GeometryType.Polyline, GeographyExportFormat.Wkt),
+                Is.EqualTo("some-coord"));
+        }
+
+        [Test]
+        public void GeoJson_point_with_no_coordinates_falls_back_to_area_coordinates()
+        {
+            var area = new Area { Coordinates = "some-coord" };
+            Assert.That(serializer.Serialize(area, GeometryType.Polyline, GeographyExportFormat.GeoJson),
+                Is.EqualTo("some-coord"));
+        }
+
+        // ── Unknown format ───────────────────────────────────────────────────────
+
+        [Test]
+        public void Unknown_format_throws_ArgumentOutOfRangeException()
+        {
+            var area = new Area { Coordinates = "10,48;11,48;11,49" };
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                serializer.Serialize(area, GeometryType.Polygon, (GeographyExportFormat)999));
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
@@ -10,6 +11,12 @@ namespace WB.Services.Export.CsvExport.Exporters
     public class GeographySerializer : IGeographySerializer
     {
         private const double CoordinateEqualityTolerance = 1e-10;
+        private readonly ILogger<GeographySerializer> logger;
+
+        public GeographySerializer(ILogger<GeographySerializer> logger)
+        {
+            this.logger = logger;
+        }
 
         /// <summary>
         /// Serializes a geography answer according to the specified export format.
@@ -35,14 +42,28 @@ namespace WB.Services.Export.CsvExport.Exporters
 
             try
             {
-                var result = format == GeographyExportFormat.Wkt
-                    ? ToWkt(geometryType.Value, coords)
-                    : ToGeoJson(geometryType.Value, coords);
+                string result;
+                switch (format)
+                {
+                    case GeographyExportFormat.Wkt:
+                        result = ToWkt(geometryType.Value, coords);
+                        break;
+                    case GeographyExportFormat.GeoJson:
+                        result = ToGeoJson(geometryType.Value, coords);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(format), format, $"Unknown geography export format: {format}");
+                }
 
                 return string.IsNullOrEmpty(result) ? (area.Coordinates ?? string.Empty) : result;
             }
-            catch
+            catch (ArgumentOutOfRangeException)
             {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to serialize geography answer with format {Format}", format);
                 return area.Coordinates ?? string.Empty;
             }
         }
@@ -105,7 +126,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 
                 case GeometryType.Polygon:
                     if (coords.Length < 3) return string.Empty;
-                    return "POLYGON((" + FormatWktCoordList(EnsureClosed(coords)) + "))";
+                    return "POLYGON((" + FormatWktCoordList(CloseRing(coords)) + "))";
 
                 default:
                     return string.Empty;
@@ -137,7 +158,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 
                 case GeometryType.Polygon:
                     if (coords.Length < 3) return string.Empty;
-                    return "{\"type\":\"Polygon\",\"coordinates\":[" + FormatGeoJsonCoordArray(EnsureClosed(coords)) + "]}";
+                    return "{\"type\":\"Polygon\",\"coordinates\":[" + FormatGeoJsonCoordArray(CloseRing(coords)) + "]}";
 
                 default:
                     return string.Empty;
@@ -164,7 +185,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             return sb.ToString();
         }
 
-        private static GeoCoordinate[] EnsureClosed(GeoCoordinate[] ring)
+        private static GeoCoordinate[] CloseRing(GeoCoordinate[] ring)
         {
             if (ring.Length < 2) return ring;
             var first = ring[0];
