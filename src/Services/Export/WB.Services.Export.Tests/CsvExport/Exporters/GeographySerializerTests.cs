@@ -213,7 +213,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         }
 
         [Test]
-        public void Wkt_point_with_no_coordinates_falls_back_to_area_coordinates()
+        public void Wkt_polyline_with_no_coordinates_falls_back_to_area_coordinates()
         {
             var area = new Area { Coordinates = "some-coord" };
             Assert.That(serializer.Serialize(area, GeometryType.Polyline, GeographyExportFormat.Wkt),
@@ -221,7 +221,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         }
 
         [Test]
-        public void GeoJson_point_with_no_coordinates_falls_back_to_area_coordinates()
+        public void GeoJson_polyline_with_no_coordinates_falls_back_to_area_coordinates()
         {
             var area = new Area { Coordinates = "some-coord" };
             Assert.That(serializer.Serialize(area, GeometryType.Polyline, GeographyExportFormat.GeoJson),
