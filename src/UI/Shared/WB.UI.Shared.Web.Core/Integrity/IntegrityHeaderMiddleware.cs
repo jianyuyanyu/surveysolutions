@@ -1,14 +1,13 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using WB.Core.Infrastructure.HttpServices.Services;
 
 namespace WB.UI.Shared.Web.Integrity;
 
 public class IntegrityHeaderMiddleware
 {
     private readonly RequestDelegate next;
-    private readonly string HeaderValue = "773994826649214";
 
-    private string XSurveySolutions = "X-Survey-Solutions";
     public IntegrityHeaderMiddleware(RequestDelegate next)
     {
         this.next = next;
@@ -18,7 +17,7 @@ public class IntegrityHeaderMiddleware
     {
         context.Response.OnStarting(() =>
         {
-            context.Response.Headers[XSurveySolutions] = HeaderValue;
+            context.Response.Headers[IntegrityService.IntegrityHeaderName] = IntegrityService.IntegrityHeaderValue;
             return Task.CompletedTask;
         });
 

@@ -4,5 +4,5 @@ namespace WB.Core.Infrastructure.HttpServices.Services;
 
 public interface IIntegrityService
 {
-    void ValidateResponseHeadersAndThrow(HttpResponseHeaders content);
+    void ValidateResponseHeadersAndThrow(HttpResponseHeaders headers);
 }

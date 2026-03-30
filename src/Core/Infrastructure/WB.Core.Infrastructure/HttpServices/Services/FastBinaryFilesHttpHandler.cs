@@ -110,14 +110,16 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                         {
                             logger.Warn($"Downloader#{id}: Retry due to exception: {e.Message}", e);
                         })
-                        .ExecuteAsync(() =>
+                        .ExecuteAsync(async () =>
                         {
-                                var responseResult = httpClient.SendAsync(rangeRequest, HttpCompletionOption.ResponseHeadersRead,
-                                token);
-                                
-                                integrityService.ValidateResponseHeadersAndThrow(responseResult.Result.Headers);
-                                
-                                return responseResult;
+                            var responseResult = await httpClient.SendAsync(
+                                rangeRequest,
+                                HttpCompletionOption.ResponseHeadersRead,
+                                token).ConfigureAwait(false);
+
+                            integrityService.ValidateResponseHeadersAndThrow(responseResult.Headers);
+
+                            return responseResult;
                         })
                         .ConfigureAwait(false);
 
