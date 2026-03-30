@@ -1381,12 +1381,6 @@
   <data name="MapList_HasDuplicateLabels" xml:space="preserve">
     <value>Tem rótulos duplicados</value>
   </data>
-  <data name="MapList_Yes" xml:space="preserve">
-    <value>Sim</value>
-  </data>
-  <data name="MapList_No" xml:space="preserve">
-    <value>Não</value>
-  </data>
   <data name="MapLinking_DescriptionTitle" xml:space="preserve">
     <value>Gerenciar links de mapa de usuário</value>
   </data>

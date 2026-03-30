@@ -1065,12 +1065,6 @@
   <data name="MapList_HasDuplicateLabels" xml:space="preserve">
     <value>有重复标签</value>
   </data>
-  <data name="MapList_Yes" xml:space="preserve">
-    <value>是</value>
-  </data>
-  <data name="MapList_No" xml:space="preserve">
-    <value>否</value>
-  </data>
   <data name="MapList_Upload" xml:space="preserve">
     <value>上传 .zip 文件</value>
   </data>
