@@ -10,6 +10,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 {
     public class GeographySerializer : IGeographySerializer
     {
+        // Tolerance used to detect whether the polygon ring's last point equals its first point (ring closure).
         private const double CoordinateEqualityTolerance = 1e-10;
         private readonly ILogger<GeographySerializer> logger;
 
@@ -30,15 +31,16 @@ namespace WB.Services.Export.CsvExport.Exporters
             if (area == null)
                 return string.Empty;
 
-            if (format == GeographyExportFormat.Legacy)
-                return area.Coordinates ?? string.Empty;
+            var fallback = area.Coordinates ?? string.Empty;
 
-            var coords = ParseCoordinates(area.Coordinates);
-            if (coords == null || coords.Length == 0)
-                return area.Coordinates ?? string.Empty;
+            if (format == GeographyExportFormat.Legacy)
+                return fallback;
+
+            if (!TryParseCoordinates(area.Coordinates, out var coords) || coords!.Length == 0)
+                return fallback;
 
             if (geometryType == null)
-                return area.Coordinates ?? string.Empty;
+                return fallback;
 
             try
             {
@@ -55,7 +57,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                         throw new ArgumentOutOfRangeException(nameof(format), format, $"Unknown geography export format: {format}");
                 }
 
-                return string.IsNullOrEmpty(result) ? (area.Coordinates ?? string.Empty) : result;
+                return string.IsNullOrEmpty(result) ? fallback : result;
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -65,40 +67,50 @@ namespace WB.Services.Export.CsvExport.Exporters
             catch (Exception ex)
             {
                 logger.LogError(ex, "Failed to serialize geography answer with format {Format}", format);
-                return area.Coordinates ?? string.Empty;
+                return fallback;
             }
         }
 
         /// <summary>
-        /// Parses semicolon-separated "lon,lat" pairs from the Coordinates string.
-        /// Returns null on parse failure; empty array for empty/whitespace input.
+        /// Tries to parse semicolon-separated "lon,lat" pairs from the Coordinates string.
+        /// Returns <c>true</c> with an empty array for empty/whitespace input.
+        /// Returns <c>false</c> with <c>result = null</c> on parse failure.
         /// </summary>
-        private static GeoCoordinate[]? ParseCoordinates(string? coordinates)
+        private static bool TryParseCoordinates(string? coordinates, out GeoCoordinate[]? result)
         {
             if (string.IsNullOrWhiteSpace(coordinates))
-                return Array.Empty<GeoCoordinate>();
+            {
+                result = Array.Empty<GeoCoordinate>();
+                return true;
+            }
 
             var parts = coordinates.Split(';');
-            var result = new GeoCoordinate[parts.Length];
+            var coords = new GeoCoordinate[parts.Length];
             for (int i = 0; i < parts.Length; i++)
             {
                 var xy = parts[i].Split(',');
                 if (xy.Length < 2)
-                    return null;
-                if (!double.TryParse(xy[0], NumberStyles.Float, CultureInfo.InvariantCulture, out double lon))
-                    return null;
-                if (!double.TryParse(xy[1], NumberStyles.Float, CultureInfo.InvariantCulture, out double lat))
-                    return null;
-                result[i] = new GeoCoordinate(lon, lat);
+                {
+                    result = null;
+                    return false;
+                }
+                if (!double.TryParse(xy[0], NumberStyles.Float, CultureInfo.InvariantCulture, out double lon) ||
+                    !double.TryParse(xy[1], NumberStyles.Float, CultureInfo.InvariantCulture, out double lat))
+                {
+                    result = null;
+                    return false;
+                }
+                coords[i] = new GeoCoordinate(lon, lat);
             }
-            return result;
+            result = coords;
+            return true;
         }
 
         private static string FormatWktCoord(GeoCoordinate c)
-            => c.Lon.ToString("G", CultureInfo.InvariantCulture) + " " + c.Lat.ToString("G", CultureInfo.InvariantCulture);
+            => c.Lon.ToString("R", CultureInfo.InvariantCulture) + " " + c.Lat.ToString("R", CultureInfo.InvariantCulture);
 
         private static string FormatGeoJsonCoord(GeoCoordinate c)
-            => c.Lon.ToString("G", CultureInfo.InvariantCulture) + "," + c.Lat.ToString("G", CultureInfo.InvariantCulture);
+            => c.Lon.ToString("R", CultureInfo.InvariantCulture) + "," + c.Lat.ToString("R", CultureInfo.InvariantCulture);
 
         private static string ToWkt(GeometryType geometryType, GeoCoordinate[] coords)
         {
@@ -168,10 +180,13 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         private static string FormatWktCoordList(GeoCoordinate[] points)
         {
-            var parts = new string[points.Length];
+            var sb = new StringBuilder();
             for (int i = 0; i < points.Length; i++)
-                parts[i] = FormatWktCoord(points[i]);
-            return string.Join(",", parts);
+            {
+                if (i > 0) sb.Append(',');
+                sb.Append(FormatWktCoord(points[i]));
+            }
+            return sb.ToString();
         }
 
         private static string FormatGeoJsonCoordArray(GeoCoordinate[] points)
