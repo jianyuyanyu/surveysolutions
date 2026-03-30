@@ -34,9 +34,9 @@ export const useRosterStore = defineStore('roster', {
                 this.clear();
             }
         },
-        questionDeleted(payload) {
+        async questionDeleted(payload) {
             if (this.roster.itemId && this.questionnaireId) {
-                this.fetchRosterData(this.questionnaireId, this.roster.itemId);
+                await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
             }
         },
         async questionAdded(payload) {
