@@ -133,7 +133,7 @@
     <value>GeoJSON</value>
   </data>
   <data name="GeographyExportFormat_Legacy" xml:space="preserve">
-    <value>Héritage (coordonnées sérialisées)</value>
+    <value>Tableau de coordonnées</value>
   </data>
   <data name="ClearExportCache_Title" xml:space="preserve">
     <value>Effacer le cache d'exportation</value>

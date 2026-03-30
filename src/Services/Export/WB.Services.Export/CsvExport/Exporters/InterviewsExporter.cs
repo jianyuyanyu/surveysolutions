@@ -48,15 +48,16 @@ namespace WB.Services.Export.CsvExport.Exporters
             this.errorsExporter = errorsExporter ?? throw new ArgumentNullException(nameof(errorsExporter));
         }
 
-        public async Task ExportAsync(TenantInfo tenant,
+        public async Task ExportAsync(ExportSettings settings,
             QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire,
             List<InterviewToExport> interviewsToExport,
             string basePath,
             ExportProgress progress,
-            CancellationToken cancellationToken,
-            GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
+            CancellationToken cancellationToken)
         {
+            var tenant = settings.Tenant;
+            var geographyExportFormat = settings.GeographyExportFormat;
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             await this.DoExportAsync(tenant, questionnaireExportStructure, questionnaire, basePath, interviewsToExport, progress, cancellationToken, geographyExportFormat);

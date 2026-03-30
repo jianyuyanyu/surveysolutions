@@ -253,7 +253,7 @@
     <value>GeoJSON</value>
   </data>
   <data name="GeographyExportFormat_Legacy" xml:space="preserve">
-    <value>Trashëgimi (koordinata të serializuara)</value>
+    <value>Grup koordinatash</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
     <value>Cilësimet për kodimin e eksportimit </value>

@@ -277,7 +277,7 @@
     <value>GeoJSON</value>
   </data>
   <data name="GeographyExportFormat_Legacy" xml:space="preserve">
-    <value>Застарілий (серіалізовані координати)</value>
+    <value>Масив координат</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
     <value>Налаштування шифрування експорту </value>

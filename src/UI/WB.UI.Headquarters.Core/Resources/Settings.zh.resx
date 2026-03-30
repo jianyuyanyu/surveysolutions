@@ -136,7 +136,7 @@
     <value>GeoJSON</value>
   </data>
   <data name="GeographyExportFormat_Legacy" xml:space="preserve">
-    <value>传统格式（序列化坐标）</value>
+    <value>坐标数组</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
     <value>导出加密设置</value>

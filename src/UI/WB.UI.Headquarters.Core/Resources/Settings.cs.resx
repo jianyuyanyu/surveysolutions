@@ -283,7 +283,7 @@
     <value>GeoJSON</value>
   </data>
   <data name="GeographyExportFormat_Legacy" xml:space="preserve">
-    <value>Starší (serializované souřadnice)</value>
+    <value>Pole souřadnic</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
     <value>Nastavení šifrování exportu</value>
