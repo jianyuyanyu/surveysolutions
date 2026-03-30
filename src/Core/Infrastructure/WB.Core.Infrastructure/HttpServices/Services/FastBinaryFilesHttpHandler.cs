@@ -117,14 +117,25 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                                 HttpCompletionOption.ResponseHeadersRead,
                                 token).ConfigureAwait(false);
 
-                            integrityService.ValidateResponseHeadersAndThrow(responseResult.Headers);
-
-                            return responseResult;
+                            try
+                            {
+                                integrityService.ValidateResponseHeadersAndThrow(responseResult.Headers);
+                                return responseResult;
+                            }
+                            catch
+                            {
+                                responseResult.Dispose();
+                                throw;
+                            }
                         })
                         .ConfigureAwait(false);
 
                     // fastest way to read whole response without allocating byte[] twice.
-                    var buffer = await block.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                    byte[] buffer;
+                    using (block)
+                    {
+                        buffer = await block.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                    }
 
                     // fill result array with acquired buffer data
                     Array.Copy(buffer, 0, result, chunk.From, chunk.Length);
