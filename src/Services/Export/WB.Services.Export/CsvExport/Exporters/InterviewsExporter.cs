@@ -63,7 +63,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             await this.DoExportAsync(tenant, questionnaireExportStructure, questionnaire, basePath, interviewsToExport, progress, cancellationToken, geographyExportFormat);
             stopwatch.Stop();
             this.logger.LogInformation("Export of {interviewsCount:N0} interview datas for questionnaire" +
-                    " {questionnaireId} finised. Took {elapsed:c} to complete",
+                    " {questionnaireId} finished. Took {elapsed:c} to complete",
                 interviewsToExport.Count, questionnaireExportStructure.QuestionnaireId, stopwatch.Elapsed);
         }
 
