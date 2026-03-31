@@ -54,10 +54,6 @@ export default {
 
         connection.onreconnected(() => {
             this.$store.dispatch('tryingToReconnect', false)
-            this.$store.dispatch('loadInterview')
-            this.$store.dispatch('getLanguageInfo')
-            this.$store.dispatch('fetchSectionEntities')
-            this.$store.dispatch('refreshSectionState')
         })
 
         connection.onclose(() => {
