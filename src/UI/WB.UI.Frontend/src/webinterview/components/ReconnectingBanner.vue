@@ -44,7 +44,7 @@ export default {
     gap: 12px;
     padding: 10px 20px;
     background-color: #e8a000;
-    color: #fff;
+    color: #1a1a1a;
     font-size: 14px;
 }
 
@@ -52,8 +52,8 @@ export default {
     display: inline-block;
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-top-color: #fff;
+    border: 2px solid rgba(0, 0, 0, 0.25);
+    border-top-color: #1a1a1a;
     border-radius: 50%;
     animation: reconnecting-spin 0.8s linear infinite;
     flex-shrink: 0;
@@ -71,9 +71,9 @@ export default {
 
 .reconnecting-banner__reload {
     margin-left: auto;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    color: #fff;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    color: #1a1a1a;
     padding: 4px 14px;
     border-radius: 3px;
     cursor: pointer;
@@ -81,6 +81,6 @@ export default {
 }
 
 .reconnecting-banner__reload:hover {
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.2);
 }
 </style>
