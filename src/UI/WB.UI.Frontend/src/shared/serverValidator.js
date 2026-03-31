@@ -1,4 +1,5 @@
 import modal from '~/shared/modal'
+import { $t } from '~/shared/plugins/locale'
 
 const EXPECTED_HEADER_VALUE = '773994826649214'
 
@@ -18,14 +19,13 @@ export function validateServerHeader(response) {
     shownOnce = true
 
     modal.dialog({
-        title: 'Invalid server response',
-        message: '<p>The server did not return the expected identification header.</p>' +
-            '<p>You may be connected to a proxy or an incorrect server. Please reload the page.</p>',
+        title: $t('WebInterviewUI.InvalidServerResponseTitle'),
+        message: '<p>' + $t('WebInterviewUI.InvalidServerResponseMessage') + '</p>',
         onEscape: false,
         closeButton: false,
         buttons: {
             reload: {
-                label: 'Reload',
+                label: $t('WebInterviewUI.Reload'),
                 className: 'btn-danger',
                 callback: () => { location.reload() },
             },

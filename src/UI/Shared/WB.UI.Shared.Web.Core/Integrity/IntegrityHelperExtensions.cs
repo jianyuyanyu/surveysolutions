@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 
 namespace WB.UI.Shared.Web.Integrity
 {
-    public static class IntegrityExtensions
+    public static class IntegrityHelperExtensions
     {
         public static IApplicationBuilder UseIntegrityHelper(this IApplicationBuilder builder)
         {
