@@ -158,5 +158,11 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("RateLimitExceeded", resourceCulture);
             }
         }
+        
+        public static string StopRequest {
+            get {
+                return ResourceManager.GetString("StopRequest", resourceCulture);
+            }
+        }
     }
 }

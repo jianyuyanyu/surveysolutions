@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onBeforeUnmount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useChatStore } from '../../../stores/chat';
 import ChatPanel from './ChatPanel.vue';

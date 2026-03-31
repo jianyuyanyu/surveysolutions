@@ -75,4 +75,7 @@
     <data name="RateLimitExceeded" xml:space="preserve">
         <value>Rate limit exceeded. Please try again later.</value>
     </data>
+    <data name="StopRequest" xml:space="preserve">
+        <value>Stop</value>
+    </data>
 </root>

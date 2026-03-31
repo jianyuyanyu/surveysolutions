@@ -297,7 +297,7 @@ export default {
             openEditor: null,
 
             showInstruction: null,
-            showEnablingConditions: null
+            showEnablingConditions: null,
         }
     },
     watch: {
