@@ -296,7 +296,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         item.YMaxVal = headerBounds.MaxY;
                         item.ShapeType = shapefileReader.ShapeType.ToString();
                         item.Wkid = 4326;  //geographic coordinates Wgs84
-                        item.ShapesCount = shapefileReader.Features.Count;
                         
                         string labelColumnTitle = null;
 
@@ -362,6 +361,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         if (fc.Count == 0)
                             throw new ArgumentException($"Can't read any coordinates from {mapFile.Name}.shp file");
 
+                        item.ShapesCount = fc.Count;
                         item.HasDuplicateLabels = hasDuplicates;
 
                         var json = GetGeoJson(fc);
