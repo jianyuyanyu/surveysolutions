@@ -142,8 +142,18 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     // forward user id explicitly for downstream auditing/rate-limiting
                     httpRequest.Headers.TryAddWithoutValidation("X-User-Id", user.Id.ToString());
 
-                    var jwtToken = jwtTokenService.GenerateToken(user);
-                    httpRequest.Headers.TryAddWithoutValidation("Authorization", "Bearer " + jwtToken);
+                    try
+                    {
+                        var jwtToken = jwtTokenService.GenerateToken(user);
+                        if (!string.IsNullOrWhiteSpace(jwtToken))
+                            httpRequest.Headers.TryAddWithoutValidation("Authorization", "Bearer " + jwtToken);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // If JWT secret key is not configured, log and continue without Authorization header,
+                        // allowing other authentication mechanisms (e.g. provider API key) to be used.
+                        logger.LogWarning(ex, "JWT token generation skipped because Assistant JWT secret key is not configured.");
+                    }
                 }
 
                 var proxyRequest = new

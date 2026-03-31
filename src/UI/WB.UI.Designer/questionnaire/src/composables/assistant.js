@@ -93,11 +93,6 @@ export const useAssistant = () => {
                     throw error;
                 }
 
-                console.error(
-                    `Assistant Error (attempt ${attempt}/${retries}):`,
-                    error.response?.data || error.message,
-                );
-
                 if (error.response?.status === 401) {
                     throw new Error('Not authorized.');
                 } else if (error.response?.status === 429) {
@@ -107,9 +102,6 @@ export const useAssistant = () => {
                             1000 * Math.pow(2, attempt - 1),
                             10000,
                         ); // Max 10 seconds
-                        console.log(
-                            `Rate limit exceeded. Retrying in ${backoffDelay}ms...`,
-                        );
                         await abortAwareDelay(backoffDelay, options.signal);
                         continue;
                     } else {
@@ -133,9 +125,6 @@ export const useAssistant = () => {
                     // Server error - retry
                     if (attempt < retries) {
                         const backoffDelay = Math.min(2000 * attempt, 10000);
-                        console.log(
-                            `Server error. Retrying in ${backoffDelay}ms...`,
-                        );
                         await abortAwareDelay(backoffDelay, options.signal);
                         continue;
                     } else {
