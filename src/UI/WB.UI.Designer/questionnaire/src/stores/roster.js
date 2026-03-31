@@ -34,47 +34,33 @@ export const useRosterStore = defineStore('roster', {
                 this.clear();
             }
         },
-        async questionDeleted(payload) {
-            if (this.roster.itemId && this.questionnaireId) {
-                if (!this.getIsDirty) {
-                    await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
-                } else {
-                    const freshData = await getRoster(this.questionnaireId, this.roster.itemId);
-                    this.refreshContextualData(freshData);
-                }
+        async refreshRosterDataPreservingEdits() {
+            if (!this.roster.itemId || !this.questionnaireId) {
+                return;
             }
+
+            if (!this.getIsDirty) {
+                await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
+            } else {
+                // The roster may have been structurally changed while the user has unsaved edits.
+                // A full refresh would discard those edits, so only update the
+                // context-dependent question lists that are determined by location.
+                const freshData = await getRoster(this.questionnaireId, this.roster.itemId);
+                this.refreshContextualData(freshData);
+            }
+        },
+        async questionDeleted(payload) {
+            await this.refreshRosterDataPreservingEdits();
         },
         async questionAdded(payload) {
-            if (this.roster.itemId && this.questionnaireId) {
-                if (!this.getIsDirty) {
-                    await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
-                } else {
-                    const freshData = await getRoster(this.questionnaireId, this.roster.itemId);
-                    this.refreshContextualData(freshData);
-                }
-            }
+            await this.refreshRosterDataPreservingEdits();
         },
         async questionMoved(payload) {
-            if (this.roster.itemId && this.questionnaireId) {
-                if (!this.getIsDirty) {
-                    await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
-                } else {
-                    const freshData = await getRoster(this.questionnaireId, this.roster.itemId);
-                    this.refreshContextualData(freshData);
-                }
-            }
+            await this.refreshRosterDataPreservingEdits();
         },
         async groupMoved(payload) {
             if (this.roster.itemId === payload.itemId && this.questionnaireId) {
-                if (!this.getIsDirty) {
-                    await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
-                } else {
-                    // The roster was moved to a new parent while the user has unsaved edits.
-                    // A full refresh would discard those edits, so only update the
-                    // context-dependent question lists that are determined by location.
-                    const freshData = await getRoster(this.questionnaireId, this.roster.itemId);
-                    this.refreshContextualData(freshData);
-                }
+                await this.refreshRosterDataPreservingEdits();
             }
         },
         // Updates only the fields that depend on the roster's structural position in the
