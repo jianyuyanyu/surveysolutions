@@ -71,7 +71,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IOptions<RecaptchaSettings> recaptchaSettings;
         private readonly IOptions<CaptchaConfig> captchaConfig;
         private readonly IServiceLocator serviceLocator;
-        private readonly IAggregateRootPrototypeService prototypeService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
         private const string CaptchaCompletedKey = "CaptchaCompletedKey";
@@ -131,7 +130,6 @@ namespace WB.UI.Headquarters.Controllers
             IOptions<RecaptchaSettings> recaptchaSettings,
             IOptions<CaptchaConfig> captchaConfig,
             IServiceLocator serviceLocator,
-            IAggregateRootPrototypeService prototypeService, 
             IQuestionnaireStorage questionnaireStorage, 
             IInScopeExecutor inScopeExecutor,
             IMemoryCache memoryCache,
@@ -153,7 +151,6 @@ namespace WB.UI.Headquarters.Controllers
             this.recaptchaSettings = recaptchaSettings;
             this.captchaConfig = captchaConfig;
             this.serviceLocator = serviceLocator;
-            this.prototypeService = prototypeService;
             this.questionnaireStorage = questionnaireStorage;
             this.inScopeExecutor = inScopeExecutor;
             this.memoryCache = memoryCache;
