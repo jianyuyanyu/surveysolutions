@@ -513,7 +513,8 @@
     "HelpCriticalityConditionMessage": "Ce message est affiché lorsque la condition critique est évaluée à \"Faux\" ou qu'une exception se produit lors de l'évaluation de l'expression. Le message peut utiliser des hyperliens et la substitution de texte.",
     "AttachmentSizeIsTooBig": "La taille de la pièce jointe est trop grande. Taille maximale : {{size}}",
     "SwitchTo": "Passer à",
-    "SwitchToTranslationConfirm": "Passer à changera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments."
+    "SwitchToTranslationConfirm": "Passer à changera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments.",
+    "AIAssistant": "IA"
   },
   "AccountResources": {
     "AllRights": "Tout droit reservé",
