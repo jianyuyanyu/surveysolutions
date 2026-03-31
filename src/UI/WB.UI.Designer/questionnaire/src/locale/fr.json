@@ -498,7 +498,7 @@
     "CommunicationError": "Erreur réseau",
     "SideBarCategoriesAddNew": "Ajouter de nouvelles catégories",
     "RowAdded": "Ligne ajoutée",
-    "OptionsCascadingListError": "\nVous avez entré une entrée invalide. Chaque ligne doit suivre le format : \"Titre...ValeurParente/Valeur[...Nom de la pièce jointe]\". 'Valeur' et 'ValeurParente' doivent être des nombres entiers. 'Titre' doit être une chaîne alphanumérique. 'Nom de la pièce jointe' est facultatif. Aucune ligne vide n'est autorisée.",
+    "OptionsCascadingListError": "\r\nVous avez entré une entrée invalide. Chaque ligne doit suivre le format : \"Titre...ValeurParente/Valeur[...Nom de la pièce jointe]\". 'Valeur' et 'ValeurParente' doivent être des nombres entiers. 'Titre' doit être une chaîne alphanumérique. 'Nom de la pièce jointe' est facultatif. Aucune ligne vide n'est autorisée.",
     "ShowParentValues": "Afficher les valeurs parentes",
     "HideParentValues": "Masquer les valeurs parentes",
     "AddEnablingCondition": "Ajouter une condition d'activation",
