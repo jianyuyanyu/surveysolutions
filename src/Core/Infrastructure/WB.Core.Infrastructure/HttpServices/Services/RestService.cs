@@ -173,7 +173,10 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                     return new ExecuteRequestResult(httpClient, httpResponseMessage);
                 }
 
-                throw new RestException(httpResponseMessage.ReasonPhrase, statusCode: httpResponseMessage.StatusCode);
+                var statusCode = httpResponseMessage.StatusCode;
+                var reasonPhrase = httpResponseMessage.ReasonPhrase;
+                httpResponseMessage.Dispose();
+                throw new RestException(reasonPhrase, statusCode: statusCode);
             }
             catch (OperationCanceledException ex)
             {
