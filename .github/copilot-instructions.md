@@ -6,7 +6,7 @@
 
 - **Primary Languages:** C# (.NET 9), JavaScript/Vue 3 (frontend)
 - **Database:** PostgreSQL (NHibernate ORM for HQ, EF Core for Export service)
-- **Target Runtimes:** .NET 9, Node.js 20+ (frontend)
+- **Target Runtimes:** .NET 9, Node.js 22 (frontend; match CI workflow `NODE_VERSION`)
 
 ---
 
@@ -234,8 +234,8 @@ export const useMyStore = defineStore('myStore', {
 })
 ```
 
-- **Do not** use Vuex in this project — it uses Pinia only.
-- Stores live in `questionnaire/src/stores/`.
+- Pinia is the primary state management library. Vuex is still used in legacy classifications pages; **do not** introduce new Vuex modules — new state should use Pinia.
+- Pinia stores live in `questionnaire/src/stores/`.
 
 #### API Layer
 
@@ -271,7 +271,7 @@ When reviewing PRs, flag the following:
 - [ ] **No `console.log` left in production code.**
 - [ ] **Localization:** User-visible strings must use i18next (`$t(...)` / `i18n.t(...)`) — no hardcoded English strings.
 - [ ] **No semicolons, single quotes, 4-space indent** enforced by ESLint/Prettier — PRs failing lint must be fixed before merge.
-- [ ] **Store technology:** HQ/WebInterview uses **Vuex 4**; Designer uses **Pinia**. Do not cross-pollinate.
+- [ ] **Store technology:** HQ/WebInterview uses **Vuex 4** only; Designer uses **Pinia** for new code (legacy Vuex exists in classifications pages — do not add new Vuex modules there).
 - [ ] **API calls:** Use the established API service helpers (`axios` in HQ frontend, `mande`-based helpers in Designer), not raw `fetch`.
 - [ ] **Component naming:** Multi-word component names (Vue style guide requirement).
 - [ ] **Props validation:** Props must have `type` declarations.
@@ -304,7 +304,8 @@ dotnet test src/Services/Core/WB.Services.Scheduler.Tests
 cd src/UI/WB.UI.Frontend
 npm install
 npm run build           # production build
-npm run dev             # development build (watch)
+npm run dev             # development build (one-off, Vite build --mode development)
+npm run hot             # dev server with HMR (Vite)
 npm test                # Jest unit tests
 npm run lint            # ESLint
 npm run format          # Prettier
@@ -316,8 +317,9 @@ npm run format          # Prettier
 cd src/UI/WB.UI.Designer
 npm install
 npm run build           # production build (outputs to wwwroot)
-npm run dev             # development build (watch)
-npm run hot             # Vite watch mode
+npm run dev             # development build (non-watch, Vite build --mode development)
+npm run hot             # Vite build --watch (continuous build)
+npm run hot2            # Vite dev server (HMR)
 ```
 
 ---
