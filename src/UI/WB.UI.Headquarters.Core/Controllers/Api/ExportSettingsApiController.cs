@@ -205,14 +205,14 @@ namespace WB.UI.Headquarters.Controllers.Api
         public IActionResult SetRetentionLimitInDays([FromBody] RetentionLimitInDaysModel message)
         {
             if (!ModelState.IsValid)
-                return Ok(new {sucess = false});
+                return Ok(new {success = false});
 
             UpdateRetentionSettings(settings =>
             {
                 settings.DaysToKeep = message.RetentionLimitInDays;
             });
             this.auditLog.RetentionPolicyDaysToKeepChanged(message.RetentionLimitInDays);
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
         
         public class RetentionLimitCountModel
@@ -226,7 +226,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public IActionResult SetRetentionLimitCount([FromBody] RetentionLimitCountModel message)
         {
             if (!ModelState.IsValid)
-                return Ok(new {sucess = false});
+                return Ok(new {success = false});
 
             UpdateRetentionSettings(settings =>
             {
@@ -234,7 +234,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             });
 
             this.auditLog.RetentionPolicyFilesToKeepChanged(message.RetentionLimitCount);
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
 
         [HttpPost]
@@ -243,7 +243,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             [FromBody] ChangeSettingsModel changeSettingsState)
         {
             if (!ModelState.IsValid)
-                return Ok(new {sucess = false});
+                return Ok(new {success = false});
 
             UpdateRetentionSettings(settings =>
             {
@@ -252,7 +252,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             
             this.auditLog.RetentionPolicyChanged(changeSettingsState.EnableState);
             
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
 
         [HttpDelete]
@@ -270,7 +270,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             //exportServiceApi calls to delete old exports
             await exportServiceApi.RunRetentionPolicy(exportRetentionSettings.CountToKeep ,exportRetentionSettings.DaysToKeep);
             
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
 
         public class GeographyExportFormatModel
@@ -284,14 +284,14 @@ namespace WB.UI.Headquarters.Controllers.Api
         public IActionResult SetGeographyExportFormat([FromBody] GeographyExportFormatModel model)
         {
             if (!ModelState.IsValid)
-                return Ok(new {sucess = false});
+                return Ok(new {success = false});
 
             if (!Enum.IsDefined(typeof(GeographyExportFormat), model.GeographyExportFormat))
                 return BadRequest(new { message = "Invalid geography export format value." });
 
             exportSettings.SetGeographyExportFormat(model.GeographyExportFormat);
             this.auditLog.GeographyExportFormatChanged(model.GeographyExportFormat);
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
     }
 }
