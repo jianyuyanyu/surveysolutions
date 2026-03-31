@@ -59,7 +59,11 @@ export const useRosterStore = defineStore('roster', {
             await this.refreshRosterDataPreservingEdits();
         },
         async groupMoved(payload) {
-            if (this.roster.itemId === payload.itemId && this.questionnaireId) {
+            if (
+                this.roster.itemId === payload.itemId &&
+                this.questionnaireId &&
+                payload.questionnaireId === this.questionnaireId
+            ) {
                 await this.refreshRosterDataPreservingEdits();
             }
         },
