@@ -228,6 +228,12 @@
   <data name="DecimalTooBig" xml:space="preserve">
     <value>القيمة التي تم إدخالها كبيرة جدا. تم السماح بأقل من 15 رقما</value>
   </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>لم يُرجع الخادم رأس التعريف المتوقع. ربما أنت متصل بخادم وكيل أو خادم غير صحيح. يرجى إعادة تحميل الصفحة.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>استجابة خادم غير صالحة</value>
+  </data>
   <data name="Disconnected" xml:space="preserve">
     <value>انقطع الاتصال</value>
   </data>

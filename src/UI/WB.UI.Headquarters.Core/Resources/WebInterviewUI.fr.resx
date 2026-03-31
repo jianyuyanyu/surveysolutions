@@ -138,6 +138,12 @@
   <data name="SessionTimeoutMessage" xml:space="preserve">
     <value>Veuillez actualiser la page pour continuer cette interview.</value>
   </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>Le serveur n'a pas renvoyé l'en-tête d'identification attendu. Vous êtes peut-être connecté via un proxy ou à un serveur incorrect. Veuillez recharger la page.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Réponse du serveur invalide</value>
+  </data>
   <data name="Disconnected" xml:space="preserve">
     <value>Déconnecté</value>
   </data>
