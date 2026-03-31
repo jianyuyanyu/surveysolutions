@@ -75,7 +75,7 @@ Registration uses a custom `IModule` / `IIocRegistry` abstraction (wrapping Auto
 ## C# Code Style and Conventions
 
 - **Language version:** `latest` — use modern C# features freely (pattern matching, records, switch expressions, etc.).
-- **Nullable reference types:** `WarningsAsErrors` for all CS86xx null-safety diagnostics. New code must be null-safe.
+- **Nullable reference types:** Selected nullability warnings (CS8600–CS8634, CS8714) are treated as errors via `WarningsAsErrors`. New code must be null-safe.
   - Use `#nullable enable` when adding nullable annotations to existing files that predate the policy.
 - **Constructor injection:** All dependencies injected via constructor; no service locator in application code (service locator exists only in legacy infrastructure).
 - **Interface-first:** Every service class should implement an interface; program to the interface.
