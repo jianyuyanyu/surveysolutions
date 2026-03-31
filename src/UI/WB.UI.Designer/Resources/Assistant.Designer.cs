@@ -152,5 +152,11 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("ConnectionError", resourceCulture);
             }
         }
+        
+        public static string RateLimitExceeded {
+            get {
+                return ResourceManager.GetString("RateLimitExceeded", resourceCulture);
+            }
+        }
     }
 }

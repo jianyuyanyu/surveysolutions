@@ -114,7 +114,7 @@ export const useAssistant = () => {
                         continue;
                     } else {
                         throw new Error(
-                            'Rate limit exceeded. Please check your OpenAI plan limits and try again later.',
+                            i18n.t('Assistant.RateLimitExceeded'),
                         );
                     }
                 } else if (error.response?.status === 400) {

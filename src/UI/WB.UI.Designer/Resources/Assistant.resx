@@ -72,4 +72,7 @@
     <data name="ConnectionError" xml:space="preserve">
         <value>Failed to connect to Assistant.</value>
     </data>
+    <data name="RateLimitExceeded" xml:space="preserve">
+        <value>Rate limit exceeded. Please try again later.</value>
+    </data>
 </root>
