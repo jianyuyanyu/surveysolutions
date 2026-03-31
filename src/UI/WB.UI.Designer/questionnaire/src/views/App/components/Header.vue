@@ -5,7 +5,7 @@
             <div class="header-menu">
                 <div class="buttons">
                     <button v-if="aiAvailable" class="btn" @click="showChat()">
-                        {{ $t('QuestionnaireEditor.AIAssistant', 'AI') }}
+                        {{ $t('Assistant.Title') }}
                     </button>
                     <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank" rel="noopener">{{
                         $t('QuestionnaireEditor.Help') }}</a>
