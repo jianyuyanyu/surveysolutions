@@ -164,5 +164,17 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("StopRequest", resourceCulture);
             }
         }
+        
+        public static string Copy {
+            get {
+                return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        public static string CopyCode {
+            get {
+                return ResourceManager.GetString("CopyCode", resourceCulture);
+            }
+        }
     }
 }

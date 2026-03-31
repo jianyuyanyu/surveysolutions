@@ -671,6 +671,8 @@
     "Disclaimer": "本内容由自动化AI系统生成，不构成权威性或经过验证的信息。可能包含错误或遗漏。用户在使用前有责任进行审查、验证并做出合理判断。",
     "ConnectionError": "连接助手失败。",
     "RateLimitExceeded": "超出请求限制。请稍后重试。",
-    "StopRequest": "停止"
+    "StopRequest": "停止",
+    "Copy": "复制",
+    "CopyCode": "复制代码"
   }
 }

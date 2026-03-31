@@ -78,4 +78,10 @@
     <data name="StopRequest" xml:space="preserve">
         <value>Stop</value>
     </data>
+    <data name="Copy" xml:space="preserve">
+        <value>Copy</value>
+    </data>
+    <data name="CopyCode" xml:space="preserve">
+        <value>Copy code</value>
+    </data>
 </root>

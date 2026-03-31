@@ -671,6 +671,8 @@
     "Disclaimer": "Este conteúdo foi produzido por um sistema de IA automatizado e não constitui informação autoritativa ou verificada. Pode conter erros ou omissões. Os utilizadores são responsáveis por rever, validar e exercer julgamento antes de usar.",
     "ConnectionError": "Falha ao conectar ao assistente.",
     "RateLimitExceeded": "Limite de solicitações excedido. Por favor, tente novamente mais tarde.",
-    "StopRequest": "Parar"
+    "StopRequest": "Parar",
+    "Copy": "Copiar",
+    "CopyCode": "Copiar código"
   }
 }

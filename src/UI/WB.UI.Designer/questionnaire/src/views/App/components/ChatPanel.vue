@@ -270,6 +270,8 @@ export default {
 
             // Extract fenced code blocks first
             const nonce = Math.random().toString(36).slice(2);
+            const copyTitle = vm?.$t?.('Assistant.Copy') ?? 'Copy';
+            const copyAriaLabel = vm?.$t?.('Assistant.CopyCode') ?? 'Copy code';
             const codeBlocks = [];
             let result = content.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
                 const language = lang || 'csharp';
@@ -278,7 +280,7 @@ export default {
                 const encoded = encodeURIComponent(code.replace(/\n$/, ''));
                 codeBlocks.push(
                     `<div class="chat-code-wrapper">` +
-                    `<button type="button" class="chat-copy-btn" data-copy="${encoded}" title="Copy" aria-label="Copy code"><span class="mdi mdi-content-copy" aria-hidden="true"></span></button>` +
+                    `<button type="button" class="chat-copy-btn" data-copy="${encoded}" title="${copyTitle}" aria-label="${copyAriaLabel}"><span class="mdi mdi-content-copy" aria-hidden="true"></span></button>` +
                     `<pre class="chat-code-block"><code class="hljs language-${actualLanguage}">${highlighted}</code></pre>` +
                     `</div>`
                 );
@@ -294,7 +296,7 @@ export default {
                 inlineBlocks.push(
                     `<span class="chat-inline-wrapper">` +
                     `<code class="chat-code-inline hljs">${highlighted}</code>` +
-                    `<button type="button" class="chat-copy-btn chat-copy-inline" data-copy="${encoded}" title="Copy" aria-label="Copy code"><span class="mdi mdi-content-copy" aria-hidden="true"></span></button>` +
+                    `<button type="button" class="chat-copy-btn chat-copy-inline" data-copy="${encoded}" title="${copyTitle}" aria-label="${copyAriaLabel}"><span class="mdi mdi-content-copy" aria-hidden="true"></span></button>` +
                     `</span>`
                 );
                 return `__INLINECODE_${nonce}_${idx}__`;

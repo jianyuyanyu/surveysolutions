@@ -671,6 +671,8 @@
     "Disclaimer": "Tento obsah byl vytvořen automatizovaným systémem AI a nepředstavuje autoritativní ani ověřené informace. Může obsahovat chyby nebo opomenutí. Uživatelé jsou odpovědní za přezkoumání, ověření a uplatnění vlastního úsudku před použitím.",
     "ConnectionError": "Připojení k asistentovi se nezdařilo.",
     "RateLimitExceeded": "Byl překročen limit požadavků. Zkuste to prosím znovu později.",
-    "StopRequest": "Zastavit"
+    "StopRequest": "Zastavit",
+    "Copy": "Kopírovat",
+    "CopyCode": "Kopírovat kód"
   }
 }
