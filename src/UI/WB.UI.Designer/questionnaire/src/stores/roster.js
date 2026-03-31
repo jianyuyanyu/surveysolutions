@@ -36,22 +36,65 @@ export const useRosterStore = defineStore('roster', {
         },
         async questionDeleted(payload) {
             if (this.roster.itemId && this.questionnaireId) {
-                await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
+                if (!this.getIsDirty) {
+                    await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
+                } else {
+                    const freshData = await getRoster(this.questionnaireId, this.roster.itemId);
+                    this.refreshContextualData(freshData);
+                }
             }
         },
         async questionAdded(payload) {
             if (this.roster.itemId && this.questionnaireId) {
-                await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
+                if (!this.getIsDirty) {
+                    await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
+                } else {
+                    const freshData = await getRoster(this.questionnaireId, this.roster.itemId);
+                    this.refreshContextualData(freshData);
+                }
             }
         },
         async questionMoved(payload) {
             if (this.roster.itemId && this.questionnaireId) {
-                await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
+                if (!this.getIsDirty) {
+                    await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
+                } else {
+                    const freshData = await getRoster(this.questionnaireId, this.roster.itemId);
+                    this.refreshContextualData(freshData);
+                }
             }
         },
         async groupMoved(payload) {
             if (this.roster.itemId === payload.itemId && this.questionnaireId) {
-                await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
+                if (!this.getIsDirty) {
+                    await this.fetchRosterData(this.questionnaireId, this.roster.itemId);
+                } else {
+                    // The roster was moved to a new parent while the user has unsaved edits.
+                    // A full refresh would discard those edits, so only update the
+                    // context-dependent question lists that are determined by location.
+                    const freshData = await getRoster(this.questionnaireId, this.roster.itemId);
+                    this.refreshContextualData(freshData);
+                }
+            }
+        },
+        // Updates only the fields that depend on the roster's structural position in the
+        // questionnaire (available trigger question lists, breadcrumbs).  User edits to
+        // title, type, variableName, fixedRosterTitles, etc. are intentionally preserved.
+        // Both roster and initialRoster are patched so that dirty-detection continues to
+        // reflect only genuine user changes, not stale server-side option lists.
+        refreshContextualData(freshData) {
+            const contextFields = [
+                'numericIntegerQuestions',
+                'textListsQuestions',
+                'notLinkedMultiOptionQuestions',
+                'numericIntegerTitles',
+                'breadcrumbs'
+            ];
+            for (const field of contextFields) {
+                if (freshData[field] !== undefined) {
+                    this.roster[field] = _.cloneDeep(freshData[field]);
+                    this.initialRoster[field] = _.cloneDeep(freshData[field]);
+                }
             }
         },
         async fetchRosterData(questionnaireId, rosterId) {
