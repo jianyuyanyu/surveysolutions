@@ -425,12 +425,11 @@ namespace WB.UI.Headquarters
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseIntegrityHelper();
+            
             app.UseViteForwarder();
             app.UseForwardedHeaders();
-
             app.UseExceptional();
-
-            app.UseIntegrityHelper();
 
             if (!env.IsDevelopment())
             {
