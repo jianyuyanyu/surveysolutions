@@ -5,7 +5,7 @@
         <span v-if="attemptCount > 0" class="reconnecting-banner__attempt">
             {{ $t('WebInterviewUI.ReconnectAttempt', { count: attemptCount }) }}
         </span>
-        <button class="reconnecting-banner__reload" @click="reload">
+        <button type="button" class="reconnecting-banner__reload" @click="reload">
             {{ $t('WebInterviewUI.Reload') }}
         </button>
     </div>
