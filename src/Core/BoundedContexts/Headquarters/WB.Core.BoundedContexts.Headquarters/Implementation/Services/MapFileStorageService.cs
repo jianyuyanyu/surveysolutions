@@ -340,7 +340,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                             if (labelColumnTitle != null && readFeature.Attributes.Exists(labelColumnTitle))
                             {
-                                var labelValue = readFeature.Attributes[labelColumnTitle].ToString();
+                                var labelValue = Convert.ToString(readFeature.Attributes[labelColumnTitle]);
 
                                 if (!string.IsNullOrWhiteSpace(labelValue))
                                 {
