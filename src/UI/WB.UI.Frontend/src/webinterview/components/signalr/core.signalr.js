@@ -56,8 +56,10 @@ export default {
             this.$store.dispatch('tryingToReconnect', false)
         })
 
-        connection.onclose(() => {
-            this.$store.dispatch('disconnected')
+        connection.onclose((error) => {
+            if (error) {
+                this.$store.dispatch('disconnected')
+            }
         })
 
         connection.on('refreshEntities', (questions) => {
