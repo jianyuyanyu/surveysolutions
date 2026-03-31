@@ -558,10 +558,12 @@ export default {
         },
         onGeographyFormatSelected(item) {
             if (item != null) {
+                const previousFormat = this.geographyExportFormat
                 this.$emit('update:geographyExportFormat', item.key)
-                nextTick(() => {
-                    this.$hq.ExportSettings.setGeographyExportFormat(item.key)
-                })
+                this.$hq.ExportSettings.setGeographyExportFormat(item.key)
+                    .catch(() => {
+                        this.$emit('update:geographyExportFormat', previousFormat)
+                    })
             }
         },
         noAction() {
