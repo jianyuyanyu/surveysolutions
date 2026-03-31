@@ -290,6 +290,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return BadRequest(new { message = "Invalid geography export format value." });
 
             exportSettings.SetGeographyExportFormat(model.GeographyExportFormat);
+            this.auditLog.GeographyExportFormatChanged(model.GeographyExportFormat);
             return Ok(new {sucess = true});
         }
     }
