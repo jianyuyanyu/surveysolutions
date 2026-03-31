@@ -34,7 +34,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.IsPreviewGeoJson);
             Property(x => x.HasDuplicateLabels,  pm =>
             {
-                pm.Type<BooleanType>();
                 pm.Column("has_duplicate_labels");
             });
             
