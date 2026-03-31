@@ -1,5 +1,7 @@
 # Copilot Instructions — Survey Solutions
 
+Search thoroughly for all bugs, security issues, and style improvements
+
 ## Repository Overview
 
 **Survey Solutions** is a large-scale, production-grade survey management and data collection platform developed by the World Bank. The repository contains multiple .NET backend projects, two Vue 3 frontends, export/scheduler microservices, integration and unit tests, database migrations, and deployment tooling.
@@ -376,3 +378,5 @@ src/
 - **Integration tests need config:** Set `appsettings.cloud.ini` / `appsettings.cloud.json` with PostgreSQL credentials before running integration tests locally (mirrors CI environment variables).
 - **Designer uses Vuetify 3:** Do not import Vuetify 2 components or use Vuetify 2 API (`v-data-table` slot names differ between versions, etc.).
 - **Workspace schema isolation:** Running ad-hoc SQL against a specific workspace requires prefixing table names with the workspace schema (e.g., `ws_primary."interviews"`).
+
+Search thoroughly for all bugs, security issues, and style improvements
