@@ -53,14 +53,14 @@ const confirmPromptDialog = {
     name: 'ConfirmPrompt',
     data() {
         return {
-            title: { type: String, required: true },
-            header: { type: String, required: false },
-            okButtonTitle: { type: String, required: false },
-            cancelButtonTitle: { type: String, required: false },
-            isReadOnly: { type: Boolean, required: false },
-            callback: { type: Function, required: false },
-            noControls: { type: Boolean, required: false },
-            isAlert: { type: Boolean, required: false, default: false },
+            title: '',
+            header: '',
+            okButtonTitle: '',
+            cancelButtonTitle: '',
+            isReadOnly: false,
+            callback: null,
+            noControls: false,
+            isAlert: false,
 
             inputValue: '',
             inputLabel: null,

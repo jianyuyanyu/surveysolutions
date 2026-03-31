@@ -19,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
@@ -209,7 +210,11 @@ namespace WB.UI.Designer
                             }
                             else
                             {
-                                context.Response.Headers.Append("X-Token-Error", context.Exception.Message);
+                                var logger = context.HttpContext.RequestServices
+                                    .GetRequiredService<ILoggerFactory>()
+                                    .CreateLogger("JwtAuthentication");
+                                logger.LogWarning(context.Exception, "JWT authentication failed.");
+                                context.Response.Headers.Append("X-Token-Error", "Token validation failed");
                             }
                             return Task.CompletedTask;
                         },
