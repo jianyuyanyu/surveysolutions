@@ -828,7 +828,9 @@ export default {
     display: block;
     padding: 12px 14px;
     white-space: pre-wrap;
-    word-break: break-word;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    overflow-x: auto;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
