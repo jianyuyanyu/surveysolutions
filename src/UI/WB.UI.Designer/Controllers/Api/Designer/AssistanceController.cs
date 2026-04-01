@@ -59,13 +59,23 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         public class Message
         {
+            [Required]
+            [RegularExpression("^(user|assistant)$", ErrorMessage = "Invalid message role.")]
+            [StringLength(20)]
             public string Role { get; set; } = string.Empty;
+
+            [Required]
+            [StringLength(4000)]
             public string Content { get; set; } = string.Empty;
         }
 
         public class AssistanceRequest
         {
+            [Required]
+            [StringLength(4000)]
             public string Prompt { get; set; } = string.Empty;
+
+            [MaxLength(50)]
             public List<Message>? Messages { get; set; }
             public Guid? EntityId { get; set; }
             public Guid? ConversationId { get; set; }
@@ -76,7 +86,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public Guid? EntityId { get; set; }
             public long? ClientMessageId { get; set; }
             public long? ClientTimestamp { get; set; }
+            [StringLength(4000)]
             public string Prompt { get; set; } = string.Empty;
+            [StringLength(16000)]
             public string AssistantResponse { get; set; } = string.Empty;
             public long? AssistantCallId { get; set; }
             public AssistantResponseReaction Reaction { get; set; }
