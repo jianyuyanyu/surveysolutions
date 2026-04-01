@@ -59,13 +59,23 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         public class Message
         {
+            [Required]
+            [RegularExpression("^(user|assistant)$", ErrorMessage = "Invalid message role.")]
+            [StringLength(20)]
             public string Role { get; set; } = string.Empty;
+
+            [Required]
+            [StringLength(4000)]
             public string Content { get; set; } = string.Empty;
         }
 
         public class AssistanceRequest
         {
+            [Required]
+            [StringLength(4000)]
             public string Prompt { get; set; } = string.Empty;
+
+            [MaxLength(50)]
             public List<Message>? Messages { get; set; }
             public Guid? EntityId { get; set; }
             public Guid? ConversationId { get; set; }
@@ -76,7 +86,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public Guid? EntityId { get; set; }
             public long? ClientMessageId { get; set; }
             public long? ClientTimestamp { get; set; }
+            [StringLength(4000)]
             public string Prompt { get; set; } = string.Empty;
+            [StringLength(16000)]
             public string AssistantResponse { get; set; } = string.Empty;
             public long? AssistantCallId { get; set; }
             public AssistantResponseReaction Reaction { get; set; }
@@ -177,9 +189,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
                 if (!httpResponse.IsSuccessStatusCode)
                 {
-                    var errorContent = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-                    logger.LogError("Assistant service returned error: {StatusCode} - {Content}", httpResponse.StatusCode, errorContent);
-                    return StatusCode((int)httpResponse.StatusCode, "Error from assistant service.");
+                    var correlationId = Guid.NewGuid();
+                    logger.LogError("Assistant service returned error: {StatusCode}. CorrelationId: {CorrelationId}",
+                        httpResponse.StatusCode, correlationId);
+                    return StatusCode((int)httpResponse.StatusCode,
+                        $"Error from assistant service. CorrelationId: {correlationId}");
                 }
 
                 var responseContent = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
@@ -307,8 +321,19 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 if (user != null)
                 {
                     httpRequest.Headers.TryAddWithoutValidation("X-User-Id", user.Id.ToString());
-                    var jwtToken = jwtTokenService.GenerateToken(user);
-                    httpRequest.Headers.TryAddWithoutValidation("Authorization", "Bearer " + jwtToken);
+                    
+                    try
+                    {
+                        var jwtToken = jwtTokenService.GenerateToken(user);
+                        if (!string.IsNullOrWhiteSpace(jwtToken))
+                            httpRequest.Headers.TryAddWithoutValidation("Authorization", "Bearer " + jwtToken);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // If JWT secret key is not configured, log and continue without Authorization header,
+                        // allowing other authentication mechanisms (e.g. provider API key) to be used.
+                        logger.LogWarning(ex, "JWT token generation skipped because Assistant JWT secret key is not configured.");
+                    }
                 }
 
                 var providerRequest = new ReactionRequest(request.Reaction, request.Comment);

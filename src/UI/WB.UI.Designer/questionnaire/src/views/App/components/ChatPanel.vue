@@ -788,8 +788,7 @@ export default {
 :deep(.chat-code-block) {
     margin: 8px 0;
     border-radius: 6px;
-    overflow-x: auto;
-    font-size: 12px;
+    font-size: 16px;
     line-height: 1.5;
 }
 
@@ -854,14 +853,17 @@ export default {
 :deep(.chat-code-block code) {
     display: block;
     padding: 12px 14px;
-    white-space: pre;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    overflow-x: auto;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
 :deep(.chat-code-inline) {
     padding: 1px 5px;
     border-radius: 3px;
-    font-size: 12px;
+    font-size: 16px;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
@@ -905,8 +907,7 @@ export default {
 }
 
 :deep(.hljs-variable) {
-    color: teal;
-    font-weight: 600;
+    color: #3da802;
 }
 
 .chat-disclaimer {

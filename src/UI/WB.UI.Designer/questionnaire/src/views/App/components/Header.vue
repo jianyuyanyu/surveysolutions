@@ -42,23 +42,23 @@
                             <span class="caret"></span>
                             <span class="sr-only">{{
                                 $t('QuestionnaireEditor.ToggleDropdown')
-                                }}</span>
+                            }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
                                 <a href="/identity/account/manage">{{
                                     $t('QuestionnaireEditor.ManageAccount')
-                                    }}</a>
+                                }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/manage/changepassword">{{
                                     $t('QuestionnaireEditor.ChangePassword')
-                                    }}</a>
+                                }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/logout">{{
                                     $t('QuestionnaireEditor.LogOut')
-                                    }}</a>
+                                }}</a>
                             </li>
                         </ul>
                     </div>
@@ -254,7 +254,7 @@ export default {
         showChat() {
             this.chatStore.open({
                 questionnaireId: this.questionnaireId,
-                entityId: this.route.params.entityId || null,
+                entityId: this.route.params.entityId,
             });
         },
         saveAsQuestionnaire() {

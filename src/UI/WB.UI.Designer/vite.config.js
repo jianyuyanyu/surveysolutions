@@ -256,15 +256,13 @@ export default defineConfig(({ mode, command }) => {
                 inline: true,
                 patterns: [
                     normalizePath(
-                        join('./Resources/QuestionnaireEditor(.*)?.resx'),
+                        join('./Resources/QuestionnaireEditor*.resx'),
                     ),
+                    normalizePath(join('./Resources/AccountResources*.resx')),
                     normalizePath(
-                        join('./Resources/AccountResources(.*)?.resx'),
+                        join('./Resources/QuestionnaireController*.resx'),
                     ),
-                    normalizePath(
-                        join('./Resources/QuestionnaireController(.*)?.resx'),
-                    ),
-                    normalizePath(join('./Resources/Assistant(.*)?.resx')),
+                    normalizePath(join('./Resources/Assistant*.resx')),
                 ],
                 destination: './questionnaire/src/locale',
                 locales: {
