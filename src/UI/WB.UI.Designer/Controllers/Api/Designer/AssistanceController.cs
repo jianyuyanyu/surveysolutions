@@ -86,7 +86,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public Guid? EntityId { get; set; }
             public long? ClientMessageId { get; set; }
             public long? ClientTimestamp { get; set; }
+            [StringLength(4000)]
             public string Prompt { get; set; } = string.Empty;
+            [StringLength(16000)]
             public string AssistantResponse { get; set; } = string.Empty;
             public long? AssistantCallId { get; set; }
             public AssistantResponseReaction Reaction { get; set; }
