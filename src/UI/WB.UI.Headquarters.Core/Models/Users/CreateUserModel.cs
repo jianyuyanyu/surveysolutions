@@ -8,7 +8,7 @@ namespace WB.UI.Headquarters.Models.Users
 {
     public class CreateUserModel : EditUserModel
     {
-        public const string UserNameRegularExpression = "^(?!_)(?!.*_$)(?!.*__)[a-zA-Z0-9_]{3,15}$";
+        public const string UserNameRegularExpression = "^[a-zA-Z0-9_]{3,15}$";
 
         [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredUserNameErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
         [RegularExpression(UserNameRegularExpression, ErrorMessageResourceName = nameof(FieldsAndValidations.UserNameErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]

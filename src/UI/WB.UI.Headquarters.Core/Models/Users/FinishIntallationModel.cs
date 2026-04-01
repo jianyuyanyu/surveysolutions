@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     public class FinishIntallationModel
     {
-        public const string UserNameRegularExpression = "^(?!_)(?!.*_$)(?!.*__)[a-zA-Z0-9_]{3,15}$";
+        public const string UserNameRegularExpression = "^[a-zA-Z0-9_]{3,15}$";
 
         [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredUserNameErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         [Display(Name = nameof(FieldsAndValidations.UserNameFieldName), ResourceType = typeof(FieldsAndValidations), Order = 1)]
