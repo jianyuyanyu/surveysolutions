@@ -22,6 +22,7 @@
                 <div v-if="messages.length === 0" class="text-center text-grey-darken-1 mt-8">
                     <v-icon size="48" class="mb-4">mdi-chat-outline</v-icon>
                     <p>{{ $t('Assistant.WelcomeMessage') }}</p>
+                    <p class="chat-disclaimer-body">{{ $t('Assistant.Disclaimer') }}</p>
                 </div>
 
                 <div v-for="(message, index) in messages" :key="message.id" class="mb-4">
@@ -102,7 +103,7 @@
 
         <!-- Disclaimer -->
         <div class="chat-disclaimer">
-            {{ $t('Assistant.Disclaimer') }}
+            {{ $t('Assistant.DisclaimerLabel') }} <help link="aiDisclaimer" />
         </div>
 
     </v-card>
@@ -116,12 +117,14 @@ import { useTreeStore } from '../../../stores/tree';
 import hljs from 'highlight.js/lib/core';
 import csharp from 'highlight.js/lib/languages/csharp';
 import DOMPurify from 'dompurify';
+import Help from './Help.vue';
 hljs.registerLanguage('csharp', csharp);
 
 const USER_STOPPED_REQUEST = 'User stopped the request';
 
 export default {
     name: 'ChatPanel',
+    components: { Help },
     setup() {
         const vm = getCurrentInstance()?.proxy;
         const chatStore = useChatStore();
@@ -891,5 +894,17 @@ export default {
     background-color: rgb(var(--v-theme-surface));
     border-top: 1px solid rgba(var(--v-theme-on-surface), 0.1);
     flex-shrink: 0;
+}
+
+.chat-disclaimer-body {
+    margin-top: 16px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(var(--v-theme-on-surface), 0.6);
+    text-align: left;
+    padding: 12px 16px;
+    border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+    border-radius: 6px;
+    background-color: rgba(var(--v-theme-on-surface), 0.03);
 }
 </style>
