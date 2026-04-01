@@ -176,5 +176,35 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("CopyCode", resourceCulture);
             }
         }
+        
+        public static string NotAuthorized {
+            get {
+                return ResourceManager.GetString("NotAuthorized", resourceCulture);
+            }
+        }
+        
+        public static string InvalidRequest {
+            get {
+                return ResourceManager.GetString("InvalidRequest", resourceCulture);
+            }
+        }
+        
+        public static string AccessDenied {
+            get {
+                return ResourceManager.GetString("AccessDenied", resourceCulture);
+            }
+        }
+        
+        public static string ModelNotFound {
+            get {
+                return ResourceManager.GetString("ModelNotFound", resourceCulture);
+            }
+        }
+        
+        public static string ServiceUnavailable {
+            get {
+                return ResourceManager.GetString("ServiceUnavailable", resourceCulture);
+            }
+        }
     }
 }

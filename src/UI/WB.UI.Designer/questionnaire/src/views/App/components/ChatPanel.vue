@@ -441,8 +441,6 @@ export default {
                     || error.name === 'CanceledError' || error.code === 'ERR_CANCELED') {
                     //do nothing
                 } else {
-                    console.error('Error sending message:', error);
-
                     const errorMessage = {
                         id: Date.now() + 1,
                         role: 'assistant',
@@ -512,7 +510,6 @@ export default {
                     comment: comment || null
                 });
             } catch (error) {
-                console.error('Error sending assistant reaction:', error);
                 message.reaction = previous;
                 message.isHelpful = previous === 1;
                 message.isUnhelpful = previous === -1;

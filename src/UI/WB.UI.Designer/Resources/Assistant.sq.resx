@@ -72,4 +72,31 @@
     <data name="ConnectionError" xml:space="preserve">
         <value>Lidhja me asistentin dështoi.</value>
     </data>
+    <data name="RateLimitExceeded" xml:space="preserve">
+        <value>Kufiri i kërkesave u tejkalua. Ju lutemi provoni përsëri më vonë.</value>
+    </data>
+    <data name="StopRequest" xml:space="preserve">
+        <value>Ndaloni</value>
+    </data>
+    <data name="Copy" xml:space="preserve">
+        <value>Kopjo</value>
+    </data>
+    <data name="CopyCode" xml:space="preserve">
+        <value>Kopjo kodin</value>
+    </data>
+    <data name="NotAuthorized" xml:space="preserve">
+        <value>Jo i autorizuar.</value>
+    </data>
+    <data name="InvalidRequest" xml:space="preserve">
+        <value>Kërkesë e pavlefshme. Ju lutemi kontrolloni formatin e mesazhit tuaj.</value>
+    </data>
+    <data name="AccessDenied" xml:space="preserve">
+        <value>Qasja e mohuar. Çelësi juaj API mund të mos ketë lejet e nevojshme.</value>
+    </data>
+    <data name="ModelNotFound" xml:space="preserve">
+        <value>Modeli i asistentit nuk u gjet. Ju lutemi kontrolloni nëse keni qasje në modelin e konfiguruar.</value>
+    </data>
+    <data name="ServiceUnavailable" xml:space="preserve">
+        <value>Shërbimi i asistentit është përkohësisht i padisponueshëm. Ju lutemi provoni përsëri më vonë.</value>
+    </data>
 </root>

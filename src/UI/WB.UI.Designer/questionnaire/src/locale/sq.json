@@ -673,6 +673,11 @@
     "RateLimitExceeded": "Kufiri i kërkesave u tejkalua. Ju lutemi provoni përsëri më vonë.",
     "StopRequest": "Ndaloni",
     "Copy": "Kopjo",
-    "CopyCode": "Kopjo kodin"
+    "CopyCode": "Kopjo kodin",
+    "NotAuthorized": "Jo i autorizuar.",
+    "InvalidRequest": "Kërkesë e pavlefshme. Ju lutemi kontrolloni formatin e mesazhit tuaj.",
+    "AccessDenied": "Qasja e mohuar. Çelësi juaj API mund të mos ketë lejet e nevojshme.",
+    "ModelNotFound": "Modeli i asistentit nuk u gjet. Ju lutemi kontrolloni nëse keni qasje në modelin e konfiguruar.",
+    "ServiceUnavailable": "Shërbimi i asistentit është përkohësisht i padisponueshëm. Ju lutemi provoni përsëri më vonë."
   }
 }

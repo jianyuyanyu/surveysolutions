@@ -84,4 +84,19 @@
     <data name="CopyCode" xml:space="preserve">
         <value>Copy code</value>
     </data>
+    <data name="NotAuthorized" xml:space="preserve">
+        <value>Not authorized.</value>
+    </data>
+    <data name="InvalidRequest" xml:space="preserve">
+        <value>Invalid request. Please check your message format.</value>
+    </data>
+    <data name="AccessDenied" xml:space="preserve">
+        <value>Access denied. Your API key may not have the required permissions.</value>
+    </data>
+    <data name="ModelNotFound" xml:space="preserve">
+        <value>Assistant model not found. Please check if you have access to the configured model.</value>
+    </data>
+    <data name="ServiceUnavailable" xml:space="preserve">
+        <value>Assistant service is temporarily unavailable. Please try again later.</value>
+    </data>
 </root>

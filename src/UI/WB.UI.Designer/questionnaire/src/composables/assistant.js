@@ -94,7 +94,7 @@ export const useAssistant = () => {
                 }
 
                 if (error.response?.status === 401) {
-                    throw new Error('Not authorized.');
+                    throw new Error(i18n.t('Assistant.NotAuthorized'));
                 } else if (error.response?.status === 429) {
                     // Rate limit exceeded - implement exponential backoff
                     if (attempt < retries) {
@@ -111,15 +111,15 @@ export const useAssistant = () => {
                     }
                 } else if (error.response?.status === 400) {
                     throw new Error(
-                        'Invalid request. Please check your message format.',
+                        i18n.t('Assistant.InvalidRequest'),
                     );
                 } else if (error.response?.status === 403) {
                     throw new Error(
-                        'Access denied. Your API key may not have the required permissions.',
+                        i18n.t('Assistant.AccessDenied'),
                     );
                 } else if (error.response?.status === 404) {
                     throw new Error(
-                        'Assistant model not found. Please check if you have access to the configured model.',
+                        i18n.t('Assistant.ModelNotFound'),
                     );
                 } else if (error.response?.status >= 500) {
                     // Server error - retry
@@ -129,7 +129,7 @@ export const useAssistant = () => {
                         continue;
                     } else {
                         throw new Error(
-                            'Assistant service is temporarily unavailable. Please try again later.',
+                            i18n.t('Assistant.ServiceUnavailable'),
                         );
                     }
                 } else {

@@ -673,6 +673,11 @@
     "RateLimitExceeded": "Limite de requêtes dépassée. Veuillez réessayer plus tard.",
     "StopRequest": "Arrêter",
     "Copy": "Copier",
-    "CopyCode": "Copier le code"
+    "CopyCode": "Copier le code",
+    "NotAuthorized": "Non autorisé.",
+    "InvalidRequest": "Requête invalide. Veuillez vérifier le format de votre message.",
+    "AccessDenied": "Accès refusé. Votre clé API n'a peut-être pas les autorisations requises.",
+    "ModelNotFound": "Modèle d'assistant introuvable. Veuillez vérifier si vous avez accès au modèle configuré.",
+    "ServiceUnavailable": "Le service d'assistant est temporairement indisponible. Veuillez réessayer plus tard."
   }
 }

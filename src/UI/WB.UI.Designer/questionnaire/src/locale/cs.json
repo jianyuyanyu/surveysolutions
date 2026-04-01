@@ -673,6 +673,11 @@
     "RateLimitExceeded": "Byl překročen limit požadavků. Zkuste to prosím znovu později.",
     "StopRequest": "Zastavit",
     "Copy": "Kopírovat",
-    "CopyCode": "Kopírovat kód"
+    "CopyCode": "Kopírovat kód",
+    "NotAuthorized": "Neautorizováno.",
+    "InvalidRequest": "Neplatný požadavek. Zkontrolujte formát zprávy.",
+    "AccessDenied": "Přístup odepřen. Váš API klíč nemusí mít potřebná oprávnění.",
+    "ModelNotFound": "Model asistenta nebyl nalezen. Zkontrolujte, zda máte přístup ke konfigurovanému modelu.",
+    "ServiceUnavailable": "Služba asistenta je dočasně nedostupná. Zkuste to prosím znovu později."
   }
 }
