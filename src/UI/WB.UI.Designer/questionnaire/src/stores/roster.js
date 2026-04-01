@@ -19,19 +19,24 @@ export const useRosterStore = defineStore('roster', {
         setupListeners() {
             emitter.on('rosterUpdated', this.rosterUpdated);
             emitter.on('rosterDeleted', this.rosterDeleted);
+            emitter.on('groupDeleted', this.groupDeleted);
             emitter.on('questionDeleted', this.questionDeleted);
             emitter.on('questionAdded', this.questionAdded);
+            emitter.on('questionUpdated', this.questionUpdated);
             emitter.on('questionMoved', this.questionMoved);
             emitter.on('groupMoved', this.groupMoved);
+            emitter.on('itemPasted', this.itemPasted);
         },
         rosterUpdated(payload) {
             if (this.roster.itemId === payload.roster.itemId) {
                 this.setRosterData(payload.roster);
             }
         },
-        rosterDeleted(payload) {
+        async rosterDeleted(payload) {
             if (this.roster.itemId === payload.id) {
                 this.clear();
+            } else {
+                await this.refreshRosterDataPreservingEdits();
             }
         },
         async refreshRosterDataPreservingEdits() {
@@ -48,6 +53,15 @@ export const useRosterStore = defineStore('roster', {
                 const freshData = await getRoster(this.questionnaireId, this.roster.itemId);
                 this.refreshContextualData(freshData);
             }
+        },
+        async groupDeleted(payload) {
+            await this.refreshRosterDataPreservingEdits();
+        },
+        async questionUpdated(payload) {
+            await this.refreshRosterDataPreservingEdits();
+        },
+        async itemPasted(payload) {
+            await this.refreshRosterDataPreservingEdits();
         },
         async questionDeleted(payload) {
             await this.refreshRosterDataPreservingEdits();
