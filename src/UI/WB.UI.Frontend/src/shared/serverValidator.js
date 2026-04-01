@@ -10,7 +10,8 @@ export function validateServerHeader(response) {
 
     // Avoid recursive modal when the error-reporting endpoint itself fails validation
     const url = response.config && response.config.url
-    if (url && url.includes('/error/report')) return
+    const urlStr = url && String(url)
+    if (urlStr && urlStr.includes('/error/report')) return
 
     const actual = response.headers && response.headers['x-survey-solutions']
     if (actual === EXPECTED_HEADER_VALUE) return
