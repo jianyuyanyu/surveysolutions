@@ -114,7 +114,7 @@
                         {{ $t('Assistant.DisclaimerLabel') }}
                     </button>
                 </template>
-                <span>{{ $t('Assistant.DisclaimerLabel') }}</span>
+                <span>{{ $t('Assistant.Disclaimer') }}</span>
             </v-tooltip>
         </div>
 
