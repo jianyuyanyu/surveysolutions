@@ -48,7 +48,7 @@ The following patterns look suspicious but are **intentional** in this codebase 
 
 | Pattern | Why it is intentional |
 |---|---|
-| `IUnitOfWork.Session` access in `*Denormalizer` or `*Repository` classes in `WB.Infrastructure.Native` | Infrastructure layer is allowed direct session access |
+| `IUnitOfWork.Session` access used for persistence/denormalization inside `*Denormalizer` or infrastructure `*Repository` classes in `WB.Infrastructure.Native`, where no read-side abstraction exists | Infrastructure-level write/denormalization paths may use direct session access; read-side domain queries must still go through repositories/services |
 | `ServiceLocator.Current.GetInstance<T>()` in any `*Module.cs` or files under `WB.Infrastructure.Native` | Legacy DI bootstrap path; not application code |
 | `.cshtml` files in `WB.UI.Headquarters.Core/Views/` containing asset-hash filenames | Vite build output; these files are intentionally committed |
 | `[AllowAnonymous]` on controllers in `WB.UI.WebTester` or WebInterview controllers | Public-facing interview endpoints require anonymous access |
