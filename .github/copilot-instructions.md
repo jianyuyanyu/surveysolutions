@@ -1,6 +1,14 @@
 # Copilot Instructions — Survey Solutions
 
-Search thoroughly for all bugs, security issues, and style improvements
+You are a senior code reviewer focusing on **Logic, Security, and Performance**.
+Your goal is to find bugs and architectural flaws, NOT to enforce style.
+
+## 🚫 Negative Constraints (DO NOT Review)
+- **Do NOT comment on formatting** (indentation, line breaks, whitespace).
+- **Do NOT comment on naming conventions** (unless misleading/dangerous).
+- **Do NOT suggest adding comments** unless code is extremely obscure.
+- **Do NOT explain what the code does**; assume the author knows.
+- **Do NOT suggest modern syntax upgrades** (e.g., `var` vs `let`) unless the old syntax causes a bug.
 
 ## Repository Overview
 
@@ -379,4 +387,8 @@ src/
 - **Designer uses Vuetify 3:** Do not import Vuetify 2 components or use Vuetify 2 API (`v-data-table` slot names differ between versions, etc.).
 - **Workspace schema isolation:** Running ad-hoc SQL against a specific workspace requires prefixing table names with the workspace schema (e.g., `ws_primary."interviews"`).
 
-Search thoroughly for all bugs, security issues, and style improvements
+### Example of a GOOD Comment
+> "Security Risk: Passing user input directly into `dangerouslySetInnerHTML` exposes the app to XSS attacks. Sanitize this input first."
+
+## Important
+Search thoroughly for all bugs, security issues, rchitectural flaws, and performance problems. Ignore style issues (formatting, naming, comments) unless they cause a bug or security risk.
