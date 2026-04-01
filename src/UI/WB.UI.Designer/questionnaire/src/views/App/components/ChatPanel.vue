@@ -103,7 +103,19 @@
 
         <!-- Disclaimer -->
         <div class="chat-disclaimer">
-            {{ $t('Assistant.DisclaimerLabel') }} <help link="aiDisclaimer" />
+            <v-tooltip location="top">
+                <template #activator="{ props }">
+                    <button
+                        v-bind="props"
+                        type="button"
+                        class="chat-disclaimer-button"
+                        :aria-label="$t('Assistant.DisclaimerLabel')"
+                    >
+                        {{ $t('Assistant.DisclaimerLabel') }}
+                    </button>
+                </template>
+                <span>{{ $t('Assistant.DisclaimerLabel') }}</span>
+            </v-tooltip>
         </div>
 
     </v-card>
