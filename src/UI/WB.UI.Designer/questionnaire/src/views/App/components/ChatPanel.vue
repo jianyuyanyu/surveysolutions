@@ -129,14 +129,12 @@ import { useTreeStore } from '../../../stores/tree';
 import hljs from 'highlight.js/lib/core';
 import csharp from 'highlight.js/lib/languages/csharp';
 import DOMPurify from 'dompurify';
-import Help from './Help.vue';
 hljs.registerLanguage('csharp', csharp);
 
 const USER_STOPPED_REQUEST = 'User stopped the request';
 
 export default {
     name: 'ChatPanel',
-    components: { Help },
     setup() {
         const vm = getCurrentInstance()?.proxy;
         const chatStore = useChatStore();
