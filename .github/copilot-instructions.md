@@ -9,6 +9,51 @@ Your goal is to find bugs and architectural flaws, NOT to enforce style.
 - **Do NOT suggest adding comments** unless code is extremely obscure.
 - **Do NOT explain what the code does**; assume the author knows.
 - **Do NOT suggest modern syntax upgrades** (e.g., `var` vs `let`) unless the old syntax causes a bug.
+- **Do NOT flag issues in unchanged context lines** — only review lines that are new or modified in the diff.
+- **Do NOT raise the same issue more than once** — if a pattern repeats, note it once and state it appears elsewhere.
+
+---
+
+## 📋 Review Output Format
+
+Every finding must use this structure:
+
+```
+[SEVERITY] Short title
+File: path/to/file.cs, line N
+Problem: One sentence describing the defect.
+Fix: One sentence concrete remediation.
+```
+
+**Severity levels:**
+- 🔴 **CRITICAL** — Security vulnerability, data loss, or silent data corruption. Must be fixed before merge.
+- 🟠 **HIGH** — Definite logic bug, race condition, or unhandled exception path. Should be fixed before merge.
+- 🟡 **MEDIUM** — Architectural violation or missing safeguard that will likely cause a future bug.
+
+Omit findings that don't reach 🟡 MEDIUM. When there are no findings, respond with: `✅ No issues found in the diff.`
+
+---
+
+## 🔍 Review Scope: Diff Only
+
+- Only review **lines added or changed** in this PR.
+- Pre-existing issues in unchanged surrounding context are **out of scope** — do not report them.
+- If changed code *calls* unchanged code that has a defect, flag it only if the new call creates a new risk.
+
+---
+
+## ⚠️ False Positive Prevention
+
+The following patterns look suspicious but are **intentional** in this codebase — do **not** flag them:
+
+| Pattern | Why it is intentional |
+|---|---|
+| `IUnitOfWork.Session` access in `*Denormalizer` or `*Repository` classes in `WB.Infrastructure.Native` | Infrastructure layer is allowed direct session access |
+| `ServiceLocator.Current.GetInstance<T>()` in any `*Module.cs` or files under `WB.Infrastructure.Native` | Legacy DI bootstrap path; not application code |
+| `.cshtml` files in `WB.UI.Headquarters.Core/Views/` containing asset-hash filenames | Vite build output; these files are intentionally committed |
+| `[AllowAnonymous]` on controllers in `WB.UI.WebTester` or WebInterview controllers | Public-facing interview endpoints require anonymous access |
+| `#nullable disable` at the top of files that predate nullable reference type adoption | Gradual migration strategy; flagging old files is out of scope |
+| `AcceptChanges()` called without a preceding `DiscardChanges()` in the happy path | `IUnitOfWork` commit pattern; rollback is implicit on scope disposal |
 
 ## Repository Overview
 
@@ -243,34 +288,62 @@ No automated test suite is configured for the Designer frontend; rely on manual 
 
 ## Code Review Checklist
 
-When reviewing PRs, flag the following:
+Apply this checklist **only to changed code**. Each item is tagged with its severity if violated.
 
 ### C# / Backend
 
-- [ ] **Nullable safety:** New code must not introduce nullable dereferences. Check for missing null guards before CS86xx suppressions.
-- [ ] **No service locator in application code:** `ServiceLocator.Current.GetInstance<T>()` is only acceptable in legacy infrastructure paths.
-- [ ] **Thin controllers:** Business logic must not live in controllers or filters.
-- [ ] **Authorization not missing:** Every new API action must have `[Authorize]`, `[AuthorizeByRole]`, or `[AllowAnonymous]` explicitly.
-- [ ] **No raw NHibernate session in services:** Use `IQueryableReadSideRepositoryReader<T>` or `IPlainStorageAccessor<T>`. Direct `IUnitOfWork.Session` access must be justified with a comment.
-- [ ] **Row-level locking:** Operations that must prevent concurrent writes (e.g., CAWI assignment slot consumption) use `Session.Refresh(entity, LockMode.Upgrade)`.
-- [ ] **HTML sanitization:** User-supplied strings rendered as HTML are sanitized with `RemoveHtmlTags()`.
-- [ ] **Module registration:** New services are registered in the correct `*Module`, not in `Startup.cs`.
-- [ ] **Workspace awareness:** Queries don't hardcode a schema; they rely on NHibernate session workspace routing.
-- [ ] **Migrations:** Schema changes have a corresponding FluentMigrator migration (HQ) or EF Core migration (Export).
-- [ ] **Tests:** New public service methods have corresponding unit tests using `Create.*` factories.
+- 🔴 **Authorization not missing:** Every new API action must have `[Authorize]`, `[AuthorizeByRole]`, or `[AllowAnonymous]` explicitly. A missing attribute means the endpoint falls back to whatever the global policy is — verify that is intentional.
+- 🔴 **HTML sanitization:** User-supplied strings rendered as HTML are sanitized with `RemoveHtmlTags()`. Raw untrusted strings in Razor output or API responses are an XSS risk.
+- 🟠 **Nullable safety:** New code must not introduce nullable dereferences. Check for missing null guards before CS86xx suppressions.
+- 🟠 **Row-level locking:** Operations that must prevent concurrent writes (e.g., CAWI assignment slot consumption) use `Session.Refresh(entity, LockMode.Upgrade)`. Missing lock → double-decrement of available slots under load.
+- 🟠 **Migrations present:** Any schema change (new table, column, index) in the diff must have a corresponding FluentMigrator migration (HQ/Designer) or EF Core migration (Export service). Missing migration → runtime crash on deploy.
+- 🟡 **No raw NHibernate session in services:** Use `IQueryableReadSideRepositoryReader<T>` or `IPlainStorageAccessor<T>`. Direct `IUnitOfWork.Session` access in non-infrastructure code must be justified.
+- 🟡 **No service locator in application code:** `ServiceLocator.Current.GetInstance<T>()` is only acceptable in legacy infrastructure paths.
+- 🟡 **Thin controllers:** Business logic must not live in controllers or filters.
+- 🟡 **Module registration:** New services are registered in the correct `*Module`, not in `Startup.cs`.
+- 🟡 **Workspace awareness:** Queries don't hardcode a schema; they rely on NHibernate session workspace routing.
+- 🟡 **Tests:** New public service methods have corresponding unit tests using `Create.*` factories.
 
 ### Vue / Frontend (both projects)
 
-- [ ] **XSS prevention:** Dynamic HTML content rendered with `v-html` must be wrapped in `v-dompurify-html` or sanitized before binding.
-- [ ] **No `console.log` left in production code.**
-- [ ] **Localization:** User-visible strings must use i18next (`$t(...)` / `i18n.t(...)`) — no hardcoded English strings.
-- [ ] **No semicolons, single quotes, 4-space indent** enforced by ESLint/Prettier — PRs failing lint must be fixed before merge.
-- [ ] **Store technology:** HQ/WebInterview uses **Vuex 4** only; Designer uses **Pinia** for new code (legacy Vuex exists in classifications pages — do not add new Vuex modules there).
-- [ ] **API calls:** Use the established API service helpers (`axios` in HQ frontend, `mande`-based helpers in Designer), not raw `fetch`.
-- [ ] **Component naming:** Multi-word component names (Vue style guide requirement).
-- [ ] **Props validation:** Props must have `type` declarations.
+- 🔴 **XSS prevention:** Dynamic HTML content rendered with `v-html` must be wrapped in `v-dompurify-html` or sanitized before binding. Raw `v-html` on untrusted data is a direct XSS vector.
+- 🟠 **No `console.log` left in production code.** Sensitive data (tokens, user PII) accidentally logged is a security issue.
+- 🟡 **Localization:** User-visible strings must use i18next (`$t(...)` / `i18n.t(...)`) — no hardcoded English strings.
+- 🟡 **Store technology:** HQ/WebInterview uses **Vuex 4** only; Designer uses **Pinia** for new code (legacy Vuex exists in classifications pages — do not add new Vuex modules there).
+- 🟡 **API calls:** Use the established API service helpers (`axios` in HQ frontend, `mande`-based helpers in Designer), not raw `fetch`.
+- 🟡 **Props validation:** Props must have `type` declarations.
 
 ---
+
+## 💡 Examples of Good Findings
+
+**🔴 CRITICAL — Missing authorization**
+```
+File: src/UI/WB.UI.Headquarters.Core/Controllers/Api/ReportsController.cs, line 42
+Problem: The new `GetSensitiveReport` action has no [Authorize] or [AuthorizeByRole] attribute; it will inherit the global default policy which allows all authenticated users including Interviewers.
+Fix: Add [AuthorizeByRole(UserRoles.Headquarter, UserRoles.Administrator)] to restrict access to privileged roles.
+```
+
+**🔴 CRITICAL — XSS via v-html**
+```
+File: src/UI/WB.UI.Frontend/src/hqapp/components/InterviewerProfile.vue, line 88
+Problem: `userComment` is bound with v-html but comes from an API response and is never sanitized — an attacker who can set a comment value can inject arbitrary script into any HQ user's session.
+Fix: Replace v-html with v-dompurify-html directive, or sanitize the value with DOMPurify.sanitize() before binding.
+```
+
+**🟠 HIGH — Race condition / missing row lock**
+```
+File: src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Assignments/AssignmentsService.cs, line 115
+Problem: `GetAssignment` loads the entity via GetById (L1 cache) before decrementing quantity; concurrent requests will read the same stale value and both succeed, over-assigning by N-1.
+Fix: Use GetAssignmentWithUpgradeLock (IQueryable path + LockMode.Upgrade) as done for CAWI assignments to serialize concurrent access at the database level.
+```
+
+**🟡 MEDIUM — Schema change without migration**
+```
+File: src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Users/HqUser.cs, line 34
+Problem: A new `LastPasswordChangedAt` property was mapped with NHibernate but no corresponding FluentMigrator migration adds the column — the application will throw on first query after deploy.
+Fix: Add a FluentMigrator migration in WB.Persistence.Headquarters that adds the column with a nullable default.
+```
 
 ## Build and Test Commands
 
@@ -372,7 +445,12 @@ src/
 - **Workspace schema isolation:** Running ad-hoc SQL against a specific workspace requires prefixing table names with the workspace schema (e.g., `ws_primary."interviews"`).
 
 ### Example of a GOOD Comment
-> "Security Risk: Passing user input directly into a Vue `v-html` binding exposes the app to XSS attacks. Use `v-dompurify-html` or sanitize this input before binding."
+> 🔴 **CRITICAL — XSS via v-html**
+> File: `src/UI/WB.UI.Frontend/src/hqapp/components/SomeComponent.vue`, line 12
+> Problem: Passing user input directly into a Vue `v-html` binding exposes the app to XSS attacks — any user who can store a value in this field can inject script into every HQ operator's session.
+> Fix: Replace `v-html` with `v-dompurify-html` or sanitize the value with `DOMPurify.sanitize()` before binding.
 
 ## Important
 Search thoroughly for all bugs, security issues, architectural flaws, and performance problems. Ignore style issues (formatting, naming, comments) unless they cause a bug or security risk.
+
+Only report findings at 🟡 MEDIUM or above. Use the structured output format defined at the top. When there are no findings, respond with `✅ No issues found in the diff.`
