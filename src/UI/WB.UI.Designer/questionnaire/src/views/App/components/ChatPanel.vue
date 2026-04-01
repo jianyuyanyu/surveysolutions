@@ -103,27 +103,18 @@
 
         <!-- Disclaimer -->
         <div class="chat-disclaimer">
-            <v-tooltip location="top">
-                <template #activator="{ props }">
-                    <a
-                        v-bind="props"
-                        role="button"
-                        tabindex="0"
-                        class="chat-disclaimer-link"
-                        :aria-label="$t('Assistant.DisclaimerLabel')"
-                    >
-                        {{ $t('Assistant.DisclaimerLabel') }}
-                    </a>
-                </template>
-                <span class="chat-disclaimer-link">{{ $t('Assistant.Disclaimer') }}</span>
-            </v-tooltip>
+            <a ref="disclaimerRef" role="button" tabindex="0" class="chat-disclaimer-link tooltip-help-trigger"
+                :aria-label="$t('Assistant.DisclaimerLabel')">
+                {{ $t('Assistant.DisclaimerLabel') }}
+            </a>
         </div>
 
     </v-card>
 </template>
 
 <script>
-import { ref, computed, nextTick, watch, getCurrentInstance } from 'vue';
+import { ref, computed, nextTick, watch, getCurrentInstance, onMounted, onUnmounted } from 'vue';
+import * as bootstrap from 'bootstrap';
 import { useChatStore } from '../../../stores/chat';
 import { useAssistant } from '../../../composables/assistant';
 import { useTreeStore } from '../../../stores/tree';
@@ -392,6 +383,26 @@ export default {
             });
         };
 
+        const disclaimerRef = ref(null);
+        let disclaimerTooltip = null;
+
+        onMounted(() => {
+            if (disclaimerRef.value) {
+                disclaimerTooltip = new bootstrap.Tooltip(disclaimerRef.value, {
+                    title: vm?.$t?.('Assistant.Disclaimer'),
+                    container: 'body',
+                    placement: 'top',
+                    customClass: 'in',
+                    trigger: 'hover'
+                });
+            }
+        });
+
+        onUnmounted(() => {
+            disclaimerTooltip?.dispose();
+            disclaimerTooltip = null;
+        });
+
         const abortController = ref(null);
 
         const stopRequest = () => {
@@ -580,6 +591,7 @@ export default {
             currentMessage,
             isLoading,
             messagesContainer,
+            disclaimerRef,
             close,
             sendMessage,
             handleEnter,
