@@ -189,9 +189,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
                 if (!httpResponse.IsSuccessStatusCode)
                 {
-                    var errorContent = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-                    logger.LogError("Assistant service returned error: {StatusCode} - {Content}", httpResponse.StatusCode, errorContent);
-                    return StatusCode((int)httpResponse.StatusCode, "Error from assistant service.");
+                    var correlationId = Guid.NewGuid();
+                    logger.LogError("Assistant service returned error: {StatusCode}. CorrelationId: {CorrelationId}",
+                        httpResponse.StatusCode, correlationId);
+                    return StatusCode((int)httpResponse.StatusCode,
+                        $"Error from assistant service. CorrelationId: {correlationId}");
                 }
 
                 var responseContent = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
