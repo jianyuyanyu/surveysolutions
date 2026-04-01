@@ -173,6 +173,9 @@ namespace WB.UI.Designer
             // causing unpredictable accept/reject behaviour.
             if (jwtEnabled)
             {
+                if (jwtSecretKey is { Length: < 32 })
+                    throw new InvalidOperationException("JWT secret key is too short.");
+                
                 authBuilder.AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
