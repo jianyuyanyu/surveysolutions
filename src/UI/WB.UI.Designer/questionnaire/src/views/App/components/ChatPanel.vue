@@ -22,6 +22,7 @@
                 <div v-if="messages.length === 0" class="text-center text-grey-darken-1 mt-8">
                     <v-icon size="48" class="mb-4">mdi-chat-outline</v-icon>
                     <p>{{ $t('Assistant.WelcomeMessage') }}</p>
+                    <p class="chat-disclaimer-body">{{ $t('Assistant.Disclaimer') }}</p>
                 </div>
 
                 <div v-for="(message, index) in messages" :key="message.id" class="mb-4">
@@ -102,14 +103,18 @@
 
         <!-- Disclaimer -->
         <div class="chat-disclaimer">
-            {{ $t('Assistant.Disclaimer') }}
+            <a ref="disclaimerRef" role="button" tabindex="0" class="chat-disclaimer-link tooltip-help-trigger"
+                :aria-label="$t('Assistant.DisclaimerLabel')">
+                {{ $t('Assistant.DisclaimerLabel') }}
+            </a>
         </div>
 
     </v-card>
 </template>
 
 <script>
-import { ref, computed, nextTick, watch, getCurrentInstance } from 'vue';
+import { ref, computed, nextTick, watch, getCurrentInstance, onMounted, onUnmounted } from 'vue';
+import * as bootstrap from 'bootstrap';
 import { useChatStore } from '../../../stores/chat';
 import { useAssistant } from '../../../composables/assistant';
 import { useTreeStore } from '../../../stores/tree';
@@ -378,6 +383,26 @@ export default {
             });
         };
 
+        const disclaimerRef = ref(null);
+        let disclaimerTooltip = null;
+
+        onMounted(() => {
+            if (disclaimerRef.value) {
+                disclaimerTooltip = new bootstrap.Tooltip(disclaimerRef.value, {
+                    title: vm?.$t?.('Assistant.Disclaimer'),
+                    container: 'body',
+                    placement: 'top',
+                    customClass: 'in',
+                    trigger: 'hover'
+                });
+            }
+        });
+
+        onUnmounted(() => {
+            disclaimerTooltip?.dispose();
+            disclaimerTooltip = null;
+        });
+
         const abortController = ref(null);
 
         const stopRequest = () => {
@@ -566,6 +591,7 @@ export default {
             currentMessage,
             isLoading,
             messagesContainer,
+            disclaimerRef,
             close,
             sendMessage,
             handleEnter,
@@ -892,5 +918,35 @@ export default {
     background-color: rgb(var(--v-theme-surface));
     border-top: 1px solid rgba(var(--v-theme-on-surface), 0.1);
     flex-shrink: 0;
+    text-align: center;
+}
+
+.chat-disclaimer-link {
+    cursor: pointer;
+    color: #428bca;
+    text-decoration: none;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+}
+
+.chat-disclaimer-link:hover,
+.chat-disclaimer-link:focus {
+    color: #2b6497;
+    text-decoration: underline;
+    outline: none;
+}
+
+.chat-disclaimer-body {
+    margin-top: 16px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(var(--v-theme-on-surface), 0.6);
+    text-align: left;
+    padding: 12px 16px;
+    border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+    border-radius: 6px;
+    background-color: rgba(var(--v-theme-on-surface), 0.03);
 }
 </style>
