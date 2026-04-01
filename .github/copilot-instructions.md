@@ -19,16 +19,16 @@ Your goal is to find bugs and architectural flaws, NOT to enforce style.
 Every finding must use this structure:
 
 ```
-[SEVERITY] Short title
+🔴 CRITICAL: Short title
 File: path/to/file.cs, line N
 Problem: One sentence describing the defect.
 Fix: One sentence concrete remediation.
 ```
 
-**Severity levels:**
-- 🔴 **CRITICAL** — Security vulnerability, data loss, or silent data corruption. Must be fixed before merge.
-- 🟠 **HIGH** — Definite logic bug, race condition, or unhandled exception path. Should be fixed before merge.
-- 🟡 **MEDIUM** — Architectural violation or missing safeguard that will likely cause a future bug.
+Replace `🔴 CRITICAL` with the appropriate severity prefix:
+- `🔴 CRITICAL` — Security vulnerability, data loss, or silent data corruption. Must be fixed before merge.
+- `🟠 HIGH` — Definite logic bug, race condition, or unhandled exception path. Should be fixed before merge.
+- `🟡 MEDIUM` — Architectural violation or missing safeguard that will likely cause a future bug.
 
 Omit findings that don't reach 🟡 MEDIUM. When there are no findings, respond with: `✅ No issues found in the diff.`
 
@@ -293,7 +293,7 @@ Apply this checklist **only to changed code**. Each item is tagged with its seve
 ### C# / Backend
 
 - 🔴 **Authorization not missing:** Every new API action must have `[Authorize]`, `[AuthorizeByRole]`, or `[AllowAnonymous]` explicitly. A missing attribute means the endpoint falls back to whatever the global policy is — verify that is intentional.
-- 🔴 **HTML sanitization:** User-supplied strings rendered as HTML are sanitized with `RemoveHtmlTags()`. Raw untrusted strings in Razor output or API responses are an XSS risk.
+- 🔴 **HTML sanitization:** User-supplied strings that are rendered as HTML (e.g., via `Html.Raw`, returning HTML fragments, or client-side `v-html`) must be sanitized with `RemoveHtmlTags()`. Rely on Razor's default HTML encoding for plain text output and treat JSON API responses as data until they are safely rendered by the client.
 - 🟠 **Nullable safety:** New code must not introduce nullable dereferences. Check for missing null guards before CS86xx suppressions.
 - 🟠 **Row-level locking:** Operations that must prevent concurrent writes (e.g., CAWI assignment slot consumption) use `Session.Refresh(entity, LockMode.Upgrade)`. Missing lock → double-decrement of available slots under load.
 - 🟠 **Migrations present:** Any schema change (new table, column, index) in the diff must have a corresponding FluentMigrator migration (HQ/Designer) or EF Core migration (Export service). Missing migration → runtime crash on deploy.
@@ -317,29 +317,29 @@ Apply this checklist **only to changed code**. Each item is tagged with its seve
 
 ## 💡 Examples of Good Findings
 
-**🔴 CRITICAL — Missing authorization**
 ```
+🔴 CRITICAL: Missing authorization
 File: src/UI/WB.UI.Headquarters.Core/Controllers/Api/ReportsController.cs, line 42
 Problem: The new `GetSensitiveReport` action has no [Authorize] or [AuthorizeByRole] attribute; it will inherit the global default policy which allows all authenticated users including Interviewers.
 Fix: Add [AuthorizeByRole(UserRoles.Headquarter, UserRoles.Administrator)] to restrict access to privileged roles.
 ```
 
-**🔴 CRITICAL — XSS via v-html**
 ```
+🔴 CRITICAL: XSS via v-html
 File: src/UI/WB.UI.Frontend/src/hqapp/components/InterviewerProfile.vue, line 88
 Problem: `userComment` is bound with v-html but comes from an API response and is never sanitized — an attacker who can set a comment value can inject arbitrary script into any HQ user's session.
 Fix: Replace v-html with v-dompurify-html directive, or sanitize the value with DOMPurify.sanitize() before binding.
 ```
 
-**🟠 HIGH — Race condition / missing row lock**
 ```
+🟠 HIGH: Race condition / missing row lock
 File: src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Assignments/AssignmentsService.cs, line 115
 Problem: `GetAssignment` loads the entity via GetById (L1 cache) before decrementing quantity; concurrent requests will read the same stale value and both succeed, over-assigning by N-1.
 Fix: Use GetAssignmentWithUpgradeLock (IQueryable path + LockMode.Upgrade) as done for CAWI assignments to serialize concurrent access at the database level.
 ```
 
-**🟡 MEDIUM — Schema change without migration**
 ```
+🟡 MEDIUM: Schema change without migration
 File: src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Users/HqUser.cs, line 34
 Problem: A new `LastPasswordChangedAt` property was mapped with NHibernate but no corresponding FluentMigrator migration adds the column — the application will throw on first query after deploy.
 Fix: Add a FluentMigrator migration in WB.Persistence.Headquarters that adds the column with a nullable default.
@@ -445,10 +445,12 @@ src/
 - **Workspace schema isolation:** Running ad-hoc SQL against a specific workspace requires prefixing table names with the workspace schema (e.g., `ws_primary."interviews"`).
 
 ### Example of a GOOD Comment
-> 🔴 **CRITICAL — XSS via v-html**
-> File: `src/UI/WB.UI.Frontend/src/hqapp/components/SomeComponent.vue`, line 12
-> Problem: Passing user input directly into a Vue `v-html` binding exposes the app to XSS attacks — any user who can store a value in this field can inject script into every HQ operator's session.
-> Fix: Replace `v-html` with `v-dompurify-html` or sanitize the value with `DOMPurify.sanitize()` before binding.
+```
+🔴 CRITICAL: XSS via v-html
+File: src/UI/WB.UI.Frontend/src/hqapp/components/SomeComponent.vue, line 12
+Problem: Passing user input directly into a Vue `v-html` binding exposes the app to XSS attacks — any user who can store a value in this field can inject script into every HQ operator's session.
+Fix: Replace `v-html` with `v-dompurify-html` or sanitize the value with `DOMPurify.sanitize()` before binding.
+```
 
 ## Important
 Search thoroughly for all bugs, security issues, architectural flaws, and performance problems. Ignore style issues (formatting, naming, comments) unless they cause a bug or security risk.
