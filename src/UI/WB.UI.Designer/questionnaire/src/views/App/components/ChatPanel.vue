@@ -910,7 +910,7 @@ export default {
 
 .chat-disclaimer-link {
     cursor: pointer;
-    color: #2a81cb;
+    color: #428bca;
     text-decoration: none;
     background: none;
     border: none;
@@ -920,7 +920,7 @@ export default {
 
 .chat-disclaimer-link:hover,
 .chat-disclaimer-link:focus {
-    color: #2a81cb;
+    color: #2b6497;
     text-decoration: underline;
     outline: none;
 }
