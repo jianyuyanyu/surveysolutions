@@ -105,14 +105,15 @@
         <div class="chat-disclaimer">
             <v-tooltip location="top">
                 <template #activator="{ props }">
-                    <button
+                    <a
                         v-bind="props"
-                        type="button"
-                        class="chat-disclaimer-button"
+                        role="button"
+                        tabindex="0"
+                        class="chat-disclaimer-link"
                         :aria-label="$t('Assistant.DisclaimerLabel')"
                     >
                         {{ $t('Assistant.DisclaimerLabel') }}
-                    </button>
+                    </a>
                 </template>
                 <span>{{ $t('Assistant.Disclaimer') }}</span>
             </v-tooltip>
@@ -904,6 +905,24 @@ export default {
     background-color: rgb(var(--v-theme-surface));
     border-top: 1px solid rgba(var(--v-theme-on-surface), 0.1);
     flex-shrink: 0;
+    text-align: center;
+}
+
+.chat-disclaimer-link {
+    cursor: pointer;
+    color: rgba(var(--v-theme-on-surface), 0.5);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+}
+
+.chat-disclaimer-link:hover,
+.chat-disclaimer-link:focus {
+    color: rgba(var(--v-theme-on-surface), 0.75);
+    outline: none;
 }
 
 .chat-disclaimer-body {
