@@ -182,14 +182,7 @@ There are **two distinct frontend applications**, each with different technology
 - **DOMPurify** (`vue-dompurify-html`) — sanitize HTML in user-generated content
 - **Vite** — build tool
 
-#### Code Style Rules (ESLint + Prettier)
 
-- 4-space indentation in `.js` and `.vue` files
-- Single quotes for strings
-- **No semicolons**
-- Trailing commas in multi-line arrays/objects; **no** trailing commas in functions/imports
-- `vue/html-indent`: 4-space, closing bracket on same line (no newline before `>`)
-- Extend `plugin:vue/essential` + `eslint:recommended` + `prettier`
 
 #### State Management (Vuex)
 
@@ -222,15 +215,6 @@ There are **two distinct frontend applications**, each with different technology
 - **Ace Editor** (`vue3-ace-editor`, `ace-builds`) — expression/script editing
 - **DOMPurify** (`vue-dompurify-html`) — sanitize HTML
 - **Vite** — build tool
-
-#### Code Style Rules (ESLint + Prettier)
-
-- 4-space indentation in `.js` and `.vue` files
-- Single quotes for strings
-- **No semicolons**
-- Trailing commas in multi-line arrays/objects; **no** trailing commas in functions/imports
-- Extend `plugin:vue/recommended` (stricter than the HQ project)
-- Prettier: `tabWidth: 4`, `singleQuote: true`
 
 #### State Management (Pinia)
 
@@ -388,7 +372,7 @@ src/
 - **Workspace schema isolation:** Running ad-hoc SQL against a specific workspace requires prefixing table names with the workspace schema (e.g., `ws_primary."interviews"`).
 
 ### Example of a GOOD Comment
-> "Security Risk: Passing user input directly into `dangerouslySetInnerHTML` exposes the app to XSS attacks. Sanitize this input first."
+> "Security Risk: Passing user input directly into a Vue `v-html` binding exposes the app to XSS attacks. Use `v-dompurify-html` or sanitize this input before binding."
 
 ## Important
-Search thoroughly for all bugs, security issues, rchitectural flaws, and performance problems. Ignore style issues (formatting, naming, comments) unless they cause a bug or security risk.
+Search thoroughly for all bugs, security issues, architectural flaws, and performance problems. Ignore style issues (formatting, naming, comments) unless they cause a bug or security risk.
