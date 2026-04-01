@@ -94,6 +94,20 @@ namespace WB.UI.Headquarters.Code.Workspaces
                         "SupervisorId is required for each workspace when assigning to an interviewer");
                 }
 
+                if (user.IsInRole(UserRoles.Interviewer)
+                    && model.Mode != AssignWorkspacesMode.Remove)
+                {
+                    foreach (var workspaceAssignment in dbWorkspaces.Where(w => w.SupervisorId.HasValue))
+                    {
+                        var supervisor = await users.FindByIdAsync(workspaceAssignment.SupervisorId!.Value, cancellationToken);
+                        if (supervisor == null || !supervisor.IsInRole(UserRoles.Supervisor) || supervisor.IsArchivedOrLocked)
+                        {
+                            ModelState.AddModelError(nameof(model.Workspaces),
+                                $"Supervisor '{workspaceAssignment.SupervisorId}' not found or is not a valid active supervisor");
+                        }
+                    }
+                }
+
                 if (ModelState.IsValid)
                 {
                     try

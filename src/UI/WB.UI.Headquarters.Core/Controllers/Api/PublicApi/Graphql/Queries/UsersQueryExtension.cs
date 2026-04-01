@@ -23,12 +23,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
                 .Name("viewer");
 
             descriptor.Field<UsersResolver>(x => x.GetUsers(default, default))
-                .Authorize(
-                    roles: UserRoles.Administrator.ToString()/*, 
-                    UserRoles.Headquarter.ToString(),
-                    UserRoles.ApiUser.ToString()*/)
+                .Authorize(roles: new[]
+                {
+                    nameof(UserRoles.Administrator),
+                    nameof(UserRoles.Headquarter),
+                    nameof(UserRoles.ApiUser)
+                })
                 .Name("users")
-				.Description("Gets a list of user accounts with their attributes. This query is accessible only to users in the role administrator.")
+				.Description("Gets a list of user accounts with their attributes. This query is accessible to users in the roles administrator, headquarter, or api user.")
                 .Type<ListType<UserType>>()
                 .UseSimplePaging<UserType, HqUser>()
                 .UseSorting<UsersSortInputType>()
