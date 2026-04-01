@@ -910,9 +910,8 @@ export default {
 
 .chat-disclaimer-link {
     cursor: pointer;
-    color: rgba(var(--v-theme-on-surface), 0.5);
-    text-decoration: underline;
-    text-underline-offset: 2px;
+    color: #2a81cb;
+    text-decoration: none;
     background: none;
     border: none;
     padding: 0;
@@ -921,7 +920,8 @@ export default {
 
 .chat-disclaimer-link:hover,
 .chat-disclaimer-link:focus {
-    color: rgba(var(--v-theme-on-surface), 0.75);
+    color: #2a81cb;
+    text-decoration: underline;
     outline: none;
 }
 
