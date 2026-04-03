@@ -8,6 +8,7 @@ using ApprovalTests.Reporters;
 using ApprovalTests.Reporters.TestFrameworks;
 using AutoMapper;
 using Main.Core.Documents;
+using Microsoft.Extensions.Logging.Abstractions;
 using NJsonSchema;
 using NJsonSchema.Generation;
 using NJsonSchema.Validation;

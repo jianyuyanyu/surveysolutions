@@ -75,9 +75,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        public void DropChangedTree()
+        public override void DiscardChanges()
         {
             this.changedTree = null;
+            base.DiscardChanges();
         }
 
         public override void InitializeFromHistory(Guid eventSourceId, IEnumerable<CommittedEvent> history)
@@ -91,7 +92,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.changedTree = null;
         }
-
 
         private IInterviewExpressionStorage expressionStorageCached = null;
         protected IInterviewExpressionStorage GetExpressionStorage()
@@ -1133,7 +1133,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
                 .RequireQuestionExists()
-                .RequireQuestionEnabled();
+                .RequireQuestionIsEnabledAndNotReadOnly();
 
             var targetQuestion = this.Tree.GetQuestion(questionIdentity);
             if (targetQuestion.HasProtectedAnswer())
