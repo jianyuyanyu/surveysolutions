@@ -41,16 +41,27 @@ i18next.use(LanguageDetector).init({
     load: 'languageOnly',
     useCookie: false,
     useLocalStorage: false,
-    interpolation: {
-        format: function(value, format, lng) {
-            if (format === 'uppercase') return value.toUpperCase();
-            if (moment.isDate(value) || moment.isMoment(value))
-                return moment(value).format(format);
-            return value;
-        }
-    },
     resources: messages
 });
+
+// i18next v26 removed interpolation.format; register custom formatters via the Formatter API.
+// These handle moment.js format strings used in locale keys (e.g. {{dateTime, H:mm}}).
+i18next.services.formatter.add('uppercase', (value) => String(value).toUpperCase());
+
+// Register a moment-based formatter for every format spec found in locale files.
+// A Date or Moment value is formatted with moment; any other value is returned as-is.
+function addMomentFormatter(fmt) {
+    i18next.services.formatter.add(fmt, (value) => {
+        if (moment.isDate(value) || moment.isMoment(value))
+            return moment(value).format(fmt);
+        return value;
+    });
+}
+addMomentFormatter('H:mm');
+addMomentFormatter('H: mm');
+addMomentFormatter('MMMM DD[,] YYYY [at] k:mm');
+addMomentFormatter('MMMM DD[,] YYYY [в] k:mm');
+addMomentFormatter('MMMM DD [,] YYYY [la] k:mm');
 
 const instance = i18next;
 
