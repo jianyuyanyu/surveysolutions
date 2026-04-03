@@ -49,7 +49,10 @@ i18next.use(LanguageDetector).init({
 
 // Custom (non-moment) formatters. Add new entries here as needed.
 const customFormatters = {
-    uppercase: (value) => String(value).toUpperCase(),
+    uppercase: (value) => {
+        if (value == null) return value;
+        return String(value).toUpperCase();
+    }
 };
 
 for (const [name, fn] of Object.entries(customFormatters)) {
