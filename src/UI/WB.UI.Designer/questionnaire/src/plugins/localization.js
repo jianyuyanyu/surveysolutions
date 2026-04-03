@@ -46,7 +46,10 @@ i18next.use(LanguageDetector).init({
 
 // i18next v26 removed interpolation.format; register custom formatters via the Formatter API.
 // These handle moment.js format strings used in locale keys (e.g. {{dateTime, H:mm}}).
-i18next.services.formatter.add('uppercase', (value) => String(value).toUpperCase());
+i18next.services.formatter.add('uppercase', (value) => {
+    if (value == null) return value;
+    return String(value).toUpperCase();
+});
 
 // Dynamically scan all loaded locale values for {{var, format}} patterns and register
 // a moment-based formatter for every unique format spec found.  This way adding a new
