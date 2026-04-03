@@ -237,7 +237,10 @@ export default {
         },
         savedAtTimestamp() {
             const time = this.verificationStore.status.time;
-            return this.$t('QuestionnaireEditor.SavedAtTimestamp', { dateTime: time })
+            if (!time) return '';
+            const hours = time.getHours();
+            const minutes = String(time.getMinutes()).padStart(2, '0');
+            return this.$t('QuestionnaireEditor.SavedAtTimestamp', { dateTime: `${hours}:${minutes}` });
         },
         aiAvailable() {
             return this.currentUser.aiAvailable &&
