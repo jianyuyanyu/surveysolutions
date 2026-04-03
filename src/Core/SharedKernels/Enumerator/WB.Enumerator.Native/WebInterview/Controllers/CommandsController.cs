@@ -47,7 +47,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult ChangeLanguage(Guid interviewId, ChangeLanguageRequest request)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (request == null)
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
             
@@ -79,7 +80,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerTextQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(answerRequest, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
 
@@ -90,7 +91,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerTextListQuestion(Guid interviewId, [FromBody] AnswerRequest<TextListAnswerRowDto[]> answerRequest)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(answerRequest, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
             
@@ -106,7 +107,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerGpsQuestion(Guid interviewId, [FromBody] AnswerRequest<GpsAnswer> answerRequest)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(answerRequest, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
             
@@ -121,7 +122,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime?> answerRequest)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(answerRequest, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
             
@@ -135,7 +136,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int?> answerRequest)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(answerRequest, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
             
@@ -150,7 +151,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerLinkedSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[]> answerRequest)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(answerRequest, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
             
@@ -165,7 +166,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerLinkedMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[][]> answerRequest)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(answerRequest, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
 
@@ -179,7 +180,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int[]> answerRequest)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(answerRequest, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
 
@@ -193,7 +194,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerYesNoQuestion(Guid interviewId, [FromBody] AnswerRequest<InterviewYesNoAnswer[]> answerRequest)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(answerRequest, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
 
@@ -208,7 +209,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int?> answerRequest)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(answerRequest, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
             
@@ -222,7 +223,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double?> answerRequest)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(answerRequest, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
             
@@ -236,7 +237,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerQRBarcodeQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(answerRequest, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
 
@@ -252,7 +253,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [ObservingNotAllowed]
         public virtual IActionResult RemoveAnswer(Guid interviewId, RemoveAnswerRequest request)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(request, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
 
@@ -297,7 +298,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult SendNewComment(Guid interviewId, NewCommentRequest request)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(request, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
 
