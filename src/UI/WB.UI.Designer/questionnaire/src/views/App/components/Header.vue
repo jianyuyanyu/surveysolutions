@@ -236,9 +236,7 @@ export default {
             return warnings ? warnings.length : null;
         },
         savedAtTimestamp() {
-            const time = this.verificationStore.status.time;
-            if (!time) return '';
-            return this.$t('QuestionnaireEditor.SavedAtTimestamp', { dateTime: time });
+            return this.$t('QuestionnaireEditor.SavedAtTimestamp', { dateTime: this.verificationStore.status.time });
         },
         aiAvailable() {
             return this.currentUser.aiAvailable &&

@@ -49,9 +49,10 @@ i18next.use(LanguageDetector).init({
 i18next.services.formatter.add('uppercase', (value) => String(value).toUpperCase());
 
 // Register a moment-based formatter for every format spec found in locale files.
-// A Date or Moment value is formatted with moment; any other value is returned as-is.
+// null/undefined are returned as-is, matching the previous interpolation.format fallthrough.
 function addMomentFormatter(fmt) {
     i18next.services.formatter.add(fmt, (value) => {
+        if (value == null) return value;
         if (moment.isDate(value) || moment.isMoment(value))
             return moment(value).format(fmt);
         return value;
