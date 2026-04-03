@@ -24,7 +24,7 @@
     "ReadOnly": "للقراءة فقط",
     "ReadOnlyQuestion": "هذا سؤال للقراءة فقط. لا يمكنك تحريره.",
     "Save": "حفظ",
-    "SavedAtTimestamp": "تم الحفظ في {{dateTime، H:mm}}",
+    "SavedAtTimestamp": "تم الحفظ في {{dateTime, H:mm}}",
     "Settings": "الإعدادات",
     "SideBarAddMacro": "إضافة ماكرو جديد",
     "SideBarAttachmentName": "اسم المرفق",
