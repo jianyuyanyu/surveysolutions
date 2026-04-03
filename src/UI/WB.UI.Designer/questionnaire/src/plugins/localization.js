@@ -46,28 +46,35 @@ i18next.use(LanguageDetector).init({
 
 // i18next v26 removed interpolation.format; register custom formatters via the Formatter API.
 // These handle moment.js format strings used in locale keys (e.g. {{dateTime, H:mm}}).
-i18next.services.formatter.add('uppercase', (value) => {
-    if (value == null) return value;
-    return String(value).toUpperCase();
-});
+
+// Custom (non-moment) formatters. Add new entries here as needed.
+const customFormatters = {
+    uppercase: (value) => String(value).toUpperCase(),
+};
+
+for (const [name, fn] of Object.entries(customFormatters)) {
+    i18next.services.formatter.add(name, fn);
+}
 
 // Dynamically scan all loaded locale values for {{var, format}} patterns and register
 // a moment-based formatter for every unique format spec found.  This way adding a new
 // format string to any locale file works automatically without touching this file.
 // null/undefined are returned as-is, matching the previous interpolation.format fallthrough.
-function collectFormats(obj, found = new Set()) {
+// Formats already registered in customFormatters are excluded automatically.
+function collectFormats(obj, found = new Set(), exclude = new Set()) {
     if (typeof obj === 'string') {
         const re = /\{\{[^,}]+,\s*([^}]+?)\s*\}\}/g;
         let m;
-        while ((m = re.exec(obj)) !== null) found.add(m[1]);
+        while ((m = re.exec(obj)) !== null) {
+            if (!exclude.has(m[1])) found.add(m[1]);
+        }
     } else if (obj && typeof obj === 'object') {
-        for (const v of Object.values(obj)) collectFormats(v, found);
+        for (const v of Object.values(obj)) collectFormats(v, found, exclude);
     }
     return found;
 }
 
-const momentFormats = collectFormats(messages);
-momentFormats.delete('uppercase'); // handled separately above
+const momentFormats = collectFormats(messages, new Set(), new Set(Object.keys(customFormatters)));
 momentFormats.forEach((fmt) => {
     i18next.services.formatter.add(fmt, (value) => {
         if (value == null) return value;
