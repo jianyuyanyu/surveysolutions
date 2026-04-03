@@ -48,21 +48,31 @@ i18next.use(LanguageDetector).init({
 // These handle moment.js format strings used in locale keys (e.g. {{dateTime, H:mm}}).
 i18next.services.formatter.add('uppercase', (value) => String(value).toUpperCase());
 
-// Register a moment-based formatter for every format spec found in locale files.
+// Dynamically scan all loaded locale values for {{var, format}} patterns and register
+// a moment-based formatter for every unique format spec found.  This way adding a new
+// format string to any locale file works automatically without touching this file.
 // null/undefined are returned as-is, matching the previous interpolation.format fallthrough.
-function addMomentFormatter(fmt) {
+function collectFormats(obj, found = new Set()) {
+    if (typeof obj === 'string') {
+        const re = /\{\{[^,}]+,\s*([^}]+?)\s*\}\}/g;
+        let m;
+        while ((m = re.exec(obj)) !== null) found.add(m[1]);
+    } else if (obj && typeof obj === 'object') {
+        for (const v of Object.values(obj)) collectFormats(v, found);
+    }
+    return found;
+}
+
+const momentFormats = collectFormats(messages);
+momentFormats.delete('uppercase'); // handled separately above
+momentFormats.forEach((fmt) => {
     i18next.services.formatter.add(fmt, (value) => {
         if (value == null) return value;
         if (moment.isDate(value) || moment.isMoment(value))
             return moment(value).format(fmt);
         return value;
     });
-}
-addMomentFormatter('H:mm');
-addMomentFormatter('H: mm');
-addMomentFormatter('MMMM DD[,] YYYY [at] k:mm');
-addMomentFormatter('MMMM DD[,] YYYY [в] k:mm');
-addMomentFormatter('MMMM DD [,] YYYY [la] k:mm');
+});
 
 const instance = i18next;
 
