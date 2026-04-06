@@ -132,7 +132,7 @@
     <value>حفظ</value>
   </data>
   <data name="SavedAtTimestamp" xml:space="preserve">
-    <value>تم الحفظ في {{dateTime، H:mm}}</value>
+    <value>تم الحفظ في {{dateTime, H:mm}}</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>الإعدادات</value>
