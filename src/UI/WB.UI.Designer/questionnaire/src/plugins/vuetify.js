@@ -6,7 +6,6 @@ const myCustomLightTheme = {
     dark: false,
     colors: {
         primary: '2a81cb',
-        success: '2fc507',
         error: 'd20426',
     },
 };
