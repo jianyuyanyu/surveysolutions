@@ -110,6 +110,7 @@
         </div>
 
     </v-card>
+    <confirm-prompt-dialog></confirm-prompt-dialog>
 </template>
 
 <script>
