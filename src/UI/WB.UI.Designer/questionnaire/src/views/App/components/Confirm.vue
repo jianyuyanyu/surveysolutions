@@ -15,7 +15,8 @@
                     <div class="modal-body" v-dompurify-html="title">
                     </div>
                     <div class="modal-footer" v-if="!noControls">
-                        <button class="btn btn-primary btn-lg" v-if="!isReadOnly" @click="ok()">
+                        <button :class="['btn', 'btn-lg', isDanger ? 'btn-danger' : 'btn-primary']" v-if="!isReadOnly"
+                            @click="ok()">
                             {{ okButtonTitle || $t('QuestionnaireEditor.OK') }}
                         </button>
                         <button v-if="!isAlert" class="btn btn-link" @click="cancel()">
@@ -50,6 +51,7 @@ const confirmDialog = {
             callback: { type: Function, required: false },
             noControls: { type: Boolean, required: false },
             isAlert: { type: Boolean, required: false, default: false },
+            isDanger: { type: Boolean, required: false, default: false },
             isOpen: false
         };
     },
@@ -69,6 +71,7 @@ const confirmDialog = {
             this.cancelButtonTitle = params.cancelButtonTitle;
             this.isReadOnly = params.isReadOnly || false;
             this.isAlert = params.isAlert || false;
+            this.isDanger = params.isDanger || false;
             this.callback = params.callback;
             this.noControls = params.noControls || false;
             this.isOpen = true;
