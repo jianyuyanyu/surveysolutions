@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;

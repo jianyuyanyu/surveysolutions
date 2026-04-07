@@ -9,6 +9,7 @@ using ApprovalTests.Reporters;
 using ApprovalTests.Reporters.TestFrameworks;
 using AutoMapper;
 using Main.Core.Documents;
+using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
