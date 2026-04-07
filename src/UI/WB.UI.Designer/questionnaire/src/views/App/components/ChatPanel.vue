@@ -549,12 +549,14 @@ export default {
             const next = previous === reactionValue ? 0 : reactionValue;
 
             if (next === -1 && previous !== -1) {
-                // Send negative reaction immediately, then prompt for optional feedback.
-                await applyReaction({ message, index, previous, next, comment: null });
-
-                const { confirmed, comment } = await promptUnhelpfulComment();
-                if (confirmed) {
-                    // Re-send same negative reaction with the user's comment (if any).
+                // Send the request and show the dialog in parallel.
+                const [, { confirmed, comment }] = await Promise.all([
+                    applyReaction({ message, index, previous, next, comment: null }),
+                    promptUnhelpfulComment()
+                ]);
+                // Re-send with comment only if the reaction is still -1
+                // (guards against the request failing or the user changing reaction in the meantime).
+                if (confirmed && getMessageReaction(message) === -1) {
                     await applyReaction({ message, index, previous: -1, next: -1, comment });
                 }
                 return;
