@@ -288,12 +288,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 ? null
                 : Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(request.Prompt)));
 
+            // Sanitize user-provided entity id to avoid log forging via control characters.
+            var entityIdSafe = Convert.ToString(request.EntityId)?.Replace("\r", string.Empty).Replace("\n", string.Empty);
+
             logger.LogInformation(
                 "Assistant reaction: userId={UserId} questionnaire={QuestionnaireId}${Version} entityId={EntityId} reaction={Reaction} assistantCallId={AssistantCallId} clientMsgId={ClientMessageId} clientTs={ClientTimestamp} promptHash={PromptHash} responseHash={ResponseHash}",
                 user?.Id,
                 questionnaireRevision.QuestionnaireId,
                 questionnaireRevision.Version,
-                request.EntityId,
+                entityIdSafe,
                 request.Reaction,
                 request.AssistantCallId,
                 request.ClientMessageId,
