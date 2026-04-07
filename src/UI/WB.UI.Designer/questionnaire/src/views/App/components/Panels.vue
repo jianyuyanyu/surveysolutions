@@ -1,13 +1,14 @@
 <template>
-    <div class="questionnaire-tree" :style="{ marginRight: isOpen ? panelWidth + 'px' : '0px' }">
-        <router-view name="tree"></router-view>
-        <router-view />
+    <div class="panels-layout">
+        <div class="questionnaire-tree" :style="{ right: isOpen ? panelWidth + 'px' : '0px' }">
+            <router-view name="tree"></router-view>
+            <router-view />
+        </div>
+        <div v-if="isOpen" id="resizablePanel" ref="resizablePanel" :style="{ width: panelWidth + 'px' }">
+            <div class="resize-handle" @mousedown="startResize"></div>
+            <ChatPanel class="panel-content" />
+        </div>
     </div>
-    <div v-if="isOpen" id="resizablePanel" ref="resizablePanel" :style="{ width: panelWidth + 'px' }">
-        <div class="resize-handle" @mousedown="startResize"></div>
-        <ChatPanel class="panel-content" />
-    </div>
-
 </template>
 
 <script>
@@ -74,17 +75,29 @@ export default {
 </script>
 
 <style scoped>
-#resizablePanel {
-    position: fixed;
-    right: 0;
+.panels-layout {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
 
+.questionnaire-tree {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#resizablePanel {
+    position: absolute;
+    top: 0;
+    right: 0;
     bottom: 0;
     background: white;
     border-left: 1px solid #ddd;
     overflow: hidden;
-    z-index: 100;
     display: flex;
-    height: calc(100% - (75px + 2px));
 }
 
 .resize-handle {
