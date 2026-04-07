@@ -153,6 +153,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Veuillez actualiser la page pour rétablir la connexion et continuer cette interview.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Connexion perdue. Tentative de reconnexion…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Tentative {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="CloseInterviewMessage" xml:space="preserve">
     <value>&lt;p&gt;L'entretien web ne peut être rempli que dans un seul onglet du navigateur web.&lt;/p&gt;&lt;p&gt;Veuillez actualiser cette page afin de continuer le remplissage dans cet onglet, ou fermer l'onglet.&lt;/p&gt;</value>
   </data>

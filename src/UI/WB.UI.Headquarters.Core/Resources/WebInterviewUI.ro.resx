@@ -213,6 +213,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Reîncărcați pagina pentru a restabili conexiunea și continuați acest interviu.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Conexiunea a fost pierdută. Se încearcă reconectarea…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Tentativă {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>S-a întrerupt conexiunea cu serverul.</value>
   </data>

@@ -153,6 +153,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Пожалуйста перегрузите страницу чтобы восстановить соединение с сервером и продолжить интервью.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Соединение потеряно. Выполняется попытка переподключения…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Попытка {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="CloseInterviewMessage" xml:space="preserve">
     <value>&lt;p&gt;Веб Интервью поддерживается только в одной активной вкладке&lt;/p&gt;&lt;p&gt;Пожалуйста перегрузите эту страницу если хотите продолжить интервью или закройте окно&lt;/p&gt;</value>
   </data>
