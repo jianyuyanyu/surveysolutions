@@ -1364,13 +1364,19 @@
     }
 }
 
-.question-editor {
-    position: relative;
-    height: 100%;
-    background: white;
-    padding: 0;
+.editor-panel {
     flex-shrink: 0;
     min-width: 540px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.question-editor {
+    position: relative;
+    flex: 1;
+    background: white;
+    padding: 0;
 
     form {
         width: 100%;
@@ -1453,6 +1459,7 @@
 }
 
 .question-editor.commenting {
+    flex: 0 0 50%;
     height: 50%;
 }
 
