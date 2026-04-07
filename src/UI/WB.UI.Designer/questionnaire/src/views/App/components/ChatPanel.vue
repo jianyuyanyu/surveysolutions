@@ -536,9 +536,12 @@ export default {
                     comment: comment || null
                 });
             } catch (error) {
-                message.reaction = previous;
-                message.isHelpful = previous === 1;
-                message.isUnhelpful = previous === -1;
+                // Only roll back if the reaction hasn't been changed by a subsequent action.
+                if (message.reaction === next) {
+                    message.reaction = previous;
+                    message.isHelpful = previous === 1;
+                    message.isUnhelpful = previous === -1;
+                }
             }
         };
 
