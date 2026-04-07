@@ -141,6 +141,12 @@
   <data name="Disconnected" xml:space="preserve">
     <value>Disconnected</value>
   </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>The server did not return the expected identification header. You may be connected to a proxy or an incorrect server. Please reload the page.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Invalid server response</value>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>Connection to server is lost.</value>
   </data>

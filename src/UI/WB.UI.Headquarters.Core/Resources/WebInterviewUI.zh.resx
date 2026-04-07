@@ -234,6 +234,12 @@
   <data name="DecimalTooBig" xml:space="preserve">
     <value>输入的值过大。最大的为数为15位</value>
   </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>服务器未返回预期的标识标头。您可能连接到代理服务器或错误的服务器。请重新加载页面。</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>服务器响应无效</value>
+  </data>
   <data name="Disconnected" xml:space="preserve">
     <value>未连接</value>
   </data>

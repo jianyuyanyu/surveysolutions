@@ -138,6 +138,12 @@
   <data name="SessionTimeoutMessage" xml:space="preserve">
     <value>Por favor, recarregue a página para continuar esta entrevista.</value>
   </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>O servidor não retornou o cabeçalho de identificação esperado. Você pode estar conectado a um proxy ou a um servidor incorreto. Por favor, recarregue a página.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Resposta do servidor inválida</value>
+  </data>
   <data name="Disconnected" xml:space="preserve">
     <value>Desconectado</value>
   </data>

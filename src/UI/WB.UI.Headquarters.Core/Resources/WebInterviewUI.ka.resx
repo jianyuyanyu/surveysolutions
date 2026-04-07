@@ -228,6 +228,12 @@
   <data name="DecimalTooBig" xml:space="preserve">
     <value>შეტანილი მნიშვნელობა უფრო დიდია. ნებადართულია მხოლოდ 15 ციფრი</value>
   </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>სერვერმა არ დაბრუნა მოსალოდნელი საიდენტიფიკაციო სათაური. შესაძლოა, თქვენ დაკავშირებული ხართ მარიონეტულ სერვერთან ან არასწორ სერვერთან. გთხოვთ, განაახლოთ გვერდი.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>სერვერის არასწორი პასუხი</value>
+  </data>
   <data name="Disconnected" xml:space="preserve">
     <value>კავშირდაკარგული</value>
   </data>

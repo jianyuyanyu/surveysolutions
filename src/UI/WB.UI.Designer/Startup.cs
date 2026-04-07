@@ -52,6 +52,7 @@ using WB.UI.Designer.Services.Restore;
 using WB.UI.Shared.Web.Authentication;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
+using WB.UI.Shared.Web.Integrity;
 using WB.UI.Shared.Web.Services;
 using WB.UI.Designer.Extensions;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
@@ -374,6 +375,8 @@ namespace WB.UI.Designer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
+            app.UseIntegrityHelper();
+            
             app.UseViteForwarder();
             app.UseExceptional();
 

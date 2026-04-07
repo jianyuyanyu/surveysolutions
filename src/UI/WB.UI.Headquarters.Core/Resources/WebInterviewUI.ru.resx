@@ -138,6 +138,12 @@
   <data name="SessionTimeoutMessage" xml:space="preserve">
     <value>Пожалуйста перегрузите страницу чтобы продолжить интервью.</value>
   </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>Сервер не вернул ожидаемый идентификационный заголовок. Возможно, вы подключены через прокси-сервер или к неверному серверу. Пожалуйста, перезагрузите страницу.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Неверный ответ сервера</value>
+  </data>
   <data name="Disconnected" xml:space="preserve">
     <value>Разъеденены</value>
   </data>
