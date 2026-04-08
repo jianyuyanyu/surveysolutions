@@ -25,6 +25,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Controllers.Api.Designer;
+using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.Tests.Unit.Designer.Api.Designer
 {
@@ -127,7 +128,7 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         {
             var controller = CreateController();
 
-            Assert.Throws<CommandController.CommandDeserializationException>(
+            Assert.Throws<CommandDeserializationException>(
                 () => controller.Deserialize("CompletelyUnknownCommandType", "{}"));
         }
 
@@ -136,7 +137,7 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         {
             var controller = CreateController();
 
-            Assert.Throws<CommandController.CommandDeserializationException>(
+            Assert.Throws<CommandDeserializationException>(
                 () => controller.Deserialize("UpdateQuestionnaire", "not { valid } json [[["));
         }
 
@@ -156,7 +157,7 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         {
             var controller = CreateController();
 
-            Assert.Throws<CommandController.CommandDeserializationException>(
+            Assert.Throws<CommandDeserializationException>(
                 () => controller.Deserialize("UpdateQuestionnaire", null!));
         }
 
@@ -202,12 +203,12 @@ namespace WB.Tests.Unit.Designer.Api.Designer
                 // It is fine if it succeeds (type found and {} produced a valid instance)
                 // or throws CommandDeserializationException for a different reason
                 // (e.g. the deserialized object came back null for that type).
-                CommandController.CommandDeserializationException caughtEx = null;
+                CommandDeserializationException caughtEx = null;
                 try
                 {
                     controller.Deserialize(key, "{}");
                 }
-                catch (CommandController.CommandDeserializationException e)
+                catch (CommandDeserializationException e)
                 {
                     caughtEx = e;
                 }
