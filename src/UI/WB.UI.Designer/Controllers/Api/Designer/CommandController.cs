@@ -37,6 +37,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
+using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Controllers;
 using QuestionnaireEditor = WB.UI.Designer.Resources.QuestionnaireEditor;
 
@@ -471,10 +472,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     // Wrap any ArgumentException thrown by Json.NET to avoid leaking
                     // implementation details to callers.
                     logger.LogError(ae, "ArgumentException during JSON deserialization.");
-                    throw new CommandDeserializationException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand), ae);
+                    throw new CommandDeserializationException(
+                        $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}", ae);
                 }
                 if (deserialized == null)
-                    throw new CommandDeserializationException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand));
+                    throw new CommandDeserializationException(
+                        $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}");
 
                 return deserialized;
             }
@@ -484,7 +487,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 // internal details and to ensure callers can distinguish user validation
                 // errors from deserialization failures.
                 logger.LogError(e, "ArgumentException during command deserialization.");
-                throw new CommandDeserializationException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand), e);
+                throw new CommandDeserializationException(
+                    $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}", e);
             }
             catch (Exception e)
             {
@@ -493,19 +497,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 // user-actionable ArgumentExceptions (validation errors) and
                 // internal deserialization failures that should not leak details
                 // to the client.
-                throw new CommandDeserializationException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand), e);
-            }
-        }
-
-        // Dedicated exception type for deserialization/internal command errors.
-        // This allows controllers to mask internal details while still returning
-        // user-visible messages for other ArgumentExceptions which represent
-        // validation or user-actionable errors.
-        public class CommandDeserializationException : Exception
-        {
-            public CommandDeserializationException(string message, Exception? innerException = null)
-                : base(message, innerException)
-            {
+                throw new CommandDeserializationException(
+                    $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}", e);
             }
         }
 
