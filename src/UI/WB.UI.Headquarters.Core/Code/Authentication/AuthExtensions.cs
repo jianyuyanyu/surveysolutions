@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.AspNetCore.Authentication;
@@ -67,7 +68,19 @@ namespace WB.UI.Headquarters.Code.Authentication
                     {
                         AuthenticationHeaderValue authHeader =
                             AuthenticationHeaderValue.Parse(ctx.Request.Headers[HeaderNames.Authorization]);
-                        return authHeader.Scheme;
+
+                        // Only forward to schemes that are actually registered.
+                        // Returning an unregistered scheme causes an InvalidOperationException
+                        // in AuthenticationMiddleware when a client sends an unknown scheme.
+                        var knownSchemes = new[]
+                        {
+                            AuthType.Basic,
+                            AuthType.AuthToken,
+                            AuthType.TenantToken,
+                        };
+
+                        if (knownSchemes.Contains(authHeader.Scheme, StringComparer.OrdinalIgnoreCase))
+                            return authHeader.Scheme;
                     }
 
                     return null;
