@@ -271,6 +271,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 this.logger.LogError(exc, $"Error on command of type ({model.Type.Replace('\n', '_').Replace('\r', '_')}) handling ");
                 return this.Error((int)HttpStatusCode.NotAcceptable, $"{exc.Message} Please reload page.");
             }
+            catch (ArgumentException e)
+            {
+                this.logger.LogError(e, $"Error on command of type ({model.Type.Replace('\n', '_').Replace('\r', '_')}) handling ");
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+            }
             catch (Exception e)
             {
                 this.logger.LogError(e, $"Error on command of type ({model.Type.Replace('\n', '_').Replace('\r', '_')}) handling ");
