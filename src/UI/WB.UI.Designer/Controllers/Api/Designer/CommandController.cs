@@ -69,6 +69,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         // request body data
         private static readonly FormOptions defaultFormOptions = new FormOptions();
 
+        // Message to return to client when an ArgumentException occurs (do not expose internal exception messages)
+        private const string ArgumentExceptionClientMessage = "Invalid command";
+
         public CommandController(
             ICommandService commandService,
             DesignerDbContext dbContext,
@@ -149,7 +152,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             catch (ArgumentException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
             }
 
             var updateAttachment = this.ProcessCommand(command).Response;
@@ -228,7 +231,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             catch (ArgumentException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
             }
 
             var updateLookupTable = this.ProcessCommand(updateLookupTableCommand).Response;
@@ -270,6 +273,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 this.logger.LogError(exc, $"Error on command of type ({model.Type.Replace('\n', '_').Replace('\r', '_')}) handling ");
                 return this.Error((int)HttpStatusCode.NotAcceptable, $"{exc.Message} Please reload page.");
+            }
+            catch (ArgumentException e)
+            {
+                this.logger.LogError(e, $"Error on command of type ({model.Type.Replace('\n', '_').Replace('\r', '_')}) handling ");
+                return this.Error((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
             }
             catch (Exception e)
             {
@@ -318,7 +326,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             catch (ArgumentException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
             }
             catch (InvalidFileException e)
             {
@@ -386,7 +394,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             catch (ArgumentException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
             }
             catch (InvalidFileException e)
             {
