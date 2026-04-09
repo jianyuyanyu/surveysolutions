@@ -522,43 +522,32 @@ export default {
 
             return is_ie
         },
-        showPointsOnMap(points, locations) {
+        showPointsOnMap(points, locations, AdvancedMarkerElement, PinElement) {
             const self = this
-
-            const arrowMarker = {
-                icon: {
-                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                },
-                offset: '100%',
-            }
 
             this.infoWindow = new google.maps.InfoWindow()
             var bounds = new google.maps.LatLngBounds()
             var markers = []
             points.forEach(point => {
-                var icon = {
-                    path: 'M 0 -50C 15 -50 50 -15 50 0C 50 15 15 50 0 50C -15 50 -50 15 -50 0C -50 -15 -15 -50 0 -50 Z',
-                    fillColor: point.colors[0],
-                    fillOpacity: 0.9,
-                    strokeColor: 'white',
-                    strokeWeight: 2,
-                    scale: 0.4,
-                }
-
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(point.latitude, point.longitude),
-                    label: { text: point.index === -1 ? '' : point.index + '', color: 'white' },
-                    map: self.map,
-                    opacity: 1,
-                    zIndex: point.Index === -1 ? 1000 : 1000 + point.index,
-                    icon: icon,
+                const pinElement = new PinElement({
+                    background: point.colors[0],
+                    borderColor: 'white',
+                    glyphColor: 'white',
+                    glyph: point.index === -1 ? '' : String(point.index),
                 })
-                marker.set('id', point.index)
+
+                var marker = new AdvancedMarkerElement({
+                    position: new google.maps.LatLng(point.latitude, point.longitude),
+                    map: self.map,
+                    zIndex: point.Index === -1 ? 1000 : 1000 + point.index,
+                    content: pinElement.element,
+                })
+                marker._customId = point.index
 
                 self.addDetailsOnClick(marker, point)
 
                 markers.push(marker)
-                bounds.extend(marker.getPosition())
+                bounds.extend(marker.position)
 
                 self.points.set(point.index, {
                     index: point.index,
@@ -571,24 +560,21 @@ export default {
                 })
             })
             locations.forEach(point => {
-                var marker = new google.maps.Marker({
+                const dotElement = document.createElement('div')
+                dotElement.style.cssText = 'width:10px;height:10px;background:#2a81cb;border-radius:50%;border:1px solid #2a81cb'
+
+                var marker = new AdvancedMarkerElement({
                     position: new google.maps.LatLng(point.latitude, point.longitude),
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 5,
-                        fillColor: '#2a81cb',
-                        strokeColor: '#2a81cb',
-                    },
                     map: self.map,
-                    opacity: 1,
                     zIndex: 999,
+                    content: dotElement,
                 })
-                marker.set('id', point.interviewIds[0])
+                marker._customId = point.interviewIds[0]
 
                 self.addDetailsOnClick(marker, point)
 
                 markers.push(marker)
-                bounds.extend(marker.getPosition())
+                bounds.extend(marker.position)
             })
 
             MarkerClusterer.prototype.getClusters = function () {
@@ -647,7 +633,7 @@ export default {
                     size: cluster.count,
                 })
                 markers.forEach(marker => {
-                    let markerId = marker.get('id')
+                    let markerId = marker._customId
 
                     let point = this.points.get(markerId)
                     if (point != null)
@@ -708,12 +694,14 @@ export default {
 
                     nextTick(function () {
                         self.infoWindow.setContent($(self.$refs.tooltip).html())
-                        self.infoWindow.open(self.map, marker)
+                        self.infoWindow.open({ anchor: marker, map: self.map })
                     })
                 })
         },
         async initializeMap() {
             if (!this.model.showMap) return
+
+            const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker")
 
             const response = await this.$http.get(this.model.api.interviewerPoints + '/' + this.interviewerId)
             var data = response.data || { checkInPoints: [], targetLocations: [] }
@@ -722,6 +710,11 @@ export default {
 
             if (points.length > 0 || locations.length > 0) {
                 this.markerExist = true
+
+                const mapId = this.$config.googleMapsMapId || 'DEMO_MAP_ID'
+                if (!this.$config.googleMapsMapId) {
+                    console.warn('GoogleMap: googleMapsMapId is not configured. Using DEMO_MAP_ID as fallback. Configure a Map ID in Google Cloud Console for production use.')
+                }
 
                 var mapOptions = {
                     zoom: 9,
@@ -746,12 +739,13 @@ export default {
                     scaleControl: true,
                     streetViewControl: false,
                     center: this.model.initialLocation,
+                    mapId: mapId,
                 }
 
                 const self = this
                 nextTick(function () {
                     self.map = new google.maps.Map(self.$refs.map, mapOptions)
-                    self.showPointsOnMap(points, locations)
+                    self.showPointsOnMap(points, locations, AdvancedMarkerElement, PinElement)
                 })
             }
         },
