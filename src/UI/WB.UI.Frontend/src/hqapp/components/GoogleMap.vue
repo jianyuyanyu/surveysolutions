@@ -512,7 +512,7 @@ export default {
                 minZoom: 3,
                 scaleControl: true,
                 streetViewControl: false,
-                mapId: this.$config.googleMapsMapId || 'DEMO_MAP_ID',
+                ...(this.$config.googleMapsMapId ? { mapId: this.$config.googleMapsMapId } : {}),
             }
         },
 

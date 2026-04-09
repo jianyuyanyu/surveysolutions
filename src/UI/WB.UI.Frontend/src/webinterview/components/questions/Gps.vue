@@ -140,17 +140,12 @@ export default {
                     self.pickedLocation = null
                     var latlng = new google.maps.LatLng(-34.397, 150.644)
 
-                    const mapId = self.$config.googleMapsMapId || 'DEMO_MAP_ID'
-                    if (!self.$config.googleMapsMapId) {
-                        console.warn('GoogleMap: googleMapsMapId is not configured. Using DEMO_MAP_ID as fallback. Configure a Map ID in Google Cloud Console for production use.')
-                    }
-
                     var mapOptions =
                     {
                         zoom: 14,
                         center: latlng,
                         streetViewControl: false,
-                        mapId: mapId,
+                        ...(self.$config.googleMapsMapId ? { mapId: self.$config.googleMapsMapId } : {}),
                     }
 
                     var canvas = document.getElementById('map_canvas');
