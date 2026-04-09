@@ -173,8 +173,8 @@ export default {
                     google.maps.event.addListener(map, 'click', function (event) {
                         placeMarker(event.latLng)
                         self.pickedLocation = {
-                            latitude: pushpin.position.lat(),
-                            longitude: pushpin.position.lng(),
+                            latitude: event.latLng.lat(),
+                            longitude: event.latLng.lng(),
                         }
                         if (event.placeId) {
                             event.stop() // prevent showing information about place
