@@ -56,7 +56,17 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             if (write)
             {
-                bool hasWriteAccess = viewFactory.HasUserChangeAccessToQuestionnaire(questionnaireRevision.QuestionnaireId, httpContextUser.GetId());
+                if (!httpContextUser.Identity!.IsAuthenticated)
+                {
+                    context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
+                    {
+                        StatusCode = StatusCodes.Status401Unauthorized
+                    };
+                    return;
+                }
+
+                bool hasWriteAccess = httpContextUser.IsAdmin() ||
+                    viewFactory.HasUserChangeAccessToQuestionnaire(questionnaireRevision.QuestionnaireId, httpContextUser.GetId());
                 if (!hasWriteAccess)
                 {
                     context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
