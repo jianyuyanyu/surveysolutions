@@ -1,7 +1,12 @@
 ﻿import DOMPurify from 'dompurify';
 import { Modal } from 'bootstrap';
+import { checkServerHeader } from '../../questionnaire/src/services/serverGuard';
 
 window.Modal = Modal;
+
+$(document).ajaxComplete(function (event, xhr) {
+    checkServerHeader(xhr.getResponseHeader('X-Survey-Solutions'));
+});
 
 function ItemViewModel() {
     var self = this;

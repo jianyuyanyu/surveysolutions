@@ -1,5 +1,6 @@
 ﻿import { createStore } from 'vuex';
 import axios from 'axios';
+import { checkServerHeader } from '../../../../services/serverGuard';
 
 const routes = {
     userInfo: 'user',
@@ -36,6 +37,7 @@ $http.interceptors.request.use(
 $http.interceptors.response.use(
     function(response) {
         store.commit('finish_loading');
+        checkServerHeader(response.headers['x-survey-solutions']);
         return response;
     },
     function(error) {
