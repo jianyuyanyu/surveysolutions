@@ -67,7 +67,8 @@ export default {
         },
     },
     methods: {
-        updateStatus(newMessage) {
+        updateStatus(newMessage, isError = false) {
+            this.isError = isError
             this.statusMessage = this.$t('Pages.Map_Status') + ': ' + newMessage
         },
         onFileChange(e) {
@@ -77,7 +78,7 @@ export default {
                 return
             }
 
-            const statusupdater = this.updateStatus
+            const statusupdater = this.updateStatus.bind(this)
             const uploadingMessage = this.$t('Pages.Map_Uploading')
             const uploadingErrorMessage = this.$t('Pages.Map_UploadingError')
 
@@ -85,8 +86,6 @@ export default {
             fd.append('file', this.$refs.uploader.files[0])
 
             var self = this
-
-            self.isError = false
 
             $.ajax({
                 url: this.$config.model.uploadUrl,
@@ -106,8 +105,7 @@ export default {
                     self.$refs.uploader.value = ''
                 },
                 error: function (error) {
-                    self.isError = true
-                    statusupdater(uploadingErrorMessage)
+                    statusupdater(uploadingErrorMessage, true)
                 },
             })
         },
