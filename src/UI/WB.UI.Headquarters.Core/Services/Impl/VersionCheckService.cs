@@ -45,9 +45,11 @@ namespace WB.UI.Headquarters.Services.Impl
 
             if (!memoryCache.TryGetValue(CachePrefix, out VersionCheckingInfo version))
             {
-                var isErrorDelayExpired = errorOccurredAt != null && (DateTime.Now - errorOccurredAt.Value).TotalSeconds > DelayOnErrorInSeconds;
+                var errorOccurredAtSnapshot = errorOccurredAt;
+                var isErrorDelayExpired = errorOccurredAtSnapshot != null
+                    && (DateTime.Now - errorOccurredAtSnapshot.Value).TotalSeconds > DelayOnErrorInSeconds;
 
-                if ((errorOccurredAt == null) || isErrorDelayExpired)
+                if (errorOccurredAtSnapshot == null || isErrorDelayExpired)
                 {
                     if (!isChecking)
                     {
