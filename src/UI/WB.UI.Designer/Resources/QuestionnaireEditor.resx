@@ -1276,6 +1276,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Request failed unexpectedly.</value>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Application is not available.</value>
+  </data>
   <data name="IncorrectRosterTitle" xml:space="preserve">
     <value>Incorrect roster title question</value>
   </data>

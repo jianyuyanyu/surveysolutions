@@ -154,6 +154,7 @@
     "ReadOnly": "Solo lectura",
     "Recompile": "Recompilar",
     "RequestFailedUnexpectedly": "La petición ha fallado inesperadamente",
+    "ApplicationNotAvailable": "La aplicación no está disponible.",
     "RosterAddItem": "Adicionar ítem",
     "RosterName": "Nombre de lista",
     "RosterSource": "Fuente de lista",

@@ -1214,6 +1214,9 @@
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>فشل الطلب بشكل غير متوقع.</value>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>التطبيق غير متاح.</value>
+  </data>
   <data name="IncorrectRosterTitle" xml:space="preserve">
     <value>عنوان القائمة غير صحيح</value>
   </data>

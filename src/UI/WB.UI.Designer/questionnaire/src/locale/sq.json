@@ -199,6 +199,7 @@
     "Recompile": "Ripërpilo",
     "ReplaceOptionsConfirmation": "Jeni të sigurt që doni të zëvendësoni kategoritë ekzistuese për pyetjen \"{{trimmedTitle}}\"?",
     "RequestFailedUnexpectedly": "Kërkesa dështoi papritur.",
+    "ApplicationNotAvailable": "Aplikacioni nuk është i disponueshëm.",
     "RosterAddItem": "Shto objekt",
     "RosterName": "Emërtimi i rosterit",
     "RosterSource": "Burimi i rosterit",

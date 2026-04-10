@@ -917,6 +917,9 @@
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Запит несподівано завершився невдало.</value>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Застосунок недоступний.</value>
+  </data>
   <data name="RequiredField" xml:space="preserve">
     <value>Обов'язкове поле</value>
   </data>

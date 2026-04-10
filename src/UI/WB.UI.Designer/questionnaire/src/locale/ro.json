@@ -227,6 +227,7 @@
     "Recompile": "Recompilare",
     "ReplaceOptionsConfirmation": "Sigur doriți să înlocuiți variante de răspuns existente pentru întrebarea „{{trimmedTitle}}”?",
     "RequestFailedUnexpectedly": "Solicitarea a eșuat în mod neașteptat.",
+    "ApplicationNotAvailable": "Aplicația nu este disponibilă.",
     "RetryExportPDF": "Reîncercați exportul în format PDF",
     "ReusableCategories": "Variante de răspuns reutilizabile",
     "RosterAddItem": "Adăugare element",

@@ -1,5 +1,15 @@
+import i18next from 'i18next';
+
 const EXPECTED_SERVER_TOKEN = '773994826649214';
 const OVERLAY_ID = '__srv-guard-overlay';
+const FALLBACK_MESSAGE = 'Application is not available.';
+
+function getMessage() {
+    if (i18next.isInitialized) {
+        return i18next.t('QuestionnaireEditor.ApplicationNotAvailable', { defaultValue: FALLBACK_MESSAGE });
+    }
+    return FALLBACK_MESSAGE;
+}
 
 export function checkServerHeader(headerValue) {
     if (headerValue !== EXPECTED_SERVER_TOKEN) {
@@ -20,7 +30,7 @@ export function blockUIForever() {
         'color:#fff;font-size:1.25rem;font-family:sans-serif;' +
         'padding:2rem 3rem;text-align:center;border-radius:8px;' +
         'background:rgba(0,0,0,0.5);';
-    box.textContent = 'Application is not available.';
+    box.textContent = getMessage();
     overlay.appendChild(box);
     document.body.appendChild(overlay);
 }

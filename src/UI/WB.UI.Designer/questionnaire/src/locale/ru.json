@@ -342,6 +342,7 @@
     "EntryWasNotFound": "Элемент не был найден в опроснике, пожалуйста, выберите другой.",
     "IncorrectRosterTitle": "Некоректный вопрос заголовка для ростера",
     "RequestFailedUnexpectedly": "Запрос завершился неудачно.",
+    "ApplicationNotAvailable": "Приложение недоступно.",
     "SelectedInvalidItem": "Выбранный недопустимый элемент. Почини это.",
     "SelectItemFromTheList": "Выберите элемент из списка",
     "EntityComment": "Новый комментарий",

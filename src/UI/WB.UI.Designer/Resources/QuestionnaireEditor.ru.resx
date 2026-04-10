@@ -1181,6 +1181,9 @@
     <value>Запрос завершился неудачно.</value>
     <comment>Запрос завершился неудачно.</comment>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Приложение недоступно.</value>
+  </data>
   <data name="SelectedInvalidItem" xml:space="preserve">
     <value>Выбранный недопустимый элемент. Почини это.</value>
     <comment>Выбранный недопустимый элемент. Почини это.</comment>

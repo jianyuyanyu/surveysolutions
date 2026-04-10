@@ -803,6 +803,9 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Solicitarea a eșuat în mod neașteptat.</value>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Aplicația nu este disponibilă.</value>
+  </data>
   <data name="RetryExportPDF" xml:space="preserve">
     <value>Reîncercați exportul în format PDF</value>
   </data>

@@ -642,6 +642,9 @@
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>请求意外失败</value>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>应用程序不可用。</value>
+  </data>
   <data name="RosterAddItem" xml:space="preserve">
     <value>添加项目</value>
   </data>
