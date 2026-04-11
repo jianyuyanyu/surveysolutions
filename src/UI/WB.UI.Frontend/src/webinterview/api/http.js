@@ -125,7 +125,7 @@ const httpPlugin = {
                     fd.append('duration', duration)
                 dispatch('uploadProgress', { id, now: 0, total: 100 })
 
-                await axios.post(url + '/' + interviewId, fd, {
+                const uploadResponse = await axios.post(url + '/' + interviewId, fd, {
                     onUploadProgress(ev) {
                         var entity = state.webinterview.entityDetails[id]
                         if (entity != undefined) {
@@ -137,6 +137,7 @@ const httpPlugin = {
                         }
                     },
                 })
+                validateServerHeader(uploadResponse)
             },
         }
 

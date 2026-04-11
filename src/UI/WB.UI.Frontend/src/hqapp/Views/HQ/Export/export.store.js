@@ -3,6 +3,7 @@ import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import axios from 'axios'
 import { errorHandler } from '~/shared/errorHandler'
+import { validateServerHeader } from '~/shared/serverValidator'
 
 function formatDate(data) {
     return moment.utc(data).local().format(DateFormats.dateTimeInList)
@@ -28,6 +29,7 @@ export default {
 
             try {
                 const response = await axios.get(api.statusUrl)
+                validateServerHeader(response)
 
                 if (response.data == null) {
                     commit('SET_SERVICE_STATE', false)
@@ -76,6 +78,7 @@ export default {
 
             for (let i = 0; i < chunks.length; i++) {
                 const response = await axios.post(api.exportStatusUrl, chunks[i])
+                validateServerHeader(response)
 
                 if (response.data == null) {
                     return
