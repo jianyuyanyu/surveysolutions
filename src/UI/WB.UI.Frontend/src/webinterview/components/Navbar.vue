@@ -307,8 +307,10 @@ export default {
                     }
                 }
             }).catch(function (error) {
-                if (error && error.response)
+                if (error && error.response) {
+                    validateServerHeader(error.response)
                     self.$errorHandler(error, self)
+                }
             })
         },
 
