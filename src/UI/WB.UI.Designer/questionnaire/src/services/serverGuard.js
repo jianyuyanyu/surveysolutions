@@ -44,7 +44,12 @@ export function installFetchGuard() {
     };
 }
 
+let pageGuardInstalled = false;
+
 export function installPageGuard() {
+    if (pageGuardInstalled) return;
+    pageGuardInstalled = true;
+
     // Capture native fetch before any patching so the ping is always independent.
     const nativeFetch = window.fetch;
     const run = () => {

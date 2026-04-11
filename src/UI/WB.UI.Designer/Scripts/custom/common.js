@@ -7,7 +7,9 @@ installPageGuard();
 window.Modal = Modal;
 
 $(document).ajaxComplete(function (event, xhr) {
-    checkServerHeader(xhr.getResponseHeader('X-Survey-Solutions'));
+    if (xhr && xhr.status > 0) {
+        checkServerHeader(xhr.getResponseHeader('X-Survey-Solutions'));
+    }
 });
 
 function ItemViewModel() {
