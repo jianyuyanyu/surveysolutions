@@ -121,7 +121,14 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResolveComment(Guid id, Guid commentId)
         {
-            await commentsService.ResolveCommentAsync(commentId, id);
+            try
+            {
+                await commentsService.ResolveCommentAsync(commentId, id);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
             await dbContext.SaveChangesAsync();
             return Ok();
         }
