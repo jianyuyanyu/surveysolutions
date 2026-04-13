@@ -139,24 +139,25 @@ export default {
                 onShow: async () => {
                     self.pickedLocation = null
                     var latlng = new google.maps.LatLng(-34.397, 150.644)
-                    const mapId = self.$config.googleMapsMapId || 'DEMO_MAP_ID'
-                    if (!self.$config.googleMapsMapId) {
-                        console.warn('GoogleMap: googleMapsMapId is not configured. Using DEMO_MAP_ID as fallback. Configure a Map ID in Google Cloud Console for production use.')
-                    }
+                    const hasMapId = !!self.$config.googleMapsMapId
 
                     var mapOptions =
                     {
                         zoom: 14,
                         center: latlng,
                         streetViewControl: false,
-                        mapId: mapId,
+                        ...(hasMapId ? { mapId: self.$config.googleMapsMapId } : {}),
                     }
 
                     var canvas = document.getElementById('map_canvas');
                     canvas.style.height = '400px';
 
                     const { Map } = await google.maps.importLibrary("maps")
-                    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker")
+                    let AdvancedMarkerElement = null
+                    if (hasMapId) {
+                        const markerLib = await google.maps.importLibrary("marker")
+                        AdvancedMarkerElement = markerLib.AdvancedMarkerElement
+                    }
                     const map = new Map(canvas, mapOptions)
 
                     if (navigator.geolocation) {
@@ -181,14 +182,24 @@ export default {
                     })
 
                     function placeMarker(location) {
-                        if (pushpin == null) {
-                            pushpin = new AdvancedMarkerElement({
-                                position: location,
-                                map: map,
-                            })
-                        }
-                        else {
-                            pushpin.position = location
+                        if (pushpin === null) {
+                            if (AdvancedMarkerElement) {
+                                pushpin = new AdvancedMarkerElement({
+                                    position: location,
+                                    map: map,
+                                })
+                            } else {
+                                pushpin = new google.maps.Marker({
+                                    position: location,
+                                    map: map,
+                                })
+                            }
+                        } else {
+                            if (AdvancedMarkerElement) {
+                                pushpin.position = location
+                            } else {
+                                pushpin.setPosition(location)
+                            }
                         }
                     }
                 },

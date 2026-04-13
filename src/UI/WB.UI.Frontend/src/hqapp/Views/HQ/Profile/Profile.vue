@@ -704,7 +704,14 @@ export default {
         async initializeMap() {
             if (!this.model.showMap) return
 
-            const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker")
+            const hasMapId = !!this.$config.googleMapsMapId
+            let AdvancedMarkerElement = null
+            let PinElement = null
+            if (hasMapId) {
+                const markerLib = await google.maps.importLibrary("marker")
+                AdvancedMarkerElement = markerLib.AdvancedMarkerElement
+                PinElement = markerLib.PinElement
+            }
 
             const response = await this.$http.get(this.model.api.interviewerPoints + '/' + this.interviewerId)
             var data = response.data || { checkInPoints: [], targetLocations: [] }
@@ -713,11 +720,6 @@ export default {
 
             if (points.length > 0 || locations.length > 0) {
                 this.markerExist = true
-
-                const mapId = this.$config.googleMapsMapId || 'DEMO_MAP_ID'
-                if (!this.$config.googleMapsMapId) {
-                    console.warn('GoogleMap: googleMapsMapId is not configured. Using DEMO_MAP_ID as fallback. Configure a Map ID in Google Cloud Console for production use.')
-                }
 
                 var mapOptions = {
                     zoom: 9,
@@ -742,7 +744,7 @@ export default {
                     scaleControl: true,
                     streetViewControl: false,
                     center: this.model.initialLocation,
-                    mapId: mapId,
+                    ...(hasMapId ? { mapId: this.$config.googleMapsMapId } : {}),
                 }
 
                 const self = this
