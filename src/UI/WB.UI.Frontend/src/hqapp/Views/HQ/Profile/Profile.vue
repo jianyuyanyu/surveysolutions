@@ -529,25 +529,35 @@ export default {
             var bounds = new google.maps.LatLngBounds()
             var markers = []
             points.forEach(point => {
-                const pinElement = new PinElement({
-                    background: point.colors[0],
-                    borderColor: 'white',
-                    glyphColor: 'white',
-                    glyph: point.index === -1 ? '' : String(point.index),
-                })
-
-                var marker = new AdvancedMarkerElement({
-                    position: new google.maps.LatLng(point.latitude, point.longitude),
-                    map: self.map,
-                    zIndex: point.index === -1 ? 1000 : 1000 + point.index,
-                    content: pinElement.element,
-                })
+                const latLng = new google.maps.LatLng(point.latitude, point.longitude)
+                let marker
+                if (AdvancedMarkerElement && PinElement) {
+                    const pinElement = new PinElement({
+                        background: point.colors[0],
+                        borderColor: 'white',
+                        glyphColor: 'white',
+                        glyph: point.index === -1 ? '' : String(point.index),
+                    })
+                    marker = new AdvancedMarkerElement({
+                        position: latLng,
+                        map: self.map,
+                        zIndex: point.index === -1 ? 1000 : 1000 + point.index,
+                        content: pinElement.element,
+                    })
+                } else {
+                    marker = new google.maps.Marker({
+                        position: latLng,
+                        map: self.map,
+                        zIndex: point.index === -1 ? 1000 : 1000 + point.index,
+                        label: point.index === -1 ? '' : String(point.index),
+                    })
+                }
                 marker._customId = point.index
 
                 self.addDetailsOnClick(marker, point)
 
                 markers.push(marker)
-                bounds.extend(marker.position)
+                bounds.extend(latLng)
 
                 self.points.set(point.index, {
                     index: point.index,
@@ -560,21 +570,38 @@ export default {
                 })
             })
             locations.forEach(point => {
-                const dotElement = document.createElement('div')
-                dotElement.style.cssText = 'width:10px;height:10px;background:#2a81cb;border-radius:50%;border:1px solid #2a81cb'
-
-                var marker = new AdvancedMarkerElement({
-                    position: new google.maps.LatLng(point.latitude, point.longitude),
-                    map: self.map,
-                    zIndex: 999,
-                    content: dotElement,
-                })
+                const latLng = new google.maps.LatLng(point.latitude, point.longitude)
+                let marker
+                if (AdvancedMarkerElement) {
+                    const dotElement = document.createElement('div')
+                    dotElement.style.cssText = 'width:10px;height:10px;background:#2a81cb;border-radius:50%;border:1px solid #2a81cb'
+                    marker = new AdvancedMarkerElement({
+                        position: latLng,
+                        map: self.map,
+                        zIndex: 999,
+                        content: dotElement,
+                    })
+                } else {
+                    marker = new google.maps.Marker({
+                        position: latLng,
+                        map: self.map,
+                        zIndex: 999,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 5,
+                            fillColor: '#2a81cb',
+                            fillOpacity: 1,
+                            strokeColor: '#2a81cb',
+                            strokeWeight: 1,
+                        },
+                    })
+                }
                 marker._customId = point.interviewIds[0]
 
                 self.addDetailsOnClick(marker, point)
 
                 markers.push(marker)
-                bounds.extend(marker.position)
+                bounds.extend(latLng)
             })
 
             MarkerClusterer.prototype.getClusters = function () {
@@ -599,18 +626,15 @@ export default {
         },
         addDetailsOnClick: function (marker, point) {
             const self = this
-            const clickEventName = typeof marker.addListener === 'function' ? 'gmp-click' : 'click'
+            // AdvancedMarkerElement exposes a DOM `.element` property; legacy Marker does not.
+            const isAdvancedMarker = 'element' in marker
+            const clickEventName = isAdvancedMarker ? 'gmp-click' : 'click'
             const clickHandler = (function (marker, point) {
                 return function () {
                     self.loadPointDetails(point.interviewIds, marker)
                 }
             })(marker, point)
-
-            if (typeof marker.addListener === 'function') {
-                marker.addListener(clickEventName, clickHandler)
-            } else {
-                google.maps.event.addListener(marker, clickEventName, clickHandler)
-            }
+            marker.addListener(clickEventName, clickHandler)
         },
         drawLines() {
             if (!this.markerCluster) return
