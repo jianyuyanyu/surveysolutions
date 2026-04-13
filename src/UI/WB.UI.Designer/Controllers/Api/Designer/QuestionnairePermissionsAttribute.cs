@@ -56,7 +56,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             if (write)
             {
-                if (!httpContextUser.Identity!.IsAuthenticated)
+                if (httpContextUser.Identity?.IsAuthenticated != true)
                 {
                     context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
                     {
@@ -77,7 +77,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return;
             }
             
-            if (!httpContextUser.Identity!.IsAuthenticated && !hasAnonymousAccess)
+            if (httpContextUser.Identity?.IsAuthenticated != true && !hasAnonymousAccess)
             {
                 context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
                 {
