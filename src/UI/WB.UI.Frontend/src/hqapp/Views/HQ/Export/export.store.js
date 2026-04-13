@@ -3,6 +3,7 @@ import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import axios from 'axios'
 import { errorHandler } from '~/shared/errorHandler'
+import { validateServerHeader } from '~/shared/serverValidator'
 
 function formatDate(data) {
     return moment.utc(data).local().format(DateFormats.dateTimeInList)
@@ -28,6 +29,7 @@ export default {
 
             try {
                 const response = await axios.get(api.statusUrl)
+                validateServerHeader(response)
 
                 if (response.data == null) {
                     commit('SET_SERVICE_STATE', false)
@@ -58,6 +60,7 @@ export default {
                 dispatch('getJobsUpdate', jobsToUpdate)
 
             } catch (error) {
+                if (error && error.response) validateServerHeader(error.response)
                 if (error && error.response && error.response.status === 401)
                     location.reload()
                 else
@@ -75,15 +78,21 @@ export default {
             const chunks = chunk(ids, 20)
 
             for (let i = 0; i < chunks.length; i++) {
-                const response = await axios.post(api.exportStatusUrl, chunks[i])
+                try {
+                    const response = await axios.post(api.exportStatusUrl, chunks[i])
+                    validateServerHeader(response)
 
-                if (response.data == null) {
-                    return
+                    if (response.data == null) {
+                        return
+                    }
+
+                    response.data.forEach(job => {
+                        commit('UPDATE_JOB', job)
+                    })
+                } catch (error) {
+                    if (error && error.response) validateServerHeader(error.response)
+                    throw error
                 }
-
-                response.data.forEach(job => {
-                    commit('UPDATE_JOB', job)
-                })
             }
 
             commit('SET_SERVICE_INITALIZED')
