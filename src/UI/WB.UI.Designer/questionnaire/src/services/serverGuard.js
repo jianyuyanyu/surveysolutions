@@ -1,6 +1,8 @@
 import i18next from 'i18next';
 
-const EXPECTED_SERVER_TOKEN = '773994826649214';
+// Capture the native fetch at module load time, before any patching by installFetchGuard.
+const _nativeFetch = window.fetch;
+
 const OVERLAY_ID = '__srv-guard-overlay';
 const FALLBACK_MESSAGE = 'Unable to complete the request. The response received does not appear to come from the Survey Solutions server.\nThis is usually caused by a network proxy, firewall, or security gateway intercepting the connection.\nPlease check your network connection or contact your IT support.';
 
@@ -11,8 +13,21 @@ function getMessage() {
     return FALLBACK_MESSAGE;
 }
 
+// learnedToken: undefined = not yet observed; string = expected token value.
+// The token is learned from the first same-origin response that carries the header,
+// so any server configuration override is automatically honoured without hard-coding.
+// If the server never sends the header (disabled via configuration), learnedToken
+// stays undefined and the guard remains inactive.
+let learnedToken = undefined;
+
 export function checkServerHeader(headerValue) {
-    if (headerValue !== EXPECTED_SERVER_TOKEN) {
+    if (learnedToken === undefined) {
+        if (headerValue) {
+            learnedToken = headerValue;
+        }
+        return;
+    }
+    if (headerValue !== learnedToken) {
         blockUIForever();
     }
 }
@@ -39,7 +54,14 @@ export function installFetchGuard() {
     const originalFetch = window.fetch;
     window.fetch = async function (...args) {
         const response = await originalFetch.apply(this, args);
-        checkServerHeader(response.headers.get('X-Survey-Solutions'));
+        const url = args[0] instanceof Request ? args[0].url : String(args[0]);
+        try {
+            if (new URL(url, window.location.href).origin === window.location.origin) {
+                checkServerHeader(response.headers.get('X-Survey-Solutions'));
+            }
+        } catch {
+            // Unparseable URL — skip the guard check.
+        }
         return response;
     };
 }
@@ -50,10 +72,8 @@ export function installPageGuard() {
     if (pageGuardInstalled) return;
     pageGuardInstalled = true;
 
-    // Capture native fetch before any patching so the ping is always independent.
-    const nativeFetch = window.fetch;
     const run = () => {
-        nativeFetch(window.location.href, { method: 'HEAD' })
+        _nativeFetch(window.location.href, { method: 'HEAD' })
             .then(response => checkServerHeader(response.headers.get('X-Survey-Solutions')))
             .catch(() => { /* network error — do not block */ });
     };
