@@ -10,7 +10,7 @@ function getMessage() {
     if (i18next.isInitialized) {
         return i18next.t('QuestionnaireEditor.ApplicationNotAvailable');
     }
-    return FALLBACK_MESSAGE;
+    return "";
 }
 
 export function checkServerHeader(headerValue) {
