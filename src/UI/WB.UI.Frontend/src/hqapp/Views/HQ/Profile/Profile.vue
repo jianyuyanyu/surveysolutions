@@ -539,7 +539,7 @@ export default {
                 var marker = new AdvancedMarkerElement({
                     position: new google.maps.LatLng(point.latitude, point.longitude),
                     map: self.map,
-                    zIndex: point.Index === -1 ? 1000 : 1000 + point.index,
+                    zIndex: point.index === -1 ? 1000 : 1000 + point.index,
                     content: pinElement.element,
                 })
                 marker._customId = point.index
