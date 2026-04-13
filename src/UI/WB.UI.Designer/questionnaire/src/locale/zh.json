@@ -175,6 +175,7 @@
     "ReadOnly": "只读模式",
     "Recompile": "重现编译",
     "RequestFailedUnexpectedly": "请求意外失败",
+    "ApplicationNotAvailable": "应用程序不可用。",
     "RosterAddItem": "添加项目",
     "RosterName": "二维表名称",
     "RosterSource": "二维表源",

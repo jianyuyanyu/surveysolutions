@@ -12,5 +12,7 @@ import 'jquery.fancytree/dist/modules/jquery.fancytree.glyph';
 import '/questionnaire/external/jquery.fancytree.contextMenu.js';
 import 'jquery-contextmenu';
 import '/Scripts/custom/public-folders.js';
+import { installPageGuard } from '../../questionnaire/src/services/serverGuard';
 
 window.jQuery = window.$ = $;
+installPageGuard();

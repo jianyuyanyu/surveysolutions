@@ -383,6 +383,7 @@
     "PleaseWait": "Por favor, aguarde...",
     "EntryWasNotFound": "A entrada não foi encontrada no questionário, por favor selecione outra.",
     "RequestFailedUnexpectedly": "A solicitação falhou inesperadamente.",
+    "ApplicationNotAvailable": "O aplicativo não está disponível.",
     "IncorrectRosterTitle": "Título da lista incorreto",
     "SelectedInvalidItem": "Item inválido selecionado. Corrija-o.",
     "SelectItemFromTheList": "Selecione um item da lista",

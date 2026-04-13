@@ -384,6 +384,7 @@
     "PleaseWait": "Please wait...",
     "EntryWasNotFound": "Entry was not found in questionnaire, please select another.",
     "RequestFailedUnexpectedly": "Request failed unexpectedly.",
+    "ApplicationNotAvailable": "Application is not available.",
     "IncorrectRosterTitle": "Incorrect roster title question",
     "SelectedInvalidItem": "Selected invalid item. Fix it.",
     "SelectItemFromTheList": "Select item from the list",

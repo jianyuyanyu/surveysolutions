@@ -265,6 +265,7 @@
     "RegenerateQuestionnaireSharingLink": "Znovu vygenerovat odkaz",
     "ReplaceOptionsConfirmation": "Opravdu chcete nahradit existující kategorie pro otázku \"{{trimmedTitle}}\"?",
     "RequestFailedUnexpectedly": "Požadavek se neočekávaně nezdařil.",
+    "ApplicationNotAvailable": "Aplikace není k dispozici.",
     "RequiredField": "Povinné pole",
     "RetryExportPDF": "Opakujte export ve formátu PDF",
     "ReusableCategories": "Opakovaně použitelné kategorie",
