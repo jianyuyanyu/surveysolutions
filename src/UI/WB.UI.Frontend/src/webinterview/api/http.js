@@ -125,18 +125,24 @@ const httpPlugin = {
                     fd.append('duration', duration)
                 dispatch('uploadProgress', { id, now: 0, total: 100 })
 
-                await axios.post(url + '/' + interviewId, fd, {
-                    onUploadProgress(ev) {
-                        var entity = state.webinterview.entityDetails[id]
-                        if (entity != undefined) {
-                            dispatch('uploadProgress', {
-                                id,
-                                now: ev.loaded,
-                                total: ev.total,
-                            })
-                        }
-                    },
-                })
+                try {
+                    const uploadResponse = await axios.post(url + '/' + interviewId, fd, {
+                        onUploadProgress(ev) {
+                            var entity = state.webinterview.entityDetails[id]
+                            if (entity != undefined) {
+                                dispatch('uploadProgress', {
+                                    id,
+                                    now: ev.loaded,
+                                    total: ev.total,
+                                })
+                            }
+                        },
+                    })
+                    validateServerHeader(uploadResponse)
+                } catch (error) {
+                    if (error && error.response) validateServerHeader(error.response)
+                    throw error
+                }
             },
         }
 
