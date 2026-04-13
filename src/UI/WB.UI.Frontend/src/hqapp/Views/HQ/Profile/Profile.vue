@@ -599,15 +599,18 @@ export default {
         },
         addDetailsOnClick: function (marker, point) {
             const self = this
-            google.maps.event.addListener(
-                marker,
-                'click',
-                (function (marker, point) {
-                    return function () {
-                        self.loadPointDetails(point.interviewIds, marker)
-                    }
-                })(marker, point)
-            )
+            const clickEventName = typeof marker.addListener === 'function' ? 'gmp-click' : 'click'
+            const clickHandler = (function (marker, point) {
+                return function () {
+                    self.loadPointDetails(point.interviewIds, marker)
+                }
+            })(marker, point)
+
+            if (typeof marker.addListener === 'function') {
+                marker.addListener(clickEventName, clickHandler)
+            } else {
+                google.maps.event.addListener(marker, clickEventName, clickHandler)
+            }
         },
         drawLines() {
             if (!this.markerCluster) return
