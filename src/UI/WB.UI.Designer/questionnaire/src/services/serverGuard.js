@@ -4,30 +4,17 @@ import i18next from 'i18next';
 const _nativeFetch = window.fetch;
 
 const OVERLAY_ID = '__srv-guard-overlay';
-const FALLBACK_MESSAGE = 'Unable to complete the request. The response received does not appear to come from the Survey Solutions server.\nThis is usually caused by a network proxy, firewall, or security gateway intercepting the connection.\nPlease check your network connection or contact your IT support.';
+const EXPECTED_SERVER_TOKEN = '773994826649214';
 
 function getMessage() {
     if (i18next.isInitialized) {
-        return i18next.t('QuestionnaireEditor.ApplicationNotAvailable', { defaultValue: FALLBACK_MESSAGE });
+        return i18next.t('QuestionnaireEditor.ApplicationNotAvailable');
     }
     return FALLBACK_MESSAGE;
 }
 
-// learnedToken: undefined = not yet observed; string = expected token value.
-// The token is learned from the first same-origin response that carries the header,
-// so any server configuration override is automatically honoured without hard-coding.
-// If the server never sends the header (disabled via configuration), learnedToken
-// stays undefined and the guard remains inactive.
-let learnedToken = undefined;
-
 export function checkServerHeader(headerValue) {
-    if (learnedToken === undefined) {
-        if (headerValue) {
-            learnedToken = headerValue;
-        }
-        return;
-    }
-    if (headerValue !== learnedToken) {
+    if (headerValue !== EXPECTED_SERVER_TOKEN) {
         blockUIForever();
     }
 }
