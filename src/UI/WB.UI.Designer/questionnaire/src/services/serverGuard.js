@@ -1,3 +1,5 @@
+// Ensure localization is initialized before we need to use i18next
+import '../plugins/localization';
 import i18next from 'i18next';
 
 // Capture the native fetch at module load time, before any patching by installFetchGuard.
