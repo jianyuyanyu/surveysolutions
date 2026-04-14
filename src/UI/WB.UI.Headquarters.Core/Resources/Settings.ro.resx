@@ -136,7 +136,7 @@
     <value>Format de export geografic</value>
   </data>
   <data name="GeographyExportFormat_Description" xml:space="preserve">
-    <value>Selectați modul în care sunt exportate răspunsurile la întrebările geografice (zonă).</value>
+    <value>Selectați cum ar trebui să fie formatate răspunsurile pentru întrebările geografice.</value>
   </data>
   <data name="GeographyExportFormat_Wkt" xml:space="preserve">
     <value>WKT (Well-Known Text)</value>

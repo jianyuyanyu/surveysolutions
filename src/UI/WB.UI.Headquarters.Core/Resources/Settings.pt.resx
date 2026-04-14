@@ -124,7 +124,7 @@
     <value>Formato de exportação geográfica</value>
   </data>
   <data name="GeographyExportFormat_Description" xml:space="preserve">
-    <value>Selecione como as respostas das perguntas geográficas (área) são exportadas.</value>
+    <value>Escolha como as respostas devem ser formatadas para perguntas de geografia.</value>
   </data>
   <data name="GeographyExportFormat_Wkt" xml:space="preserve">
     <value>WKT (Well-Known Text)</value>

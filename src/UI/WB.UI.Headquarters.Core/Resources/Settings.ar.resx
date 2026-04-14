@@ -124,7 +124,7 @@
     <value>تنسيق تصدير الجغرافيا</value>
   </data>
   <data name="GeographyExportFormat_Description" xml:space="preserve">
-    <value>حدد كيفية تصدير إجابات أسئلة الجغرافيا (المنطقة).</value>
+    <value>اختر كيفية تنسيق إجابات أسئلة الجغرافيا.</value>
   </data>
   <data name="GeographyExportFormat_Wkt" xml:space="preserve">
     <value>WKT (نص معروف)</value>
