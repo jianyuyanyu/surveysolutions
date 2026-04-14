@@ -35,6 +35,12 @@ export function blockUIForever() {
     box.textContent = getMessage();
     overlay.appendChild(box);
     document.body.appendChild(overlay);
+
+    if (!i18next.isInitialized) {
+        i18next.on('initialized', () => {
+            box.textContent = i18next.t('QuestionnaireEditor.ApplicationNotAvailable');
+        });
+    }
 }
 
 export function installFetchGuard() {
