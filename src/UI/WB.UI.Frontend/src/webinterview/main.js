@@ -1,7 +1,5 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import { validatePageLoad } from '~/shared/serverValidator'
-validatePageLoad()
 import { setupErrorHandler } from '../shared/errorHandler.js'
 import * as toastr from 'toastr'
 toastr.options.escapeHtml = true
@@ -24,6 +22,11 @@ vue.component('popover', Popover)
 import Vuei18n from '~/shared/plugins/locale'
 import { browserLanguage } from '~/shared/helpers'
 const i18n = Vuei18n.initialize(browserLanguage, vue)
+
+// validatePageLoad is called after i18n is initialized to ensure $t() is available
+// when the response arrives and the error modal may need to be rendered.
+import { validatePageLoad } from '~/shared/serverValidator'
+validatePageLoad()
 
 import 'bootstrap'
 import 'flatpickr/dist/flatpickr.css'
