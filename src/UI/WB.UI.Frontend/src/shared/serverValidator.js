@@ -46,4 +46,35 @@ export function validateJQueryXhr(jqXHR, settings) {
     validateHeaderValues(actual, url)
 }
 
+export function validatePageLoad() {
+    const url = window.location.href
+    fetch(url, { method: 'HEAD' })
+        .then(response => {
+            if (!response.ok) {
+                return fetch(url, { method: 'GET' })
+            }
+            return response
+        })
+        .then(response => {
+            validateHeaderValues(
+                response.headers.get('x-survey-solutions'),
+                url
+            )
+        })
+        .catch(() => { })
+}
+
+export function installAxiosInterceptors(axiosInstance) {
+    axiosInstance.interceptors.response.use(
+        function (response) {
+            validateServerHeader(response)
+            return response
+        },
+        function (error) {
+            if (error.response) validateServerHeader(error.response)
+            return Promise.reject(error)
+        }
+    )
+}
+
 

@@ -196,7 +196,6 @@
 </template>
 <script lang="js">
 import axios from 'axios'
-import { validateServerHeader } from '~/shared/serverValidator'
 import { filter } from 'lodash'
 import { Modal } from 'bootstrap'
 import { nextTick } from 'vue'
@@ -296,7 +295,6 @@ export default {
             axios.post(this.$config.sendLinkUri, {
                 interviewId: this.$route.params.interviewId,
             }).then(function (response) {
-                validateServerHeader(response)
                 if (response && response.data !== '' && response.data.link) {
                     try {
                         const linkUrl = new URL(response.data.link);
@@ -307,9 +305,6 @@ export default {
                     }
                 }
             }).catch(function (error) {
-                if (error && error.response) {
-                    validateServerHeader(error.response)
-                }
                 self.$errorHandler(error, self)
             })
         },

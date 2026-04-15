@@ -8,6 +8,8 @@ import '../assets/css/markup-specific.scss'
 
 import { createApp } from 'vue'
 import App from './App.vue';
+import { validatePageLoad } from '~/shared/serverValidator'
+validatePageLoad()
 
 const vue = createApp(App)
 

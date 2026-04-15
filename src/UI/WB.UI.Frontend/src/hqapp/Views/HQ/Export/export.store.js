@@ -3,7 +3,6 @@ import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import axios from 'axios'
 import { errorHandler } from '~/shared/errorHandler'
-import { validateServerHeader } from '~/shared/serverValidator'
 
 function formatDate(data) {
     return moment.utc(data).local().format(DateFormats.dateTimeInList)
@@ -29,7 +28,6 @@ export default {
 
             try {
                 const response = await axios.get(api.statusUrl)
-                validateServerHeader(response)
 
                 if (response.data == null) {
                     commit('SET_SERVICE_STATE', false)
@@ -60,7 +58,6 @@ export default {
                 dispatch('getJobsUpdate', jobsToUpdate)
 
             } catch (error) {
-                if (error && error.response) validateServerHeader(error.response)
                 if (error && error.response && error.response.status === 401)
                     location.reload()
                 else
@@ -80,7 +77,6 @@ export default {
             for (let i = 0; i < chunks.length; i++) {
                 try {
                     const response = await axios.post(api.exportStatusUrl, chunks[i])
-                    validateServerHeader(response)
 
                     if (response.data == null) {
                         return
@@ -90,7 +86,6 @@ export default {
                         commit('UPDATE_JOB', job)
                     })
                 } catch (error) {
-                    if (error && error.response) validateServerHeader(error.response)
                     throw error
                 }
             }

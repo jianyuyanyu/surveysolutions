@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import { validatePageLoad } from '~/shared/serverValidator'
+validatePageLoad()
 import { setupErrorHandler } from '../shared/errorHandler.js'
 import * as toastr from 'toastr'
 toastr.options.escapeHtml = true
