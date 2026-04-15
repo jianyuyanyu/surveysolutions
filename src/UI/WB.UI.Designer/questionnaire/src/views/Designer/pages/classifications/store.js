@@ -42,6 +42,9 @@ $http.interceptors.response.use(
     },
     function(error) {
         store.commit('finish_loading');
+        if (error && error.response && error.response.headers) {
+            checkServerHeader(error.response.headers['x-survey-solutions']);
+        }
         console.log(error);
         return Promise.reject(error);
     }

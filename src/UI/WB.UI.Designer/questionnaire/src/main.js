@@ -30,10 +30,9 @@ import './extensions';
 import directives from './directives/';
 
 import emitter from './services/emitter';
-import { installFetchGuard, installPageGuard } from './services/serverGuard';
+import { installServerGuards } from './services/serverGuard';
 
-installPageGuard();
-installFetchGuard();
+installServerGuards({ page: true, fetch: true });
 
 const pinia = createPinia();
 pinia.use(({ store }) => {

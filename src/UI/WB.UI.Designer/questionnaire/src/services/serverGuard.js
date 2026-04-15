@@ -46,6 +46,9 @@ export function blockUIForever() {
 }
 
 export function installFetchGuard() {
+    if (installFetchGuard.installed) return;
+    installFetchGuard.installed = true;
+
     const originalFetch = window.fetch;
     window.fetch = async function (...args) {
         const response = await originalFetch.apply(this, args);
@@ -61,20 +64,37 @@ export function installFetchGuard() {
     };
 }
 
+installFetchGuard.installed = false;
+
 let pageGuardInstalled = false;
 
 export function installPageGuard() {
     if (pageGuardInstalled) return;
     pageGuardInstalled = true;
 
-    const run = () => {
-        _nativeFetch(window.location.href, { method: 'HEAD' })
-            .then(response => checkServerHeader(response.headers.get('X-Survey-Solutions')))
-            .catch(() => { /* network error — do not block */ });
+    const run = async () => {
+        try {
+            const headResponse = await _nativeFetch(window.location.href, { method: 'HEAD', cache: 'no-store' });
+            if (headResponse.status === 405) {
+                // Some endpoints do not expose custom headers on HEAD; retry once with GET.
+                const getResponse = await _nativeFetch(window.location.href, { method: 'GET', cache: 'no-store' });
+                checkServerHeader(getResponse.headers.get('X-Survey-Solutions'));
+                return;
+            }
+
+            checkServerHeader(headResponse.headers.get('X-Survey-Solutions'));
+        } catch {
+            // network error — do not block
+        }
     };
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', run, { once: true });
     } else {
         run();
     }
+}
+
+export function installServerGuards({ page = true, fetch = false } = {}) {
+    if (page) installPageGuard();
+    if (fetch) installFetchGuard();
 }

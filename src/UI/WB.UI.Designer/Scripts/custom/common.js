@@ -1,8 +1,8 @@
 ﻿import DOMPurify from 'dompurify';
 import { Modal } from 'bootstrap';
-import { checkServerHeader, installPageGuard } from '../../questionnaire/src/services/serverGuard';
+import { checkServerHeader, installServerGuards } from '../../questionnaire/src/services/serverGuard';
 
-installPageGuard();
+installServerGuards({ page: true });
 
 window.Modal = Modal;
 
