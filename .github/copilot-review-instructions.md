@@ -49,22 +49,7 @@ Asset-hash filename churn (e.g., `app.<hash>.js` rename) produced by a legitimat
 
 ---
 
-## 3. 🟠 New HTTP client / interceptor missing `checkServerHeader`
-
-Every outgoing HTTP request from the browser must observe the `X-Survey-Solutions` response header via `checkServerHeader` (see `src/UI/WB.UI.Designer/questionnaire/src/services/serverGuard.js`). This detects server redeploys / version mismatches and triggers the reload flow. Bypassing it leaves the tab running against an incompatible backend and produces corrupt UI state.
-
-**Flag** when the diff:
-- Adds a new `axios.create(...)` instance, `mande(...)` client, raw `fetch(...)` wrapper, or `$.ajax` interceptor, **and**
-- does not call `checkServerHeader(response.headers['x-survey-solutions'])` in both success and error paths.
-
-Reference call sites that do it correctly: `apiService.js` (Designer), `common.js` `ajaxSetup` block (Designer), `serverGuard.js`.
-
-```
-🟠 HIGH: New HTTP client bypasses server version guard
-File: src/UI/WB.UI.Designer/questionnaire/src/services/newClient.js, line N
-Problem: The new axios instance has no response interceptor calling checkServerHeader(); after a server redeploy, the page keeps using the stale client build against an incompatible API.
-Fix: Add a response interceptor (and error handler) that calls checkServerHeader(response.headers['x-survey-solutions']) the way apiService.js does.
-```
+## 3. Do your best
 
 ---
 
@@ -89,8 +74,6 @@ Fix: Drop Html.Raw (so Razor encodes), or sanitize with .RemoveHtmlTags() before
 ```
 
 ---
-
-## 5. 🔴 jQuery `$.ajax` / `$.post` mutating call missing `X-CSRF-TOKEN`
 
 ASP.NET Core antiforgery is enforced on state-changing endpoints. Browser-side mutating calls must send the token; the established helper is `getCsrfCookie()` (see `src/UI/WB.UI.Designer/Scripts/custom/common.js`).
 
