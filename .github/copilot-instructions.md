@@ -11,6 +11,7 @@ Choose behavior based on the user request:
 - **Review mode** (review/audit/diff feedback): act as a strict reviewer and follow the review format below.
 
 When the request is ambiguous, ask one short clarification question before proceeding.
+Everything below is **Review mode** guidance unless a later section is explicitly labeled **Task Mode**.
 
 ### Task Mode — Required Behavior
 
