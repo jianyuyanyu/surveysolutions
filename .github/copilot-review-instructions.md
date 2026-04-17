@@ -77,16 +77,12 @@ Fix: Drop Html.Raw (so Razor encodes), or sanitize with .RemoveHtmlTags() before
 
 ASP.NET Core antiforgery is enforced on state-changing endpoints. Browser-side mutating calls must send the token; the established helper is `getCsrfCookie()` (see `src/UI/WB.UI.Designer/Scripts/custom/common.js`).
 
-**Flag** when the diff adds a `$.ajax`, `$.post`, `$.getJSON` (used for POST), or `fetch` call with:
-- `type` / `method` equal to `POST`, `PUT`, `PATCH`, or `DELETE`, **and**
-- No `X-CSRF-TOKEN` header set from `getCsrfCookie()`.
-
 Exception: calls to endpoints explicitly decorated `[IgnoreAntiforgeryToken]` (rare — check the controller). Even then, prefer adding the header for defense in depth.
 
 ```
 🔴 CRITICAL: CSRF token missing on mutating AJAX call
 File: src/UI/WB.UI.Designer/Scripts/custom/foo.js, line N
-Problem: The new $.ajax POST to /api/foo does not send X-CSRF-TOKEN; the request will be rejected by antiforgery in production, and if antiforgery is relaxed the endpoint is exposed to CSRF.
+Problem: The new POST to /api/foo does not send X-CSRF-TOKEN; the request will be rejected by antiforgery in production, and if antiforgery is relaxed the endpoint is exposed to CSRF.
 Fix: Add headers: { 'X-CSRF-TOKEN': getCsrfCookie() } the way the other mutating calls in common.js do.
 ```
 
@@ -127,7 +123,6 @@ When reviewing a PR, scan the diff specifically for:
 
 - [ ] Edits to generated `.cshtml` (section 1) — direct content change beyond Vite asset-hash churn.
 - [ ] Edits to files under `wwwroot/js`, `wwwroot/css`, `dist/`, `.vite/` (section 2).
-- [ ] New `axios.create` / `mande` / `fetch` wrapper / `$.ajaxSetup` — `checkServerHeader` wired? (section 3)
 - [ ] New `@Html.Raw(...)` — argument provably non-user-controlled or sanitized? (section 4)
 - [ ] New mutating AJAX call — `X-CSRF-TOKEN` header present? (section 5)
 - [ ] New Vue route — registered through `ComponentsProvider` (HQ) or central router (Designer), and visible strings localized? (section 6)
