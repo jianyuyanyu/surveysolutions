@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using Firebase.Crashlytics;
 using Android.Gms.Maps;
 using Android.Runtime;
 using Android.Views;
-using Android.Widget;
 using AndroidX.AppCompat.Widget;
 using AndroidX.DrawerLayout.Widget;
 using AndroidX.RecyclerView.Widget;
@@ -24,10 +20,7 @@ using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.IoC;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
-using NLog;
 using NLog.Extensions.Logging;
-using Serilog;
-using Serilog.Extensions.Logging;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
@@ -86,6 +79,31 @@ namespace WB.UI.Shared.Enumerator
         protected virtual void ProcessException(Exception exception)
         {
             NLog.LogManager.GetCurrentClassLogger().Error(exception);
+
+            try
+            {
+                // Unwrap TargetInvocationException layers to get the real root cause,
+                // then record it explicitly in Crashlytics so the inner exception is visible
+                // in the crash report (Crashlytics only sees the outermost JavaProxyThrowable otherwise).
+                var unwrapped = exception;
+                while (unwrapped is TargetInvocationException { InnerException: not null } tie)
+                    unwrapped = tie.InnerException;
+
+                if (!ReferenceEquals(unwrapped, exception))
+                {
+                    // Log the real inner cause as a non-fatal so it appears alongside the fatal crash
+                    var innerThrowable = Java.Lang.Throwable.FromException(unwrapped);
+                    FirebaseCrashlytics.Instance.RecordException(innerThrowable);
+                }
+
+                // Also record the full exception chain (includes inner exception message as cause)
+                var throwable = Java.Lang.Throwable.FromException(exception);
+                FirebaseCrashlytics.Instance.RecordException(throwable);
+            }
+            catch
+            {
+                // never let Crashlytics reporting break the original crash flow
+            }
         }
         
         
