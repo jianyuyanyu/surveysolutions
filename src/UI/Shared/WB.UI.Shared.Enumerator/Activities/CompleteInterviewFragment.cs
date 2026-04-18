@@ -39,11 +39,17 @@ namespace WB.UI.Shared.Enumerator.Activities
                 recyclerView.OverScrollMode = OverScrollMode.Never;
             }
 
-            SetupTabs();
+            SetupTabsIfNeeded();
             RegisterPageChangeCallback();
             viewPager.Post(RecalculateRecyclerViewHeight);
 
             return view;
+        }
+
+        public override void OnResume()
+        {
+            base.OnResume();
+            SetupTabsIfNeeded();
         }
 
         private void RegisterPageChangeCallback()
@@ -170,12 +176,23 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
 
-        private void SetupTabs()
+        private void SetupTabsIfNeeded()
+        {
+            if (viewPager?.Adapter != null)
+                return;
+
+            if (!TrySetupTabs())
+                return;
+
+            viewPager?.Post(RecalculateRecyclerViewHeight);
+        }
+
+        private bool TrySetupTabs()
         {
             var viewModel = ViewModel;
             var tabsViewModels = viewModel?.Tabs;
             if (tabsViewModels == null)
-                return;
+                return false;
             var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
             viewPager.Adapter = adapter;
 
@@ -207,6 +224,8 @@ namespace WB.UI.Shared.Enumerator.Activities
             {
                 UpdateTabIndicator();
             }
+
+            return true;
         }
         
         private void UpdateTabIndicator()
