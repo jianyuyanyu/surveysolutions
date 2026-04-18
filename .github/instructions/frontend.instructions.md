@@ -1,5 +1,5 @@
 ---
-applyTo: "src/UI/**/*.{js,ts,vue,jsx,tsx}"
+applyTo: "{src/UI/WB.UI.Frontend/src/**,src/UI/WB.UI.Designer/questionnaire/src/**/*}.{js,ts,vue,jsx,tsx}"
 ---
 
 # Frontend Conventions — Survey Solutions
