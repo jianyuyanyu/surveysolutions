@@ -48,8 +48,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (Mvx.IoCProvider == null)
                 return;
 
-            var topActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
-            if (topActivity == null)
+            if (!Mvx.IoCProvider.TryResolve(out IMvxAndroidCurrentTopActivity topActivity))
                 return;
 
             var activity = topActivity.Activity;

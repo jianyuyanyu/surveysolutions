@@ -42,6 +42,10 @@ namespace WB.UI.Shared.Enumerator
         EnumeratorSetup<TApplication> : MvvmCross.Platforms.Android.Core.MvxAndroidSetup<TApplication> 
         where TApplication : class, IMvxApplication, new()
     {
+        private static readonly object crashlyticsDeduplicationSync = new();
+        private static string lastCrashlyticsExceptionSignature = string.Empty;
+        private static DateTime lastCrashlyticsExceptionReportedAtUtc;
+
         protected EnumeratorSetup()
         {
             //restart the app to avoid incorrect state
@@ -82,6 +86,9 @@ namespace WB.UI.Shared.Enumerator
 
             try
             {
+                if (ShouldSkipCrashlyticsReport(exception))
+                    return;
+
                 // Unwrap TargetInvocationException layers to get the real root cause,
                 // then record it explicitly in Crashlytics so the inner exception is visible
                 // in the crash report (Crashlytics only sees the outermost JavaProxyThrowable otherwise).
@@ -103,6 +110,26 @@ namespace WB.UI.Shared.Enumerator
             catch
             {
                 // never let Crashlytics reporting break the original crash flow
+            }
+        }
+
+        private static bool ShouldSkipCrashlyticsReport(Exception exception)
+        {
+            var signature = $"{exception.GetType().FullName}|{exception.Message}|{exception.StackTrace}";
+            var now = DateTime.UtcNow;
+
+            lock (crashlyticsDeduplicationSync)
+            {
+                var isDuplicateInTimeWindow =
+                    signature == lastCrashlyticsExceptionSignature &&
+                    now - lastCrashlyticsExceptionReportedAtUtc < TimeSpan.FromSeconds(5);
+
+                if (isDuplicateInTimeWindow)
+                    return true;
+
+                lastCrashlyticsExceptionSignature = signature;
+                lastCrashlyticsExceptionReportedAtUtc = now;
+                return false;
             }
         }
         
