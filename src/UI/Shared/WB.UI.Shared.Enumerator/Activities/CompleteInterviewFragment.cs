@@ -173,7 +173,9 @@ namespace WB.UI.Shared.Enumerator.Activities
         private void SetupTabs()
         {
             var viewModel = ViewModel;
-            var tabsViewModels = viewModel.Tabs;
+            var tabsViewModels = viewModel?.Tabs;
+            if (tabsViewModels == null)
+                return;
             var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
             viewPager.Adapter = adapter;
 
