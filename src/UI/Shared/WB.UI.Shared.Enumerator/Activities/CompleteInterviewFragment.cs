@@ -389,6 +389,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             {
                 viewPager.UnregisterOnPageChangeCallback(pageChangeCallback);
                 pageChangeCallback.Dispose();
+                pageChangeCallback.Dispose();
                 pageChangeCallback = null;
             }
 
