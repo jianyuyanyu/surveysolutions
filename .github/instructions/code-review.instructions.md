@@ -159,23 +159,24 @@ Only report findings at 🟡 MEDIUM or above. Use the structured output format d
 
 ### 🔴 Edits to generated `.cshtml` files (Vite build output)
 
-Some `.cshtml` files are **regenerated** by the Vite build in `src/UI/WB.UI.Frontend/vite.config.js` from sibling `*.Template.cshtml` sources. Manual edits to the generated file are silently overwritten on next build.
+Some `.cshtml` files are **regenerated** by the Vite build in `src/UI/WB.UI.Frontend/vite.config.js` from sibling `*.Template.cshtml` sources. Manual edits to generated output are silently overwritten on the next build.
 
-**Generated (do not edit directly):**
+Some of these generated files are committed and may appear in diffs; others are build outputs that are typically **not** checked in. Review against the file(s) that actually exist in the repo / diff, and edit the corresponding template instead.
 
-| Destination project | Generated file | Edit this instead |
-|---|---|---|
-| `WB.UI.Headquarters.Core` | `Views/Shared/_Layout.cshtml` | `_Layout.Template.cshtml` |
-| `WB.UI.Headquarters.Core` | `Views/Shared/_EmptyLayout.cshtml` | `_EmptyLayout.Template.cshtml` |
-| `WB.UI.Headquarters.Core` | `Views/Shared/_Logon.cshtml` | `_Logon.Template.cshtml` |
-| `WB.UI.Headquarters.Core` | `Views/Shared/_FinishInstallation.cshtml` | `_FinishInstallation.Template.cshtml` |
-| `WB.UI.Headquarters.Core` | `Views/WebInterview/_WebInterviewLayout.cshtml` | `_WebInterviewLayout.Template.cshtml` |
-| `WB.UI.Headquarters.Core` | `Views/WebInterview/Index.cshtml` | `Index.Template.cshtml` |
-| `WB.UI.Headquarters.Core` | `Views/UnderConstruction/Index.cshtml` | `Index.Template.cshtml` |
-| `WB.UI.WebTester` | `Views/Shared/_Layout.cshtml` | `_Layout.Template.cshtml` |
+**Generated targets and their source templates:**
 
-**Flag** only hand-written logic/markup edits. Asset-hash filename churn (e.g., `main.<hash>.js|css`) from a legitimate rebuild is acceptable — do not flag.
+| Destination project | Generated target | Edit this instead | Repository status / review guidance |
+|---|---|---|---|
+| `WB.UI.Headquarters.Core` | `Views/Shared/_Layout.cshtml` | `_Layout.Template.cshtml` | Generated from the template; if this generated file is committed and appears in the diff, do not hand-edit it. |
+| `WB.UI.Headquarters.Core` | `Views/Shared/_EmptyLayout.cshtml` | `_EmptyLayout.Template.cshtml` | Build-generated output; may not be checked in. Review/edit the template file instead. |
+| `WB.UI.Headquarters.Core` | `Views/Shared/_Logon.cshtml` | `_Logon.Template.cshtml` | Build-generated output; may not be checked in. Review/edit the template file instead. |
+| `WB.UI.Headquarters.Core` | `Views/Shared/_FinishInstallation.cshtml` | `_FinishInstallation.Template.cshtml` | Build-generated output; may not be checked in. Review/edit the template file instead. |
+| `WB.UI.Headquarters.Core` | `Views/WebInterview/_WebInterviewLayout.cshtml` | `_WebInterviewLayout.Template.cshtml` | Generated from the template; if this generated file is committed and appears in the diff, do not hand-edit it. |
+| `WB.UI.Headquarters.Core` | `Views/WebInterview/Index.cshtml` | `Index.Template.cshtml` | Generated from the template; if this generated file is committed and appears in the diff, do not hand-edit it. |
+| `WB.UI.Headquarters.Core` | `Views/UnderConstruction/Index.cshtml` | `Index.Template.cshtml` | Generated from the template; if this generated file is committed and appears in the diff, do not hand-edit it. |
+| `WB.UI.WebTester` | `Views/Shared/_Layout.cshtml` | `_Layout.Template.cshtml` | Build-generated output; may not be checked in. Review/edit the template file instead. |
 
+**Flag** only direct hand-written edits to generated `.cshtml` files that actually exist in the repository and appear in the diff. Asset-hash filename churn (e.g., `main.<hash>.js|css`) from a legitimate rebuild is acceptable — do not flag.
 ### 🟠 Edits to committed JS / CSS build output
 
 Compiled frontend assets are committed but must never be hand-edited.
