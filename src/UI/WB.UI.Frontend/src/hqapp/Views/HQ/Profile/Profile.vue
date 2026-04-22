@@ -549,7 +549,18 @@ export default {
                         position: latLng,
                         map: self.map,
                         zIndex: point.index === -1 ? 1000 : 1000 + point.index,
-                        label: point.index === -1 ? '' : String(point.index),
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 10,
+                            fillColor: point.colors[0],
+                            fillOpacity: 1,
+                            strokeColor: 'white',
+                            strokeWeight: 1,
+                        },
+                        label: point.index === -1 ? '' : {
+                            text: String(point.index),
+                            color: 'white',
+                        },
                     })
                 }
                 marker._customId = point.index
