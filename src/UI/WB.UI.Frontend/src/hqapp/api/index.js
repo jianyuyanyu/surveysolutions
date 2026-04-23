@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { map } from 'lodash'
+import { installAxiosInterceptors } from '~/shared/serverValidator'
 
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
@@ -770,6 +771,7 @@ class HqApiClient {
         this.http = axios.create({
             baseURL: basePath,
         })
+        installAxiosInterceptors(this.http)
     }
 
     Questionnaire(questionnaireId, version) {

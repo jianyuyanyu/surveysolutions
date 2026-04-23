@@ -45,13 +45,13 @@ using WB.UI.Designer.Code.Vue;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Filters;
-using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
 using WB.UI.Designer.Services.Restore;
 using WB.UI.Shared.Web.Authentication;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
+using WB.UI.Shared.Web.Integrity;
 using WB.UI.Shared.Web.Services;
 using WB.UI.Designer.Extensions;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
@@ -317,7 +317,6 @@ namespace WB.UI.Designer
             services.AddTransient<IQuestionnaireImportService, QuestionnaireImportService>();
             services.AddTransient<IQuestionnaireExportService, QuestionnaireExportService>();
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
-            services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
             services.AddSingleton<IProductVersion, ProductVersion>();
             services.AddTransient<IProductVersionHistory, ProductVersionHistory>();
             services.AddTransient<IBasicAuthenticationService, BasicBasicAuthenticationService>();
@@ -374,6 +373,8 @@ namespace WB.UI.Designer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
+            app.UseIntegrityHelper();
+            
             app.UseViteForwarder();
             app.UseExceptional();
 
