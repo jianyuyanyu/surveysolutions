@@ -78,6 +78,9 @@
         "vuetify": "^3.7.11",
         "vuex": "^4.1.0"
     },
+    "engines": {
+        "node": ">=22"
+    },
     "overrides": {
         "@babel/runtime": ">=7.26.10",
         "@babel/traverse": ">=7.26.10",
